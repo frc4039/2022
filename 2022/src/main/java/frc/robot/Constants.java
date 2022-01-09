@@ -16,7 +16,8 @@ import edu.wpi.first.wpilibj.SPI.Port;
  */
 public final class Constants {
 
-    public static final int PRIMARY_CONTROLLER_PORT = 0;
+    public static final int DRIVER_CONTROLLER_PORT = 0;
+    public static final int OPERATOR_CONTROLLER_PORT = 1;
 
     public static final int DRIVETRAIN_FRONT_LEFT_DRIVE_MOTOR = 14;
     public static final int DRIVETRAIN_FRONT_RIGHT_DRIVE_MOTOR = 3;

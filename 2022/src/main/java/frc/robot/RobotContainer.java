@@ -4,8 +4,21 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.commands.*;
+import frc.robot.subsystems.*;
+import frc.robot.common.autonomous.AutonomousChooser;
+import frc.robot.common.autonomous.AutonomousTrajectories;
+import frc.robot.common.util.DriverReadout;
+import frc.robot.common.math.Rotation2;
+import frc.robot.common.math.Vector2;
+import frc.robot.common.input.Axis;
+import frc.robot.common.input.DPadButton;
+import frc.robot.common.input.XboxController;
+
+import java.io.IOException;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -16,9 +29,36 @@ import edu.wpi.first.wpilibj.XboxController;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
 
+  private final XboxController driverController = new XboxController(Constants.DRIVER_CONTROLLER_PORT);
+  private final XboxController operatorController = new XboxController(Constants.OPERATOR_CONTROLLER_PORT);
+
+  private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem();
+
+  private AutonomousTrajectories autonomousTrajectories;
+  private AutonomousChooser autonomousChooser;
+
+  private final DriverReadout driverReadout;
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the button bindings
+
+    try {
+      autonomousTrajectories = new AutonomousTrajectories(DrivetrainSubsystem.TRAJECTORY_CONSTRAINTS);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    autonomousChooser = new AutonomousChooser(autonomousTrajectories);
+
+    driverController.getLeftXAxis().setInverted(true);
+    driverController.getRightXAxis().setInverted(true);
+
+    CommandScheduler.getInstance().registerSubsystem(drivetrainSubsystem);
+
+    CommandScheduler.getInstance().setDefaultCommand(drivetrainSubsystem, new DriveCommand(drivetrainSubsystem, getDriveForwardAxis(), getDriveStrafeAxis(), getDriveRotationAxis()));
+
+    driverReadout = new DriverReadout(this);
+
     configureButtonBindings();
   }
 
@@ -28,12 +68,45 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
-  private void configureButtonBindings() {}
+  private void configureButtonBindings() {
+    driverController.getBackButton().whenPressed(
+      () -> drivetrainSubsystem.resetGyroAngle(Rotation2.ZERO)
+    );
 
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
+    driverController.getAButton().whenPressed(
+      new BasicDriveCommand(drivetrainSubsystem, new Vector2(-0.5, 0.0), 0.0, false).withTimeout(0.3)
+    );
+  }
 
+  public Command getAutonomousCommand() {
+    return autonomousChooser.getCommand(this);
+  }
+
+  private Axis getDriveForwardAxis() {
+    return driverController.getLeftYAxis();
+  }
+
+  private Axis getDriveStrafeAxis() {
+    return driverController.getLeftXAxis();
+  }
+
+  private Axis getDriveRotationAxis() {
+    return driverController.getRightXAxis();
+  }
+
+  public DrivetrainSubsystem getDrivetrainSubsystem() {
+    return drivetrainSubsystem;
+  }
+
+  public XboxController getDriverController() {
+    return driverController;
+  }
+
+  public XboxController getOperatorController() {
+    return operatorController;
+  }
+
+  public AutonomousChooser getAutonomousChooser() {
+    return autonomousChooser;
+  }
 }

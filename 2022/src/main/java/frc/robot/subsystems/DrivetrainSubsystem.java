@@ -103,7 +103,8 @@ public class DrivetrainSubsystem implements Subsystem, UpdateManager.Updatable {
 
         ShuffleboardTab tab = Shuffleboard.getTab("Drivetrain");
 
-        SwerveModule frontLeftModule = Mk4SwerveModuleHelper.createFalcon500(
+        //TODO: update gear ratio
+        SwerveModule frontLeftModule = Mk4SwerveModuleHelper.createNeo(
                 tab.getLayout("Front Left Module", BuiltInLayouts.kList)
                         .withPosition(2, 0)
                         .withSize(2, 4),
@@ -113,7 +114,7 @@ public class DrivetrainSubsystem implements Subsystem, UpdateManager.Updatable {
                 Constants.DRIVETRAIN_FRONT_LEFT_ENCODER_PORT,
                 Constants.DRIVETRAIN_FRONT_LEFT_ENCODER_OFFSET
         );
-        SwerveModule frontRightModule = Mk4SwerveModuleHelper.createFalcon500(
+        SwerveModule frontRightModule = Mk4SwerveModuleHelper.createNeo(
                 tab.getLayout("Front Right Module", BuiltInLayouts.kList)
                         .withPosition(4, 0)
                         .withSize(2, 4),
@@ -123,7 +124,7 @@ public class DrivetrainSubsystem implements Subsystem, UpdateManager.Updatable {
                 Constants.DRIVETRAIN_FRONT_RIGHT_ENCODER_PORT,
                 Constants.DRIVETRAIN_FRONT_RIGHT_ENCODER_OFFSET
         );
-        SwerveModule backLeftModule = Mk4SwerveModuleHelper.createFalcon500(
+        SwerveModule backLeftModule = Mk4SwerveModuleHelper.createNeo(
                 tab.getLayout("Back Left Module", BuiltInLayouts.kList)
                         .withPosition(6, 0)
                         .withSize(2, 4),
@@ -133,7 +134,7 @@ public class DrivetrainSubsystem implements Subsystem, UpdateManager.Updatable {
                 Constants.DRIVETRAIN_BACK_LEFT_ENCODER_PORT,
                 Constants.DRIVETRAIN_BACK_LEFT_ENCODER_OFFSET
         );
-        SwerveModule backRightModule = Mk4SwerveModuleHelper.createFalcon500(
+        SwerveModule backRightModule = Mk4SwerveModuleHelper.createNeo(
                 tab.getLayout("Back Right Module", BuiltInLayouts.kList)
                         .withPosition(8, 0)
                         .withSize(2, 4),
