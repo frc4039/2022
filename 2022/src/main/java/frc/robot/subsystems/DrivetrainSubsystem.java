@@ -5,6 +5,7 @@ import frc.robot.common.swervelib.Mk4SwerveModuleHelper;
 import frc.robot.common.swervelib.SwerveModule;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
@@ -22,6 +23,8 @@ import frc.robot.common.math.Rotation2;
 import frc.robot.common.math.Vector2;
 import frc.robot.common.UpdateManager;
 import frc.robot.common.util.*;
+import frc.robot.common.drivers.NavX;
+
 
 import java.util.Optional;
 
@@ -69,7 +72,7 @@ public class DrivetrainSubsystem implements Subsystem, UpdateManager.Updatable {
 
     private final Object sensorLock = new Object();
     @GuardedBy("sensorLock")
-    private final Gyroscope gyroscope = new Pigeon(Constants.PIGEON_PORT);
+    private final Gyroscope gyroscope = new NavX(SPI.Port.kMXP);
 
 
     private final Object kinematicsLock = new Object();
