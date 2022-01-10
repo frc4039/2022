@@ -19,143 +19,93 @@ public class AutonomousChooser {
     public AutonomousChooser(AutonomousTrajectories trajectories) {
         this.trajectories = trajectories;
 
-        autonomousModeChooser.setDefaultOption("6 Ball Auto", AutonomousMode.EIGHT_BALL);
-        autonomousModeChooser.addOption("6 Ball Compatible", AutonomousMode.EIGHT_BALL_COMPATIBLE);
-        autonomousModeChooser.addOption("Simple Shoot Three", AutonomousMode.SIMPLE_SHOOT_THREE);
+        autonomousModeChooser.setDefaultOption("10 Feet", AutonomousMode.TEN_FEET_TEST);
+        autonomousModeChooser.addOption("10 Feet Slow", AutonomousMode.TEN_FEET_SLOW_TEST);
+        autonomousModeChooser.addOption("10 Feet & Back", AutonomousMode.TEN_FEEN_N_BACK_TEST);
+        autonomousModeChooser.addOption("10 Feet & Back Slow", AutonomousMode.TEN_FEET_N_BACK_SLOW_TEST);
+        autonomousModeChooser.addOption("10 Feet & Back Spin", AutonomousMode.TEN_FEET_N_BACK_SPIN_TEST);
+        autonomousModeChooser.addOption("10 Feet & Back Spin Slow", AutonomousMode.TEN_FEET_N_BACK_SPIN_SLOW_TEST);
     }
 
     public SendableChooser<AutonomousMode> getAutonomousModeChooser() {
         return autonomousModeChooser;
     }
 
-    private SequentialCommandGroup get10BallAutoCommand(RobotContainer container) {
+    private Command getTenFeetTestAutoCommand(RobotContainer container) {
         SequentialCommandGroup command = new SequentialCommandGroup();
 
-        resetRobotPose(command, container, trajectories.getTenBallAutoPartOne());
-        followAndIntake(command, container, trajectories.getTenBallAutoPartOne());
-        shootAtTarget(command, container);
-        //command.addCommands(new FollowTrajectoryCommand(drivetrainSubsystem, trajectories.getTenBallAutoPartTwo()));
-        //command.addCommands(new TargetWithShooterCommand(shooterSubsystem, visionSubsystem, xboxController));
+        resetRobotPose(command, container, trajectories.getTenFeetTestAuto());
+        follow(command, container, trajectories.getTenFeetTestAuto());
 
         return command;
     }
 
-    private Command get8BallAutoCommand(RobotContainer container) {
+    private Command getTenFeetSlowTestAutoCommand(RobotContainer container) {
         SequentialCommandGroup command = new SequentialCommandGroup();
 
-        //reset robot pose
-        resetRobotPose(command, container, trajectories.getEightBallAutoPartOne());
-        command.addCommands(new HomeHoodMotorCommand(container.getShooterSubsystem()));
-        //follow first trajectory and shoot
-        follow(command, container, trajectories.getEightBallAutoPartOne());
-        shootAtTarget(command, container, 1.5);
-        //follow second trajectory and shoot
-        followAndIntake(command, container, trajectories.getEightBallAutoPartTwo());
-
-        follow(command, container, trajectories.getEightBallAutoPartThree());
-        shootAtTarget(command, container, 1.5);
-        follow(command, container, trajectories.getEightBallAutoPartFour());
+        resetRobotPose(command, container, trajectories.getTenFeetSlowTestAuto());
+        follow(command, container, trajectories.getTenFeetSlowTestAuto());
 
         return command;
     }
 
-    private Command get8BallCompatibleCommand(RobotContainer container) {
+    private Command getTenFeetNBackTestAutoCommand(RobotContainer container) {
         SequentialCommandGroup command = new SequentialCommandGroup();
 
-        //reset robot pose
-        resetRobotPose(command, container, trajectories.getEightBallCompatiblePartOne());
-        command.addCommands(new HomeHoodMotorCommand(container.getShooterSubsystem()));
-        //follow first trajectory and shoot
-        follow(command, container, trajectories.getEightBallCompatiblePartOne());
-        shootAtTarget(command, container, 1.5);
-        //follow second trajectory and shoot
-        followAndIntake(command, container, trajectories.getEightBallCompatiblePartTwo());
-
-        follow(command, container, trajectories.getEightBallCompatiblePartThree());
-        shootAtTarget(command, container, 1.5);
-        follow(command, container, trajectories.getEightBallCompatiblePartFour());
+        resetRobotPose(command, container, trajectories.getTenFeetNBackTestAuto());
+        follow(command, container, trajectories.getTenFeetNBackTestAuto());
 
         return command;
     }
 
-    public Command getCircuit10BallAutoCommand(RobotContainer container) {
+    private Command getTenFeetNBackSlowTestAutoCommand(RobotContainer container) {
         SequentialCommandGroup command = new SequentialCommandGroup();
 
-        // Reset the robot pose
-        resetRobotPose(command, container, trajectories.getCircuitTenBallAutoPartOne());
-        // Pickup the first balls and shoot
-        followAndIntake(command, container, trajectories.getCircuitTenBallAutoPartOne());
-        followAndIntake(command, container, trajectories.getCircuitTenBallAutoPartTwo());
-        shootAtTarget(command, container);
-
-        // Grab from trench
-        followAndIntake(command, container, trajectories.getEightBallAutoPartTwo());
-        followAndIntake(command, container, trajectories.getEightBallAutoPartThree());
-        shootAtTarget(command, container);
+        resetRobotPose(command, container, trajectories.getTenFeetNBackSlowTestAuto());
+        follow(command, container, trajectories.getTenFeetNBackSlowTestAuto());
 
         return command;
     }
 
-    public Command getSimpleShootThreeAutoCommand(RobotContainer container) {
+    private Command getTenFeetNBackSpinTestAutoCommand(RobotContainer container) {
         SequentialCommandGroup command = new SequentialCommandGroup();
 
-        resetRobotPose(command, container, trajectories.getSimpleShootThree());
-        command.addCommands(new HomeHoodMotorCommand(container.getShooterSubsystem()));
+        resetRobotPose(command, container, trajectories.getTenFeetNBackSpinTestAuto());
+        follow(command, container, trajectories.getTenFeetNBackSpinTestAuto());
 
-        shootAtTarget(command, container);
-        follow(command, container, trajectories.getSimpleShootThree());
+        return command;
+    }
+
+    private Command getTenFeetNBackSpinSlowTestAutoCommand(RobotContainer container) {
+        SequentialCommandGroup command = new SequentialCommandGroup();
+
+        resetRobotPose(command, container, trajectories.getTenFeetNBackSpinSlowTestAuto());
+        follow(command, container, trajectories.getTenFeetNBackSpinSlowTestAuto());
 
         return command;
     }
 
     public Command getCommand(RobotContainer container) {
         switch (autonomousModeChooser.getSelected()) {
-            case EIGHT_BALL:
-                return get8BallAutoCommand(container);
-            case EIGHT_BALL_COMPATIBLE:
-                return get8BallCompatibleCommand(container);
-            case TEN_BALL:
-                return get10BallAutoCommand(container);
-            case TEN_BALL_CIRCUIT:
-                return getCircuit10BallAutoCommand(container);
-            case SIMPLE_SHOOT_THREE:
-                return getSimpleShootThreeAutoCommand(container);
+            case TEN_FEET_TEST:
+                return getTenFeetTestAutoCommand(container);
+            case TEN_FEET_SLOW_TEST:
+                return getTenFeetSlowTestAutoCommand(container);
+            case TEN_FEEN_N_BACK_TEST:
+                return getTenFeetNBackTestAutoCommand(container);
+            case TEN_FEET_N_BACK_SLOW_TEST:
+                return getTenFeetNBackSlowTestAutoCommand(container);
+            case TEN_FEET_N_BACK_SPIN_TEST:
+                return getTenFeetNBackSpinTestAutoCommand(container);
+            case TEN_FEET_N_BACK_SPIN_SLOW_TEST:
+                return getTenFeetNBackSpinSlowTestAutoCommand(container);
         }
 
-        return get10BallAutoCommand(container);
-    }
-
-    private void shootAtTarget(SequentialCommandGroup command, RobotContainer container) {
-        shootAtTarget(command, container, 2.5);
-    }
-
-    private void shootAtTarget(SequentialCommandGroup command, RobotContainer container, double timeToWait) {
-        command.addCommands(
-                new TargetWithShooterCommand(container.getShooterSubsystem(), container.getVisionSubsystem(), container.getPrimaryController())
-                        .alongWith(new VisionRotateToTargetCommand(container.getDrivetrainSubsystem(), container.getVisionSubsystem(), () -> 0.0, () -> 0.0))
-                        .alongWith(
-                                new WaitCommand(0.1).andThen(new AutonomousFeedCommand(container.getShooterSubsystem(), container.getFeederSubsystem(), container.getVisionSubsystem())))
-                        .withTimeout(timeToWait));
+        return getTenFeetTestAutoCommand(container);
     }
 
     private void follow(SequentialCommandGroup command, RobotContainer container, Trajectory trajectory) {
-        command.addCommands(new FollowTrajectoryCommand(container.getDrivetrainSubsystem(), trajectory)
-                .deadlineWith(new TargetWithShooterCommand(container.getShooterSubsystem(), container.getVisionSubsystem(), container.getPrimaryController()))
-                .alongWith(new PrepareBallsToShootCommand(container.getFeederSubsystem(), 1.0)));
-    }
-
-    private void followAndIntake(SequentialCommandGroup command, RobotContainer container, Trajectory trajectory) {
-        command.addCommands(new InstantCommand(() -> container.getIntakeSubsystem().setTopExtended(true)));
-        command.addCommands(
-                new FollowTrajectoryCommand(container.getDrivetrainSubsystem(), trajectory)
-                        .deadlineWith(
-                                new IntakeCommand(container.getIntakeSubsystem(), container.getFeederSubsystem(), -1.0).withTimeout(0.25)
-                                        .andThen(
-                                                new IntakeCommand(container.getIntakeSubsystem(), container.getFeederSubsystem(), 1.0)
-                                                        .alongWith(
-                                                                new FeederIntakeWhenNotFullCommand(container.getFeederSubsystem(), 1.0)
-                                                        ))));
-        command.addCommands(new InstantCommand(() -> container.getIntakeSubsystem().setTopExtended(false)));
+        command.addCommands(new FollowTrajectoryCommand(container.getDrivetrainSubsystem(), trajectory));
     }
 
     private void resetRobotPose(SequentialCommandGroup command, RobotContainer container, Trajectory trajectory) {
@@ -165,10 +115,11 @@ public class AutonomousChooser {
     }
 
     private enum AutonomousMode {
-        EIGHT_BALL,
-        EIGHT_BALL_COMPATIBLE,
-        TEN_BALL,
-        TEN_BALL_CIRCUIT,
-        SIMPLE_SHOOT_THREE,
+        TEN_FEET_TEST,
+        TEN_FEET_SLOW_TEST,
+        TEN_FEEN_N_BACK_TEST,
+        TEN_FEET_N_BACK_SLOW_TEST,
+        TEN_FEET_N_BACK_SPIN_TEST,
+        TEN_FEET_N_BACK_SPIN_SLOW_TEST,
     }
 }
