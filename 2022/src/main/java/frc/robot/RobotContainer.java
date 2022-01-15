@@ -33,6 +33,7 @@ public class RobotContainer {
   private final XboxController operatorController = new XboxController(Constants.OPERATOR_CONTROLLER_PORT);
 
   private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem();
+  private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
 
   private AutonomousTrajectories autonomousTrajectories;
   private AutonomousChooser autonomousChooser;
@@ -54,6 +55,7 @@ public class RobotContainer {
     driverController.getRightXAxis().setInverted(true);
 
     CommandScheduler.getInstance().registerSubsystem(drivetrainSubsystem);
+    CommandScheduler.getInstance().registerSubsystem(intakeSubsystem);
 
     CommandScheduler.getInstance().setDefaultCommand(drivetrainSubsystem, new DriveCommand(drivetrainSubsystem, getDriveForwardAxis(), getDriveStrafeAxis(), getDriveRotationAxis()));
 
@@ -75,6 +77,10 @@ public class RobotContainer {
 
     driverController.getAButton().whenPressed(
       new BasicDriveCommand(drivetrainSubsystem, new Vector2(-0.5, 0.0), 0.0, false).withTimeout(0.3)
+    );
+
+    driverController.getLeftBumperButton().whenHeld(
+      new IntakeCommand(intakeSubsystem)
     );
   }
 
