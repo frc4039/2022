@@ -19,6 +19,8 @@ import edu.wpi.first.wpilibj.SPI.Port;
  */
 public final class Constants {
 
+    public static final int kPCMCANID = 25;
+
     public static final int DRIVER_CONTROLLER_PORT = 0;
     public static final int OPERATOR_CONTROLLER_PORT = 1;
 
@@ -43,11 +45,9 @@ public final class Constants {
     public static final double DRIVETRAIN_BACK_RIGHT_ENCODER_OFFSET = -Math.toRadians(222.01-180.0);
 
     public static final class IntakeConstants {
-
         public static final int kIntakeMotorPort = 20;
-        public static final InvertType kIntakeInversion = null;
-        public static final double kIntakePercent = 0;
-        public static final DoubleSolenoid kIntakeSolenoid = null;
+        public static final boolean kIntakeInversion = false;
+        public static final double kIntakePercent = 0.75;
 
     }
 
