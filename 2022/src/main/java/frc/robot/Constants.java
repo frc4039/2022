@@ -4,6 +4,9 @@
 
 package frc.robot;
 
+import com.ctre.phoenix.motorcontrol.InvertType;
+
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.SPI.Port;
 
 /**
@@ -38,6 +41,15 @@ public final class Constants {
     public static final double DRIVETRAIN_FRONT_RIGHT_ENCODER_OFFSET = -Math.toRadians(315.09-180.0);
     public static final double DRIVETRAIN_BACK_LEFT_ENCODER_OFFSET = -Math.toRadians(122.52+180.0);
     public static final double DRIVETRAIN_BACK_RIGHT_ENCODER_OFFSET = -Math.toRadians(222.01-180.0);
+
+    public static final class IntakeConstants {
+
+        public static final int kIntakeMotorPort = 20;
+        public static final InvertType kIntakeInversion = null;
+        public static final double kIntakePercent = 0;
+        public static final DoubleSolenoid kIntakeSolenoid = null;
+
+    }
 
 
 
