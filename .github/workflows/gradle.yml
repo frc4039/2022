@@ -25,7 +25,9 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 11
+    - name: List files in working dir
+      run: ls -R ./
     - name: Grant execute for gradlew
-      run: chmod +x 2022/gradlew
+      run: chmod +x ./2022/gradlew
     - name: Build with Gradle
       run: ./2022/gradlew build
