@@ -3,7 +3,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
@@ -13,12 +13,12 @@ import frc.robot.Constants.IntakeConstants;
 
 public class IntakeSubsystem extends SubsystemBase {
 
-  private final VictorSPX m_intakeMotor;
+  private final TalonFX m_intakeMotor;
 
   private final DoubleSolenoid m_intakeSolenoid; 
 
   public IntakeSubsystem() {
-    m_intakeMotor = new VictorSPX(IntakeConstants.kIntakeMotorPort); 
+    m_intakeMotor = new TalonFX(IntakeConstants.kIntakeMotorPort);
     m_intakeMotor.configFactoryDefault(); 
     m_intakeMotor.setInverted(IntakeConstants.kIntakeInversion);
 
