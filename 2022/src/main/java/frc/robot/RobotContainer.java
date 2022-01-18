@@ -82,7 +82,23 @@ public class RobotContainer {
     );
 
     operatorController.getRightBumperButton().whenPressed(
-      new ShootCommand(shooterSubsystem, Constants.ShooterConstants.kShooterRPM)
+      new ShootCommand(shooterSubsystem, Constants.ShooterConstants.kShooterRPMMid)
+    );
+
+    operatorController.getAButton().whenPressed(
+      new ShootCommand(shooterSubsystem, Constants.ShooterConstants.kShooterRPMLowest)
+    );
+
+    operatorController.getXButton().whenPressed(
+      new ShootCommand(shooterSubsystem, Constants.ShooterConstants.kShooterRPMLow)
+    );
+
+    operatorController.getYButton().whenPressed(
+      new ShootCommand(shooterSubsystem, Constants.ShooterConstants.kShooterRPMHigh)
+    );
+
+    operatorController.getBButton().whenPressed(
+      new ShootCommand(shooterSubsystem, Constants.ShooterConstants.kShooterRPMHighest)
     );
   }
 

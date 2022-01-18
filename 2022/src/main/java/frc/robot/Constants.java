@@ -52,7 +52,11 @@ public final class Constants {
 
         public static final double kShooterGearRatio = 2.0;
 
-        public static final double kShooterRPM = 3000;
+        public static final double kShooterRPMLowest = 3000;
+        public static final double kShooterRPMLow = 3250;
+        public static final double kShooterRPMMid = 3500;
+        public static final double kShooterRPMHigh = 3750;
+        public static final double kShooterRPMHighest = 4000;
     }
 
 }
