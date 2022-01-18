@@ -18,6 +18,8 @@ import frc.robot.common.input.Axis;
 import frc.robot.common.input.DPadButton;
 import frc.robot.common.input.XboxController;
 
+import frc.robot.Constants.*;
+
 import java.io.IOException;
 
 /**
@@ -33,6 +35,7 @@ public class RobotContainer {
   private final XboxController operatorController = new XboxController(Constants.OPERATOR_CONTROLLER_PORT);
 
   private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem();
+  private final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
 
   private AutonomousTrajectories autonomousTrajectories;
   private AutonomousChooser autonomousChooser;
@@ -54,6 +57,7 @@ public class RobotContainer {
     driverController.getRightXAxis().setInverted(true);
 
     CommandScheduler.getInstance().registerSubsystem(drivetrainSubsystem);
+    CommandScheduler.getInstance().registerSubsystem(shooterSubsystem);
 
     CommandScheduler.getInstance().setDefaultCommand(drivetrainSubsystem, new DriveCommand(drivetrainSubsystem, getDriveForwardAxis(), getDriveStrafeAxis(), getDriveRotationAxis()));
 
@@ -75,6 +79,10 @@ public class RobotContainer {
 
     driverController.getAButton().whenPressed(
       new BasicDriveCommand(drivetrainSubsystem, new Vector2(-0.5, 0.0), 0.0, false).withTimeout(0.3)
+    );
+
+    operatorController.getRightBumperButton().whenPressed(
+      new ShootCommand(shooterSubsystem, Constants.ShooterConstants.kShooterRPM)
     );
   }
 
