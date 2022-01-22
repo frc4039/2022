@@ -40,6 +40,11 @@ public class ClimberSubsystem extends SubsystemBase {
         m_climberMotorLeft.set(ControlMode.PercentOutput, ClimberConstants.kClimberPowerDown);
     }
 
+    public void stop() {
+        m_climberMotorRight.set(ControlMode.PercentOutput, 0);
+        m_climberMotorLeft.set(ControlMode.PercentOutput, 0);
+    }
+
     public boolean getTopRightLimit() {
         return m_climberMotorRight.getSensorCollection().isFwdLimitSwitchClosed() == 1;
     }
