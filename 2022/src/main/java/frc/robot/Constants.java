@@ -39,6 +39,13 @@ public final class Constants {
     public static final double DRIVETRAIN_BACK_LEFT_ENCODER_OFFSET = -Math.toRadians(122.52+180.0);
     public static final double DRIVETRAIN_BACK_RIGHT_ENCODER_OFFSET = -Math.toRadians(222.01-180.0);
 
-
+    public static final class ClimberConstants{
+        public static final boolean kClimberMotorRightInversion = true;
+        public static final boolean kClimberMotorLeftInversion = false;
+        public static final int kClimberMotorRightPort = 40;
+        public static final int kClimberMotorLeftPort = 41; 
+        public static final double kClimberPowerUp = 1.0;
+        public static final double kClimberPowerDown = -1.0;
+    }
 
 }
