@@ -40,10 +40,13 @@ public final class Constants {
     public static final double DRIVETRAIN_BACK_RIGHT_ENCODER_OFFSET = -Math.toRadians(222.01-180.0);
 
     public static final class ShooterConstants {
+        
         public static final int kShooterMotorPort1 = 30;
         public static final int kShooterMotorPort2 = 31;
+
         public static final boolean kShooterInversion1 = false;
         public static final boolean kShooterInversion2 = true;
+        public static final boolean kSensorInversion = false;
 
         public static final double kShooterP = 0.5;
         public static final double kShooterI = 0.0;

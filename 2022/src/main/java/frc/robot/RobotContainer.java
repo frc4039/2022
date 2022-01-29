@@ -172,4 +172,8 @@ public class RobotContainer {
   public AutonomousChooser getAutonomousChooser() {
     return autonomousChooser;
   }
+
+  public void PrintAllValues(){
+    shooterSubsystem.printShooterValues();
+  }
 }
