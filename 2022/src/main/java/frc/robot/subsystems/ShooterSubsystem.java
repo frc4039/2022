@@ -23,6 +23,7 @@ public class ShooterSubsystem extends SubsystemBase {
     shooterConfiguration.slot0.kP = ShooterConstants.kShooterP;
     shooterConfiguration.slot0.kI = ShooterConstants.kShooterI;
     shooterConfiguration.slot0.kD = ShooterConstants.kShooterD;
+    shooterConfiguration.slot0.kF = ShooterConstants.kShooterF;
     shooterConfiguration.primaryPID.selectedFeedbackSensor = TalonFXFeedbackDevice.IntegratedSensor.toFeedbackDevice();
     shooterConfiguration.supplyCurrLimit.currentLimit = ShooterConstants.kShooterCurrentLimit;
     shooterConfiguration.supplyCurrLimit.enable = true;
@@ -51,6 +52,15 @@ public class ShooterSubsystem extends SubsystemBase {
   public void stop() {
     m_shooterMotor1.set(ControlMode.PercentOutput, 0);
   }
+
+  public void shooterSlowForward() {
+    m_shooterMotor1.set(ControlMode.PercentOutput, 0.1);
+  }
+
+  public void shooterSlowBackward() {
+    m_shooterMotor1.set(ControlMode.PercentOutput, -0.1);
+  }
+
 
   public void printShooterValues() {
     SmartDashboard.putNumber("Shooter RPM", returnCurrentRPM());
