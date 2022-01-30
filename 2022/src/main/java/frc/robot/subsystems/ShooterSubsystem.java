@@ -78,7 +78,7 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public void shoot(double rpm) {
-      m_shooterMotor1.set(ControlMode.Velocity, rpm * ShooterConstants.kShooterGearRatio * 2048 / 600.0);
+      m_shooterMotor1.set(ControlMode.Velocity, rpm * ShooterConstants.kShooterGearRatio * 4096 / 600.0);
   }
 
   public void stop() {

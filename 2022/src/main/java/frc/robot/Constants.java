@@ -50,10 +50,10 @@ public final class Constants {
         public static final boolean kShooterInversion2 = false;
         public static final boolean kSensorInversion = false;
 
-        public static final double kShooterP = 0.0;
+        public static final double kShooterP = 0.2;
         public static final double kShooterI = 0.0;
         public static final double kShooterD = 0.0;
-        public static final double kShooterF = 0.008;
+        public static final double kShooterF = 0.0135;
 
         public static final double kShooterCurrentLimit = 30.0;
 
