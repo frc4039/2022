@@ -50,7 +50,7 @@ public final class Constants {
         public static final boolean kShooterInversion2 = false;
         public static final boolean kSensorInversion = false;
 
-        public static final double kShooterP = 0.2;
+        public static final double kShooterP = 0.15;
         public static final double kShooterI = 0.0;
         public static final double kShooterD = 0.0;
         public static final double kShooterF = 0.0135;
@@ -70,7 +70,7 @@ public final class Constants {
         public static final boolean kPreShooterInversion = true;
         public static final boolean kFeederInversion = true;
         public static final double kPreShooterPercent = 0.5;
-        public static final double kFeederPercent = 0.3;
+        public static final double kFeederPercent = 1.0;
     }
 
 }

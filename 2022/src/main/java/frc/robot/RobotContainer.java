@@ -44,6 +44,8 @@ public class RobotContainer {
 
   //private final DriverReadout driverReadout;
 
+  private final double setpoint = 2800;
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the button bindings
@@ -87,48 +89,48 @@ public class RobotContainer {
     );
 
     //D-pad up sets shooter to 3000rpm
-    driverController.getDPadButton(Direction.UP).whenPressed(
-      new ShootCommand(shooterSubsystem, 1400)
+    driverController.getDPadButton(Direction.UP).whenHeld(
+      new ComboShootCommand(shooterSubsystem, setpoint + 0)
     );
 
     //D-pad up-right sets shooter to 3100rpm
-    driverController.getDPadButton(Direction.UPRIGHT).whenPressed(
-      new ShootCommand(shooterSubsystem, 3100)
+    driverController.getDPadButton(Direction.UPRIGHT).whenHeld(
+      new ComboShootCommand(shooterSubsystem, setpoint + 50)
     );
 
     //D-pad right sets shooter to 3200rpm
-    driverController.getDPadButton(Direction.RIGHT).whenPressed(
-      new ShootCommand(shooterSubsystem, 3200)
+    driverController.getDPadButton(Direction.RIGHT).whenHeld(
+      new ComboShootCommand(shooterSubsystem, setpoint + 100)
     );
 
     //D-pad down-right sets shooter to 3300rpm
-    driverController.getDPadButton(Direction.DOWNRIGHT).whenPressed(
-      new ShootCommand(shooterSubsystem, 3300)
+    driverController.getDPadButton(Direction.DOWNRIGHT).whenHeld(
+      new ComboShootCommand(shooterSubsystem, setpoint + 150)
     );
 
     //D-pad down sets shooter to 3400rpm
-    driverController.getDPadButton(Direction.DOWN).whenPressed(
-      new ShootCommand(shooterSubsystem, 3400)
+    driverController.getDPadButton(Direction.DOWN).whenHeld(
+      new ComboShootCommand(shooterSubsystem, setpoint + 200)
     );
 
     //D-pad down-left sets shooter to 3500rpm
-    driverController.getDPadButton(Direction.DOWNLEFT).whenPressed(
-      new ShootCommand(shooterSubsystem, 3500)
+    driverController.getDPadButton(Direction.DOWNLEFT).whenHeld(
+      new ComboShootCommand(shooterSubsystem, setpoint + 250)
     );
 
     //D-pad left sets shooter to 3200rpm
-    driverController.getDPadButton(Direction.LEFT).whenPressed(
-      new ShootCommand(shooterSubsystem, 3600)
+    driverController.getDPadButton(Direction.LEFT).whenHeld(
+      new ComboShootCommand(shooterSubsystem, setpoint + 300)
     );
 
     //D-pad left-up sets shooter to 3700rpm
-    driverController.getDPadButton(Direction.UPLEFT).whenPressed(
-      new ShootCommand(shooterSubsystem, 3700)
+    driverController.getDPadButton(Direction.UPLEFT).whenHeld(
+      new ComboShootCommand(shooterSubsystem, setpoint + 350)
     );
 
     //A button sets shooter to Driver Station RPM input
-    driverController.getAButton().whenPressed(
-      new ShootCommand(shooterSubsystem, SmartDashboard.getNumber("Shooter RPM Setpoint", 0.0))
+    driverController.getAButton().whenHeld(
+      new ComboShootCommand(shooterSubsystem, SmartDashboard.getNumber("Shooter RPM Setpoint", 0.0))
     );
 
     driverController.getRightBumperButton().whenHeld(
@@ -140,7 +142,7 @@ public class RobotContainer {
     );
 
     driverController.getRightTriggerAxis().getButton(0.5).whenHeld(
-      new InstantCommand(shooterSubsystem::runFeeder, shooterSubsystem)
+      new ComboShootCommand(shooterSubsystem, 1400)
     );
 
     driverController.getLeftTriggerAxis().getButton(0.5).whenHeld(
