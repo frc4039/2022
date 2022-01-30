@@ -139,6 +139,18 @@ public class RobotContainer {
       new InstantCommand(shooterSubsystem::shooterSlowBackward, shooterSubsystem)
     );
 
+    driverController.getRightTriggerAxis().getButton(0.5).whenHeld(
+      new InstantCommand(shooterSubsystem::runFeeder, shooterSubsystem)
+    );
+
+    driverController.getLeftTriggerAxis().getButton(0.5).whenHeld(
+      new InstantCommand(shooterSubsystem::reverseFeeder, shooterSubsystem)
+    );
+
+    driverController.getYButton().toggleWhenPressed(
+      new InstantCommand(shooterSubsystem::runPreShooter, shooterSubsystem)
+    );
+
   }
 
   public Command getAutonomousCommand() {

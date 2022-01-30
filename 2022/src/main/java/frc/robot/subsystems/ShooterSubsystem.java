@@ -8,6 +8,9 @@ import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -19,6 +22,9 @@ public class ShooterSubsystem extends SubsystemBase {
 
   private final TalonSRX m_shooterMotor1;
   private final TalonSRX m_shooterMotor2;
+
+  private final CANSparkMax m_preShooterMotor;
+  private final VictorSPX m_feederMotor;
 
   public ShooterSubsystem() {
     /*
@@ -60,9 +66,15 @@ public class ShooterSubsystem extends SubsystemBase {
     m_shooterMotor1.enableVoltageCompensation(false);
     m_shooterMotor2.enableVoltageCompensation(false);
 
-
     //m_shooterMotor1.config_kF(ShooterConstants.kPIDLoopIdx, ShooterConstants.kF, ShooterConstants.kTimeoutMs);
     //m_shooterMotor1.config_kP(ShooterConstants.kPIDLoopIdx, ShooterConstants.kP, ShooterConstants.kTimeoutMs);
+  
+    m_preShooterMotor = new CANSparkMax(ShooterConstants.kPreShooterPort, MotorType.kBrushless);
+    m_feederMotor = new VictorSPX(ShooterConstants.kFeederPort);
+    m_feederMotor.configFactoryDefault();
+
+    m_preShooterMotor.setInverted(ShooterConstants.kPreShooterInversion);
+    m_feederMotor.setInverted(ShooterConstants.kFeederInversion);
   }
 
   public void shoot(double rpm) {
@@ -81,13 +93,24 @@ public class ShooterSubsystem extends SubsystemBase {
     m_shooterMotor1.set(ControlMode.PercentOutput, -0.1);
   }
 
-
   public void printShooterValues() {
     SmartDashboard.putNumber("Shooter RPM", returnCurrentRPM());
   }
 
   public double returnCurrentRPM() {
     return m_shooterMotor1.getSelectedSensorVelocity() * 600 / 2048 / ShooterConstants.kShooterGearRatio;
+  }
+
+  public void runPreShooter() {
+    m_preShooterMotor.set(ShooterConstants.kPreShooterPercent);
+  }
+
+  public void runFeeder() {
+    m_feederMotor.set(ControlMode.PercentOutput, ShooterConstants.kFeederPercent);
+  }
+
+  public void reverseFeeder() {
+    m_feederMotor.set(ControlMode.PercentOutput, ShooterConstants.kFeederPercent);
   }
 
   @Override

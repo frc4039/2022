@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import com.ctre.phoenix.motorcontrol.InvertType;
+
 import edu.wpi.first.wpilibj.SPI.Port;
 
 /**
@@ -62,6 +64,13 @@ public final class Constants {
         public static final double kShooterRPMMid = 3500;
         public static final double kShooterRPMHigh = 3750;
         public static final double kShooterRPMHighest = 4000;
+
+        public static final int kPreShooterPort = 32;
+        public static final int kFeederPort = 33;
+        public static final boolean kPreShooterInversion = false;
+        public static final boolean kFeederInversion = false;
+        public static final double kPreShooterPercent = 1.0;
+        public static final double kFeederPercent = 1.0;
     }
 
 }
