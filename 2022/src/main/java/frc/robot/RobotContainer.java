@@ -10,10 +10,10 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.*;
-import frc.robot.subsystems.*;
-import frc.robot.common.autonomous.AutonomousChooser;
-import frc.robot.common.autonomous.AutonomousTrajectories;
-import frc.robot.common.util.DriverReadout;
+import frc.robot.subsystems.ShooterSubsystem;
+//import frc.robot.common.autonomous.AutonomousChooser;
+//import frc.robot.common.autonomous.AutonomousTrajectories;
+//import frc.robot.common.util.DriverReadout;
 import frc.robot.common.math.Rotation2;
 import frc.robot.common.math.Vector2;
 import frc.robot.common.input.Axis;
@@ -36,34 +36,34 @@ public class RobotContainer {
   private final XboxController driverController = new XboxController(Constants.DRIVER_CONTROLLER_PORT);
   private final XboxController operatorController = new XboxController(Constants.OPERATOR_CONTROLLER_PORT);
 
-  private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem();
+  //private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem();
   private final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
 
-  private AutonomousTrajectories autonomousTrajectories;
-  private AutonomousChooser autonomousChooser;
+  //private AutonomousTrajectories autonomousTrajectories;
+  //private AutonomousChooser autonomousChooser;
 
-  private final DriverReadout driverReadout;
+  //private final DriverReadout driverReadout;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the button bindings
 
-    try {
-      autonomousTrajectories = new AutonomousTrajectories(DrivetrainSubsystem.TRAJECTORY_CONSTRAINTS);
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-    autonomousChooser = new AutonomousChooser(autonomousTrajectories);
+    // try {
+    //   //autonomousTrajectories = new AutonomousTrajectories(DrivetrainSubsystem.TRAJECTORY_CONSTRAINTS);
+    // } catch (IOException e) {
+    //   e.printStackTrace();
+    // }
+   // autonomousChooser = new AutonomousChooser(autonomousTrajectories);
 
     driverController.getLeftXAxis().setInverted(true);
     driverController.getRightXAxis().setInverted(true);
 
-    CommandScheduler.getInstance().registerSubsystem(drivetrainSubsystem);
+    //CommandScheduler.getInstance().registerSubsystem(drivetrainSubsystem);
     CommandScheduler.getInstance().registerSubsystem(shooterSubsystem);
 
-    CommandScheduler.getInstance().setDefaultCommand(drivetrainSubsystem, new DriveCommand(drivetrainSubsystem, getDriveForwardAxis(), getDriveStrafeAxis(), getDriveRotationAxis()));
+    //CommandScheduler.getInstance().setDefaultCommand(drivetrainSubsystem, new DriveCommand(drivetrainSubsystem, getDriveForwardAxis(), getDriveStrafeAxis(), getDriveRotationAxis()));
 
-    driverReadout = new DriverReadout(this);
+    //driverReadout = new DriverReadout(this);
 
     SmartDashboard.putNumber("Shooter RPM Setpoint", 0.0);
 
@@ -77,9 +77,9 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    driverController.getBackButton().whenPressed(
-      () -> drivetrainSubsystem.resetGyroAngle(Rotation2.ZERO)
-    );
+    //driverController.getBackButton().whenPressed(
+      //() -> drivetrainSubsystem.resetGyroAngle(Rotation2.ZERO)
+    //);
 
     //B button stops shooter
     driverController.getBButton().whenPressed(
@@ -88,7 +88,7 @@ public class RobotContainer {
 
     //D-pad up sets shooter to 3000rpm
     driverController.getDPadButton(Direction.UP).whenPressed(
-      new ShootCommand(shooterSubsystem, 3000)
+      new ShootCommand(shooterSubsystem, 1400)
     );
 
     //D-pad up-right sets shooter to 3100rpm
@@ -147,15 +147,19 @@ public class RobotContainer {
       new InstantCommand(shooterSubsystem::reverseFeeder, shooterSubsystem)
     );
 
-    driverController.getYButton().toggleWhenPressed(
+    driverController.getYButton().whenPressed(
       new InstantCommand(shooterSubsystem::runPreShooter, shooterSubsystem)
+    );
+
+    driverController.getXButton().whenPressed(
+      new InstantCommand(shooterSubsystem::stop, shooterSubsystem)
     );
 
   }
 
-  public Command getAutonomousCommand() {
-    return autonomousChooser.getCommand(this);
-  }
+  // public Command getAutonomousCommand() {
+  //   return autonomousChooser.getCommand(this);
+  // }
 
   private Axis getDriveForwardAxis() {
     return driverController.getLeftYAxis();
@@ -169,9 +173,9 @@ public class RobotContainer {
     return driverController.getRightXAxis();
   }
 
-  public DrivetrainSubsystem getDrivetrainSubsystem() {
-    return drivetrainSubsystem;
-  }
+  // public DrivetrainSubsystem getDrivetrainSubsystem() {
+  //   return drivetrainSubsystem;
+  // }
 
   public XboxController getDriverController() {
     return driverController;
@@ -181,9 +185,9 @@ public class RobotContainer {
     return operatorController;
   }
 
-  public AutonomousChooser getAutonomousChooser() {
-    return autonomousChooser;
-  }
+  // public AutonomousChooser getAutonomousChooser() {
+  //   return autonomousChooser;
+  // }
 
   public void PrintAllValues(){
     shooterSubsystem.printShooterValues();

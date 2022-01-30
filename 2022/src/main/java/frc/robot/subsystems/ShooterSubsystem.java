@@ -24,7 +24,7 @@ public class ShooterSubsystem extends SubsystemBase {
   private final TalonSRX m_shooterMotor2;
 
   private final CANSparkMax m_preShooterMotor;
-  private final VictorSPX m_feederMotor;
+  private final TalonSRX m_feederMotor;
 
   public ShooterSubsystem() {
     /*
@@ -70,7 +70,7 @@ public class ShooterSubsystem extends SubsystemBase {
     //m_shooterMotor1.config_kP(ShooterConstants.kPIDLoopIdx, ShooterConstants.kP, ShooterConstants.kTimeoutMs);
   
     m_preShooterMotor = new CANSparkMax(ShooterConstants.kPreShooterPort, MotorType.kBrushless);
-    m_feederMotor = new VictorSPX(ShooterConstants.kFeederPort);
+    m_feederMotor = new TalonSRX(ShooterConstants.kFeederPort);
     m_feederMotor.configFactoryDefault();
 
     m_preShooterMotor.setInverted(ShooterConstants.kPreShooterInversion);
@@ -83,10 +83,12 @@ public class ShooterSubsystem extends SubsystemBase {
 
   public void stop() {
     m_shooterMotor1.set(ControlMode.PercentOutput, 0);
+    m_preShooterMotor.set(0.0);
+    m_feederMotor.set(ControlMode.PercentOutput, 0.0);
   }
 
   public void shooterSlowForward() {
-    m_shooterMotor1.set(ControlMode.PercentOutput, 0.1);
+    m_shooterMotor1.set(ControlMode.PercentOutput, 0.3);
   }
 
   public void shooterSlowBackward() {
@@ -98,7 +100,7 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public double returnCurrentRPM() {
-    return m_shooterMotor1.getSelectedSensorVelocity() * 600 / 2048 / ShooterConstants.kShooterGearRatio;
+    return m_shooterMotor1.getSelectedSensorVelocity() * 600 / 4096 / ShooterConstants.kShooterGearRatio;
   }
 
   public void runPreShooter() {
@@ -110,7 +112,7 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public void reverseFeeder() {
-    m_feederMotor.set(ControlMode.PercentOutput, ShooterConstants.kFeederPercent);
+    m_feederMotor.set(ControlMode.PercentOutput, -ShooterConstants.kFeederPercent);
   }
 
   @Override

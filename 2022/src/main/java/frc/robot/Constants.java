@@ -46,18 +46,18 @@ public final class Constants {
         public static final int kShooterMotorPort1 = 30;
         public static final int kShooterMotorPort2 = 31;
 
-        public static final boolean kShooterInversion1 = false;
-        public static final boolean kShooterInversion2 = true;
+        public static final boolean kShooterInversion1 = true;
+        public static final boolean kShooterInversion2 = false;
         public static final boolean kSensorInversion = false;
 
-        public static final double kShooterP = 0.5;
+        public static final double kShooterP = 0.0;
         public static final double kShooterI = 0.0;
         public static final double kShooterD = 0.0;
-        public static final double kShooterF = 0.0;
+        public static final double kShooterF = 0.008;
 
         public static final double kShooterCurrentLimit = 30.0;
 
-        public static final double kShooterGearRatio = 2.0;
+        public static final double kShooterGearRatio = 64.0 / 20.0;
 
         public static final double kShooterRPMLowest = 3000;
         public static final double kShooterRPMLow = 3250;
@@ -67,10 +67,10 @@ public final class Constants {
 
         public static final int kPreShooterPort = 32;
         public static final int kFeederPort = 33;
-        public static final boolean kPreShooterInversion = false;
-        public static final boolean kFeederInversion = false;
-        public static final double kPreShooterPercent = 1.0;
-        public static final double kFeederPercent = 1.0;
+        public static final boolean kPreShooterInversion = true;
+        public static final boolean kFeederInversion = true;
+        public static final double kPreShooterPercent = 0.5;
+        public static final double kFeederPercent = 0.3;
     }
 
 }
