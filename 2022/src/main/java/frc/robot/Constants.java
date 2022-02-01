@@ -71,6 +71,17 @@ public final class Constants {
         public static final boolean kFeederInversion = true;
         public static final double kPreShooterPercent = 0.5;
         public static final double kFeederPercent = 1.0;
+        public static final double kPreShooterP = 0;
+        public static final double kPreShooterI = 0;
+        public static final double kPreShooterD = 0;
+        public static final double kPreShooterF = 0;
+        public static final double kPreShooterIZ = 0;
+        public static final double kPreShooterMaxOutput = 1;
+        public static final double kPreShooterMinOutput = -1;
+        public static final double kPreShooterMaxRPM = 5700;
+        public static final double kPreShooterGearRatio = 1;
+        public static final double kRPMWindow = 0.97;
+        public static final double kPreShooterRPMWindow = 0.97;
     }
 
 }
