@@ -23,15 +23,14 @@ import frc.robot.common.math.Rotation2;
 import frc.robot.common.math.Vector2;
 import frc.robot.common.UpdateManager;
 import frc.robot.common.util.*;
-import frc.robot.common.drivers.NavX;
 
 
 import java.util.Optional;
 
 //TODO: 2910 had the trackwidth and wheelbase as 1.0 on their robot, but this should be the robot dimensions in inches
 public class DrivetrainSubsystem implements Subsystem, UpdateManager.Updatable {
-    public static final double TRACKWIDTH = 1.0;
-    public static final double WHEELBASE = 1.0;
+    public static final double TRACKWIDTH = 17.5;
+    public static final double WHEELBASE = 17.5;
 
     public static final DrivetrainFeedforwardConstants FEEDFORWARD_CONSTANTS = new DrivetrainFeedforwardConstants(
             0.042746,
@@ -98,7 +97,7 @@ public class DrivetrainSubsystem implements Subsystem, UpdateManager.Updatable {
 
     public DrivetrainSubsystem() {
         synchronized (sensorLock) {
-            gyroscope.setInverted(false);
+            gyroscope.setInverted(true);
         }
 
         ShuffleboardTab tab = Shuffleboard.getTab("Drivetrain");

@@ -1,8 +1,10 @@
 package frc.robot.common;
 
+import frc.robot.Constants;
+
 public class Utilities {
 	public static double deadband(double input) {
-		return deadband(input, 0.025);
+		return deadband(input, Constants.kDeadband);
 	}
 
 	public static double deadband(double input, double buffer) {

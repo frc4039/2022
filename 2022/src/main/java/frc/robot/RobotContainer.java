@@ -50,8 +50,7 @@ public class RobotContainer {
     }
     autonomousChooser = new AutonomousChooser(autonomousTrajectories);
 
-    driverController.getLeftXAxis().setInverted(true);
-    driverController.getRightXAxis().setInverted(true);
+    driverController.getLeftYAxis().setInverted(false);
 
     CommandScheduler.getInstance().registerSubsystem(drivetrainSubsystem);
 
