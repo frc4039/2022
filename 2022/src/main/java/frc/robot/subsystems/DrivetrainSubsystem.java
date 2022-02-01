@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.Constants;
 import frc.robot.common.control.*;
 import frc.robot.common.drivers.Gyroscope;
+import frc.robot.common.drivers.NavX;
 import frc.robot.common.kinematics.ChassisVelocity;
 import frc.robot.common.kinematics.SwerveKinematics;
 import frc.robot.common.kinematics.SwerveOdometry;
