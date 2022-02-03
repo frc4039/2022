@@ -39,6 +39,10 @@ public class FeederSubsystem extends SubsystemBase {
     m_feederMotor.set(ControlMode.PercentOutput, -ShooterConstants.kFeederPercent);
   }
 
+  public void feederSlowBackward() {
+    m_feederMotor.set(ControlMode.PercentOutput, -0.1);
+  }
+
   @Override
   public void periodic() {
     

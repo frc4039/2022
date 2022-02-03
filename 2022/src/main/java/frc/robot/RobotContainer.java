@@ -8,9 +8,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.*;
-import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.*;
 //import frc.robot.common.autonomous.AutonomousChooser;
 //import frc.robot.common.autonomous.AutonomousTrajectories;
 //import frc.robot.common.util.DriverReadout;
@@ -38,13 +39,14 @@ public class RobotContainer {
 
   //private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem();
   private final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
+  private final FeederSubsystem feederSubsystem = new FeederSubsystem();
 
   //private AutonomousTrajectories autonomousTrajectories;
   //private AutonomousChooser autonomousChooser;
 
   //private final DriverReadout driverReadout;
 
-  private final double setpoint = 2800;
+  private final double RPM = 2800;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -62,6 +64,7 @@ public class RobotContainer {
 
     //CommandScheduler.getInstance().registerSubsystem(drivetrainSubsystem);
     CommandScheduler.getInstance().registerSubsystem(shooterSubsystem);
+    CommandScheduler.getInstance().registerSubsystem(feederSubsystem);
 
     //CommandScheduler.getInstance().setDefaultCommand(drivetrainSubsystem, new DriveCommand(drivetrainSubsystem, getDriveForwardAxis(), getDriveStrafeAxis(), getDriveRotationAxis()));
 
@@ -85,78 +88,43 @@ public class RobotContainer {
 
     //B button stops shooter
     driverController.getBButton().whenPressed(
-      new InstantCommand(shooterSubsystem::stop, shooterSubsystem)
+      new ParallelCommandGroup(
+        new InstantCommand(shooterSubsystem::stop, shooterSubsystem),
+        new InstantCommand(feederSubsystem::stop, feederSubsystem)
+      )
     );
 
-    //D-pad up sets shooter to 3000rpm
-    driverController.getDPadButton(Direction.UP).whenHeld(
-      new ComboShootCommand(shooterSubsystem, setpoint + 0)
+    //D-pad up increases shooter RPM by 25
+    driverController.getDPadButton(Direction.UP).whenPressed(
+      new ChangeShooterRPM(shooterSubsystem, true)
     );
 
-    //D-pad up-right sets shooter to 3100rpm
-    driverController.getDPadButton(Direction.UPRIGHT).whenHeld(
-      new ComboShootCommand(shooterSubsystem, setpoint + 50)
+    //D-pad down decreases shooter RPM by 25
+    driverController.getDPadButton(Direction.DOWN).whenPressed(
+      new ChangeShooterRPM(shooterSubsystem, false)
     );
 
-    //D-pad right sets shooter to 3200rpm
-    driverController.getDPadButton(Direction.RIGHT).whenHeld(
-      new ComboShootCommand(shooterSubsystem, setpoint + 100)
+    //D-pad right decreases shooter RPM by 25
+    driverController.getDPadButton(Direction.RIGHT).whenPressed(
+      new ChangePreShooterRPM(shooterSubsystem, false)
     );
 
-    //D-pad down-right sets shooter to 3300rpm
-    driverController.getDPadButton(Direction.DOWNRIGHT).whenHeld(
-      new ComboShootCommand(shooterSubsystem, setpoint + 150)
+    //D-pad left increases shooter RPM by 25
+    driverController.getDPadButton(Direction.LEFT).whenPressed(
+      new ChangePreShooterRPM(shooterSubsystem, true)
     );
 
-    //D-pad down sets shooter to 3400rpm
-    driverController.getDPadButton(Direction.DOWN).whenHeld(
-      new ComboShootCommand(shooterSubsystem, setpoint + 200)
+    //A button shoots
+    driverController.getAButton().whenPressed(
+      new ShootCommand(shooterSubsystem, feederSubsystem)
     );
 
-    //D-pad down-left sets shooter to 3500rpm
-    driverController.getDPadButton(Direction.DOWNLEFT).whenHeld(
-      new ComboShootCommand(shooterSubsystem, setpoint + 250)
+    driverController.getLeftBumperButton().whenPressed(
+      new ParallelCommandGroup(
+        new InstantCommand(shooterSubsystem::shooterSlowBackward, shooterSubsystem),
+        new InstantCommand(feederSubsystem::feederSlowBackward, feederSubsystem)
+      )
     );
-
-    //D-pad left sets shooter to 3200rpm
-    driverController.getDPadButton(Direction.LEFT).whenHeld(
-      new ComboShootCommand(shooterSubsystem, setpoint + 300)
-    );
-
-    //D-pad left-up sets shooter to 3700rpm
-    driverController.getDPadButton(Direction.UPLEFT).whenHeld(
-      new ComboShootCommand(shooterSubsystem, setpoint + 350)
-    );
-
-    //A button sets shooter to Driver Station RPM input
-    driverController.getAButton().whenHeld(
-      new ComboShootCommand(shooterSubsystem, SmartDashboard.getNumber("Shooter RPM Setpoint", 0.0))
-    );
-
-    driverController.getRightBumperButton().whenHeld(
-      new InstantCommand(shooterSubsystem::shooterSlowForward, shooterSubsystem)
-    );
-
-    driverController.getLeftBumperButton().whenHeld(
-      new InstantCommand(shooterSubsystem::shooterSlowBackward, shooterSubsystem)
-    );
-
-    driverController.getRightTriggerAxis().getButton(0.5).whenHeld(
-      new ComboShootCommand(shooterSubsystem, 1400)
-    );
-
-    driverController.getLeftTriggerAxis().getButton(0.5).whenHeld(
-      new InstantCommand(shooterSubsystem::reverseFeeder, shooterSubsystem)
-    );
-
-    driverController.getYButton().whenPressed(
-      new InstantCommand(shooterSubsystem::runPreShooter, shooterSubsystem)
-    );
-
-    driverController.getXButton().whenPressed(
-      new InstantCommand(shooterSubsystem::stop, shooterSubsystem)
-    );
-
   }
 
   // public Command getAutonomousCommand() {

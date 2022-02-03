@@ -19,23 +19,15 @@ import frc.robot.Constants.ShooterConstants;
 public class ShootCommand extends CommandBase {
   private final FeederSubsystem m_feeder;
   private final ShooterSubsystem m_shooter;
-  private final double m_rpm;
-  private final double m_preShooterRPM;
-
-
 
   /**
    * Creates a new Shoot Command.
    *
    * @param subsystem 
    */
-  public ShootCommand(ShooterSubsystem shooter, FeederSubsystem feeder, double rpm, double preShooterRPM) {
+  public ShootCommand(ShooterSubsystem shooter, FeederSubsystem feeder) {
     m_shooter = shooter;
     m_feeder = feeder;
-    m_rpm = rpm;
-    m_preShooterRPM = preShooterRPM;
-
-
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_shooter, m_feeder);
@@ -44,14 +36,14 @@ public class ShootCommand extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_shooter.shoot(m_rpm);
-    m_shooter.runPreShooter(m_preShooterRPM);
+    m_shooter.shoot();
+    m_shooter.runPreShooter();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if ((m_shooter.returnCurrentRPM() > m_rpm * ShooterConstants.kRPMWindow) && (m_shooter.returnPreShooterCurrentRPM() > m_preShooterRPM * ShooterConstants.kPreShooterRPMWindow)) {
+    if ((m_shooter.returnCurrentRPM() > m_shooter.ShooterRPM * ShooterConstants.kRPMWindow) && (m_shooter.returnPreShooterCurrentRPM() > m_shooter.PreShooterRPM * ShooterConstants.kPreShooterRPMWindow)) {
       m_feeder.runFeeder();
     }
   }

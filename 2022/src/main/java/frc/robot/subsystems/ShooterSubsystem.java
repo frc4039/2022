@@ -23,6 +23,9 @@ public class ShooterSubsystem extends SubsystemBase {
   private final CANSparkMax m_preShooterMotor;
   private final SparkMaxPIDController m_preShooterPID;
   private final RelativeEncoder m_preShooterEncoder;
+
+  public double ShooterRPM = 2800;
+  public double PreShooterRPM = 2800;
  
   public ShooterSubsystem() {
     /*
@@ -79,8 +82,8 @@ public class ShooterSubsystem extends SubsystemBase {
     m_preShooterPID.setIZone(ShooterConstants.kPreShooterIZ);
   }
 
-  public void shoot(double rpm) {
-      m_shooterMotor1.set(ControlMode.Velocity, rpm * ShooterConstants.kShooterGearRatio * 4096 / 600.0);
+  public void shoot() {
+      m_shooterMotor1.set(ControlMode.Velocity, ShooterRPM * ShooterConstants.kShooterGearRatio * 4096 / 600.0);
   }
 
   public void stop() {
@@ -94,6 +97,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
   public void shooterSlowBackward() {
     m_shooterMotor1.set(ControlMode.PercentOutput, -0.1);
+    m_preShooterMotor.set(-0.1);
   }
 
   public void printShooterValues() {
@@ -108,8 +112,8 @@ public class ShooterSubsystem extends SubsystemBase {
     return m_preShooterEncoder.getVelocity() / ShooterConstants.kPreShooterGearRatio;
   }
 
-  public void runPreShooter(double rpm) {
-    m_preShooterPID.setReference(rpm * ShooterConstants.kPreShooterGearRatio, CANSparkMax.ControlType.kVelocity);
+  public void runPreShooter() {
+    m_preShooterPID.setReference(PreShooterRPM * ShooterConstants.kPreShooterGearRatio, CANSparkMax.ControlType.kVelocity);
   }
 
   @Override
