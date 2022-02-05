@@ -19,7 +19,7 @@ public final class Constants {
     public static final int DRIVER_CONTROLLER_PORT = 0;
     public static final int OPERATOR_CONTROLLER_PORT = 1;
 
-    public static final double kDeadband = 0.1;
+    public static final double kDeadband = 0.075;
 
     public static final int DRIVETRAIN_FRONT_LEFT_DRIVE_MOTOR = 1;
     public static final int DRIVETRAIN_FRONT_RIGHT_DRIVE_MOTOR = 3;
@@ -36,10 +36,10 @@ public final class Constants {
     public static final int DRIVETRAIN_BACK_LEFT_ENCODER_PORT = 13;
     public static final int DRIVETRAIN_BACK_RIGHT_ENCODER_PORT = 14;
 
-    public static final double DRIVETRAIN_FRONT_LEFT_ENCODER_OFFSET = -Math.toRadians(22.67);
-    public static final double DRIVETRAIN_FRONT_RIGHT_ENCODER_OFFSET = -Math.toRadians(66.8);
-    public static final double DRIVETRAIN_BACK_LEFT_ENCODER_OFFSET = -Math.toRadians(8.43);
-    public static final double DRIVETRAIN_BACK_RIGHT_ENCODER_OFFSET = -Math.toRadians(345.7);
+    public static final double DRIVETRAIN_FRONT_LEFT_ENCODER_OFFSET = -Math.toRadians(22.85);
+    public static final double DRIVETRAIN_FRONT_RIGHT_ENCODER_OFFSET = -Math.toRadians(31.99);
+    public static final double DRIVETRAIN_BACK_LEFT_ENCODER_OFFSET = -Math.toRadians(4.83);
+    public static final double DRIVETRAIN_BACK_RIGHT_ENCODER_OFFSET = -Math.toRadians(345.71);
 
 
 
