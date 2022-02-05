@@ -41,6 +41,9 @@ public final class Constants {
     public static final double DRIVETRAIN_BACK_LEFT_ENCODER_OFFSET = -Math.toRadians(4.83);
     public static final double DRIVETRAIN_BACK_RIGHT_ENCODER_OFFSET = -Math.toRadians(345.71);
 
+    public static final int kIntakeMotorPort = 25;
+    public static final boolean kIntakeInverted = false;
+
 
 
 }
