@@ -9,6 +9,7 @@ public class Utilities {
 
 	public static double deadband(double input, double buffer) {
 		input = (Math.abs(input) > Math.abs(buffer)) ? input : 0.0;
+
 		if(input != 0.0)
 			input = Math.signum(input) * ((Math.abs(input) - buffer) / (1.0 - buffer));
 
