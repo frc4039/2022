@@ -21,6 +21,8 @@ public final class Constants {
 
     public static final double kDeadband = 0.075;
 
+    public static final double kRotationScale = 0.5;
+
     public static final int DRIVETRAIN_FRONT_LEFT_DRIVE_MOTOR = 1;
     public static final int DRIVETRAIN_FRONT_RIGHT_DRIVE_MOTOR = 3;
     public static final int DRIVETRAIN_BACK_RIGHT_DRIVE_MOTOR = 5;
