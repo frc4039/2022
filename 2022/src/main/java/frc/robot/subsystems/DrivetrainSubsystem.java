@@ -11,10 +11,12 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.Constants;
 import frc.robot.common.control.*;
 import frc.robot.common.drivers.Gyroscope;
+import frc.robot.common.drivers.NavX;
 import frc.robot.common.kinematics.ChassisVelocity;
 import frc.robot.common.kinematics.SwerveKinematics;
 import frc.robot.common.kinematics.SwerveOdometry;
@@ -23,15 +25,14 @@ import frc.robot.common.math.Rotation2;
 import frc.robot.common.math.Vector2;
 import frc.robot.common.UpdateManager;
 import frc.robot.common.util.*;
-import frc.robot.common.drivers.NavX;
 
 
 import java.util.Optional;
 
-
+//TODO: 2910 had the trackwidth and wheelbase as 1.0 on their robot, but this should be the robot dimensions in inches
 public class DrivetrainSubsystem implements Subsystem, UpdateManager.Updatable {
-    public static final double TRACKWIDTH = 1.0;
-    public static final double WHEELBASE = 1.0;
+    public static final double TRACKWIDTH = 17.5;
+    public static final double WHEELBASE = 17.5;
 
     public static final DrivetrainFeedforwardConstants FEEDFORWARD_CONSTANTS = new DrivetrainFeedforwardConstants(
             0.042746,
@@ -49,7 +50,7 @@ public class DrivetrainSubsystem implements Subsystem, UpdateManager.Updatable {
 
     private final HolonomicMotionProfiledTrajectoryFollower follower = new HolonomicMotionProfiledTrajectoryFollower(
             new PidConstants(0.4, 0.0, 0.025),
-            new PidConstants(5.0, 0.0, 0.0),
+            new PidConstants(1.0, 0.0, 0.0),
             new HolonomicFeedforward(FEEDFORWARD_CONSTANTS)
     );
 
@@ -98,17 +99,17 @@ public class DrivetrainSubsystem implements Subsystem, UpdateManager.Updatable {
 
     public DrivetrainSubsystem() {
         synchronized (sensorLock) {
-            gyroscope.setInverted(false);
+            gyroscope.setInverted(true);
         }
 
         ShuffleboardTab tab = Shuffleboard.getTab("Drivetrain");
 
-        //TODO: update gear ratio
+
         SwerveModule frontLeftModule = Mk4SwerveModuleHelper.createNeo(
                 tab.getLayout("Front Left Module", BuiltInLayouts.kList)
                         .withPosition(2, 0)
                         .withSize(2, 4),
-                Mk4SwerveModuleHelper.GearRatio.L4,
+                Mk4SwerveModuleHelper.GearRatio.L2,
                 Constants.DRIVETRAIN_FRONT_LEFT_DRIVE_MOTOR,
                 Constants.DRIVETRAIN_FRONT_LEFT_ANGLE_MOTOR,
                 Constants.DRIVETRAIN_FRONT_LEFT_ENCODER_PORT,
@@ -118,7 +119,7 @@ public class DrivetrainSubsystem implements Subsystem, UpdateManager.Updatable {
                 tab.getLayout("Front Right Module", BuiltInLayouts.kList)
                         .withPosition(4, 0)
                         .withSize(2, 4),
-                Mk4SwerveModuleHelper.GearRatio.L4,
+                Mk4SwerveModuleHelper.GearRatio.L2,
                 Constants.DRIVETRAIN_FRONT_RIGHT_DRIVE_MOTOR,
                 Constants.DRIVETRAIN_FRONT_RIGHT_ANGLE_MOTOR,
                 Constants.DRIVETRAIN_FRONT_RIGHT_ENCODER_PORT,
@@ -128,7 +129,7 @@ public class DrivetrainSubsystem implements Subsystem, UpdateManager.Updatable {
                 tab.getLayout("Back Left Module", BuiltInLayouts.kList)
                         .withPosition(6, 0)
                         .withSize(2, 4),
-                Mk4SwerveModuleHelper.GearRatio.L4,
+                Mk4SwerveModuleHelper.GearRatio.L2,
                 Constants.DRIVETRAIN_BACK_LEFT_DRIVE_MOTOR,
                 Constants.DRIVETRAIN_BACK_LEFT_ANGLE_MOTOR,
                 Constants.DRIVETRAIN_BACK_LEFT_ENCODER_PORT,
@@ -138,7 +139,7 @@ public class DrivetrainSubsystem implements Subsystem, UpdateManager.Updatable {
                 tab.getLayout("Back Right Module", BuiltInLayouts.kList)
                         .withPosition(8, 0)
                         .withSize(2, 4),
-                Mk4SwerveModuleHelper.GearRatio.L4,
+                Mk4SwerveModuleHelper.GearRatio.L2,
                 Constants.DRIVETRAIN_BACK_RIGHT_DRIVE_MOTOR,
                 Constants.DRIVETRAIN_BACK_RIGHT_ANGLE_MOTOR,
                 Constants.DRIVETRAIN_BACK_RIGHT_ENCODER_PORT,
@@ -335,6 +336,7 @@ public class DrivetrainSubsystem implements Subsystem, UpdateManager.Updatable {
         odometryXEntry.setDouble(pose.translation.x);
         odometryYEntry.setDouble(pose.translation.y);
         odometryAngleEntry.setDouble(getPose().rotation.toDegrees());
+        SmartDashboard.putNumber("Gyro heading", getPose().rotation.toDegrees());
     }
 
     public HolonomicMotionProfiledTrajectoryFollower getFollower() {
