@@ -5,6 +5,7 @@
 package frc.robot;
 
 import com.ctre.phoenix.motorcontrol.InvertType;
+import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 
 import edu.wpi.first.wpilibj.SPI.Port;
 
@@ -46,8 +47,8 @@ public final class Constants {
         public static final int kShooterMotorPort1 = 30;
         public static final int kShooterMotorPort2 = 31;
 
-        public static final boolean kShooterInversion1 = true;
-        public static final boolean kShooterInversion2 = false;
+        public static final TalonFXInvertType kShooterInversion1 = TalonFXInvertType.CounterClockwise;
+        public static final TalonFXInvertType kShooterInversion2 = TalonFXInvertType.Clockwise;
         public static final boolean kSensorInversion = false;
 
         public static final double kShooterP = 0.15;
@@ -67,7 +68,7 @@ public final class Constants {
 
         public static final int kPreShooterPort = 32;
         public static final int kFeederPort = 33;
-        public static final boolean kPreShooterInversion = true;
+        public static final TalonFXInvertType kPreShooterInversion = TalonFXInvertType.Clockwise;
         public static final boolean kFeederInversion = true;
         public static final double kPreShooterPercent = 0.5;
         public static final double kFeederPercent = 1.0;
@@ -79,7 +80,10 @@ public final class Constants {
         public static final double kPreShooterMaxOutput = 1;
         public static final double kPreShooterMinOutput = -1;
         public static final double kPreShooterMaxRPM = 5700;
+
+        //TODO: preShooter gear ratio
         public static final double kPreShooterGearRatio = 1;
+
         public static final double kRPMWindow = 0.97;
         public static final double kPreShooterRPMWindow = 0.97;
     }

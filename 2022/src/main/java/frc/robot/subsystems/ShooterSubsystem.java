@@ -2,9 +2,10 @@
 /* Copyright (c) 2018-2019 FIRST. All Rights Reserved.                        */
 package frc.robot.subsystems;
 
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
@@ -17,12 +18,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class ShooterSubsystem extends SubsystemBase {
 
-  private final TalonSRX m_shooterMotor1;
-  private final TalonSRX m_shooterMotor2;
-
-  private final CANSparkMax m_preShooterMotor;
-  private final SparkMaxPIDController m_preShooterPID;
-  private final RelativeEncoder m_preShooterEncoder;
+  private final TalonFX m_shooterMotor1;
+  private final TalonFX m_shooterMotor2;
+  private final TalonFX m_preShooterMotor;
 
   public double ShooterRPM = 2800;
   public double PreShooterRPM = 2800;
@@ -42,8 +40,8 @@ public class ShooterSubsystem extends SubsystemBase {
     shooterConfiguration.voltageCompSaturation = 11.5;
     */
 
-    m_shooterMotor1 = new TalonSRX(ShooterConstants.kShooterMotorPort1);
-    m_shooterMotor2 = new TalonSRX(ShooterConstants.kShooterMotorPort2);
+    m_shooterMotor1 = new TalonFX(ShooterConstants.kShooterMotorPort1);
+    m_shooterMotor2 = new TalonFX(ShooterConstants.kShooterMotorPort2);
 
     m_shooterMotor1.configFactoryDefault(); 
     m_shooterMotor2.configFactoryDefault(); 
@@ -55,7 +53,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
     m_shooterMotor2.follow(m_shooterMotor1);
 
-    m_shooterMotor1.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 30);
+    m_shooterMotor1.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 30);
     m_shooterMotor1.config_kF(0, ShooterConstants.kShooterF, 30);
     m_shooterMotor1.config_kP(0, ShooterConstants.kShooterP, 30);
     m_shooterMotor1.config_kI(0, ShooterConstants.kShooterI, 30);
@@ -70,25 +68,25 @@ public class ShooterSubsystem extends SubsystemBase {
     //m_shooterMotor1.config_kF(ShooterConstants.kPIDLoopIdx, ShooterConstants.kF, ShooterConstants.kTimeoutMs);
     //m_shooterMotor1.config_kP(ShooterConstants.kPIDLoopIdx, ShooterConstants.kP, ShooterConstants.kTimeoutMs);
   
-    m_preShooterMotor = new CANSparkMax(ShooterConstants.kPreShooterPort, MotorType.kBrushless);
-    m_preShooterMotor.restoreFactoryDefaults();
+    m_preShooterMotor = new TalonFX(ShooterConstants.kPreShooterPort);
+    m_preShooterMotor.configFactoryDefault();
     m_preShooterMotor.setInverted(ShooterConstants.kPreShooterInversion);
-    m_preShooterPID = m_preShooterMotor.getPIDController();
-    m_preShooterEncoder = m_preShooterMotor.getEncoder();
-    m_preShooterPID.setP(ShooterConstants.kPreShooterP);
-    m_preShooterPID.setI(ShooterConstants.kPreShooterI);
-    m_preShooterPID.setD(ShooterConstants.kPreShooterD);
-    m_preShooterPID.setFF(ShooterConstants.kPreShooterF);
-    m_preShooterPID.setIZone(ShooterConstants.kPreShooterIZ);
+    m_preShooterMotor.setSensorPhase(ShooterConstants.kSensorInversion);
+    m_shooterMotor1.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 30);
+    m_preShooterMotor.config_kF(0, ShooterConstants.kShooterF, 30);
+    m_preShooterMotor.config_kP(0, ShooterConstants.kShooterP, 30);
+    m_preShooterMotor.config_kI(0, ShooterConstants.kShooterI, 30);
+    m_preShooterMotor.config_kD(0, ShooterConstants.kShooterD, 30);
+    m_preShooterMotor.enableVoltageCompensation(false);
   }
 
   public void shoot() {
-      m_shooterMotor1.set(ControlMode.Velocity, ShooterRPM * ShooterConstants.kShooterGearRatio * 4096 / 600.0);
+      m_shooterMotor1.set(ControlMode.Velocity, ShooterRPM * ShooterConstants.kShooterGearRatio * 2048 / 600.0);
   }
 
   public void stop() {
     m_shooterMotor1.set(ControlMode.PercentOutput, 0);
-    m_preShooterMotor.set(0.0);
+    m_preShooterMotor.set(ControlMode.PercentOutput, 0);
   }
 
   public void shooterSlowForward() {
@@ -97,7 +95,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
   public void shooterSlowBackward() {
     m_shooterMotor1.set(ControlMode.PercentOutput, -0.1);
-    m_preShooterMotor.set(-0.1);
+    m_preShooterMotor.set(ControlMode.PercentOutput, -0.1);
   }
 
   public void printShooterValues() {
@@ -105,15 +103,15 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public double returnCurrentRPM() {
-    return m_shooterMotor1.getSelectedSensorVelocity() * 600 / 4096 / ShooterConstants.kShooterGearRatio;
+    return m_shooterMotor1.getSelectedSensorVelocity() * 600 / 2048 / ShooterConstants.kShooterGearRatio;
   }
 
   public double returnPreShooterCurrentRPM() {
-    return m_preShooterEncoder.getVelocity() / ShooterConstants.kPreShooterGearRatio;
+    return m_preShooterMotor.getSelectedSensorVelocity() * 600 / 2048 / ShooterConstants.kPreShooterGearRatio;
   }
 
   public void runPreShooter() {
-    m_preShooterPID.setReference(PreShooterRPM * ShooterConstants.kPreShooterGearRatio, CANSparkMax.ControlType.kVelocity);
+    m_preShooterMotor.set(ControlMode.Velocity, PreShooterRPM * ShooterConstants.kPreShooterGearRatio * 2048 / 600.0);
   }
 
   @Override
