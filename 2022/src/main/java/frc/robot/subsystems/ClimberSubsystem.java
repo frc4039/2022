@@ -109,7 +109,7 @@ public class ClimberSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         SmartDashboard.putNumber("Climber Right Encoder", getClimberRightEncoder());
-        SmartDashboard.putNumber("Climber Left Encoder", getClimberLeftEncoder());
+        //SmartDashboard.putNumber("Climber Left Encoder", getClimberLeftEncoder());
     }
 
 }
