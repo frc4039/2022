@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
 import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
@@ -28,6 +29,23 @@ public class ClimberSubsystem extends SubsystemBase {
         m_climberMotorLeft.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen, 0);
         m_climberMotorRight.setNeutralMode(NeutralMode.Brake);
         m_climberMotorLeft.setNeutralMode(NeutralMode.Brake);
+
+        m_climberMotorLeft.configReverseSoftLimitThreshold(0);
+        m_climberMotorLeft.configForwardSoftLimitThreshold(ClimberConstants.kFullyClimbedTicks);
+        m_climberMotorRight.configReverseSoftLimitThreshold(0);
+        m_climberMotorRight.configForwardSoftLimitThreshold(ClimberConstants.kFullyClimbedTicks);
+        
+        m_climberMotorLeft.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
+        m_climberMotorRight.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
+
+        m_climberMotorLeft.getSensorCollection().setIntegratedSensorPosition(0, ClimberConstants.kTimeoutMs);
+        m_climberMotorRight.getSensorCollection().setIntegratedSensorPosition(0, ClimberConstants.kTimeoutMs);
+
+        m_climberMotorLeft.configReverseSoftLimitEnable(true);
+        m_climberMotorLeft.configForwardSoftLimitEnable(true);
+        m_climberMotorRight.configReverseSoftLimitEnable(true);
+        m_climberMotorRight.configForwardSoftLimitEnable(true);
+        
     }
     
     public void climberUp() {
