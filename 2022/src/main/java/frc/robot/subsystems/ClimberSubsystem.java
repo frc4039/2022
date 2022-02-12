@@ -61,6 +61,16 @@ public class ClimberSubsystem extends SubsystemBase {
         m_climberMotorLeft.set(ControlMode.PercentOutput, ClimberConstants.kClimberPowerDown);
     }
 
+    public void climberUpSlow() {
+        m_climberMotorRight.set(ControlMode.PercentOutput, ClimberConstants.kClimberSlowUp);
+        m_climberMotorLeft.set(ControlMode.PercentOutput, ClimberConstants.kClimberSlowUp);
+    }
+
+    public void climberDownSlow() {
+        m_climberMotorRight.set(ControlMode.PercentOutput, ClimberConstants.kClimberSlowDown);
+        m_climberMotorLeft.set(ControlMode.PercentOutput, ClimberConstants.kClimberSlowDown);
+    }
+
     public void stop() {
         m_climberMotorRight.set(ControlMode.PercentOutput, 0);
         m_climberMotorLeft.set(ControlMode.PercentOutput, 0);

@@ -84,13 +84,21 @@ public class RobotContainer {
     driverController.getLeftBumperButton().whenPressed(
       new IntakeCommand(intakeSubsystem)
     );
+
+    operatorController.getLeftTriggerAxis().getButton(0.5).whenHeld(
+      new ClimberDownCommand(m_climberSubsystem)
+    );
+
+    operatorController.getLeftBumperButton().whenHeld(
+      new ClimberDownSlowCommand(m_climberSubsystem)
+    );
     
     operatorController.getRightTriggerAxis().getButton(0.5).whenHeld(
       new ClimberUpCommand(m_climberSubsystem)
     );
 
     operatorController.getRightBumperButton().whenHeld(
-      new ClimberDownCommand(m_climberSubsystem)
+      new ClimberUpSlowCommand(m_climberSubsystem)
     );
   }
 
