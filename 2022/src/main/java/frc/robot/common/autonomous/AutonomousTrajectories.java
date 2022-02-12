@@ -29,7 +29,7 @@ public class AutonomousTrajectories {
 
         tenFeetTestAuto = new Trajectory(
                 new SimplePathBuilder(new Vector2(0.0, 0.0), Rotation2.ZERO)
-                        .lineTo(new Vector2(0.0, 120.0))
+                        .lineTo(new Vector2(60.0, 0.0), Rotation2.ZERO)
                         .build(),
                 trajectoryConstraints, SAMPLE_DISTANCE
         );
