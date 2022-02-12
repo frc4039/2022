@@ -35,6 +35,7 @@ public class RobotContainer {
   private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem();
 
   private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
+  private final ClimberSubsystem m_climberSubsystem = new ClimberSubsystem();
 
   private AutonomousTrajectories autonomousTrajectories;
   private AutonomousChooser autonomousChooser;
@@ -56,8 +57,9 @@ public class RobotContainer {
     driverController.getLeftXAxis().setInverted(true);
 
     CommandScheduler.getInstance().registerSubsystem(drivetrainSubsystem);
-
+    CommandScheduler.getInstance().registerSubsystem(m_climberSubsystem);
     CommandScheduler.getInstance().setDefaultCommand(drivetrainSubsystem, new DriveCommand(drivetrainSubsystem, getDriveForwardAxis(), getDriveStrafeAxis(), getDriveRotationAxis()));
+
 
     driverReadout = new DriverReadout(this);
 
@@ -81,6 +83,14 @@ public class RobotContainer {
 
     driverController.getLeftBumperButton().whenPressed(
       new IntakeCommand(intakeSubsystem)
+    );
+    
+    operatorController.getRightTriggerAxis().getButton(0.5).whenHeld(
+      new ClimberUpCommand(m_climberSubsystem)
+    );
+
+    operatorController.getRightBumperButton().whenHeld(
+      new ClimberDownCommand(m_climberSubsystem)
     );
   }
 

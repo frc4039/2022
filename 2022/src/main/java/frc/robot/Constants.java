@@ -4,7 +4,11 @@
 
 package frc.robot;
 
+import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
+
 import edu.wpi.first.wpilibj.SPI.Port;
+import edu.wpi.first.wpilibj.motorcontrol.Talon;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -46,6 +50,17 @@ public final class Constants {
     public static final int kIntakeMotorPort = 25;
     public static final boolean kIntakeInverted = false;
 
+    public static final class ClimberConstants{
+        public static final TalonFXInvertType kClimberMotorRightInversion = TalonFXInvertType.Clockwise;
+        public static final TalonFXInvertType kClimberMotorLeftInversion = TalonFXInvertType.CounterClockwise;
+        public static final int kClimberMotorRightPort = 40;
+        public static final int kClimberMotorLeftPort = 41; 
 
+        public static final double kClimberPowerUp = 0.10;
+        public static final double kClimberPowerDown = -0.10;
+
+        public static final double kFullyClimbedTicks = 40960;
+        public static final int kTimeoutMs = 30;
+    }
 
 }
