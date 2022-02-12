@@ -49,8 +49,8 @@ public final class Constants {
         public static final int kClimberMotorRightPort = 40;
         public static final int kClimberMotorLeftPort = 41; 
 
-        public static final double kClimberPowerUp = 0.10;
-        public static final double kClimberPowerDown = -0.10;
+        public static final double kClimberPowerUp = 1.10;
+        public static final double kClimberPowerDown = -1.0;
 
         public static final double kFullyClimbedTicks = 40960;
         public static final int kTimeoutMs = 30;
