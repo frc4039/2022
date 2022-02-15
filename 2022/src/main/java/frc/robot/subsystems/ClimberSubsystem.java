@@ -7,6 +7,7 @@ import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ClimberConstants;
 
@@ -41,10 +42,12 @@ public class ClimberSubsystem extends SubsystemBase {
         m_climberMotorLeft.getSensorCollection().setIntegratedSensorPosition(0, ClimberConstants.kTimeoutMs);
         m_climberMotorRight.getSensorCollection().setIntegratedSensorPosition(0, ClimberConstants.kTimeoutMs);
 
+        /*
         m_climberMotorLeft.configReverseSoftLimitEnable(true);
         m_climberMotorLeft.configForwardSoftLimitEnable(true);
         m_climberMotorRight.configReverseSoftLimitEnable(true);
         m_climberMotorRight.configForwardSoftLimitEnable(true);
+        */
         
     }
     
@@ -56,6 +59,16 @@ public class ClimberSubsystem extends SubsystemBase {
     public void climberDown() {
         m_climberMotorRight.set(ControlMode.PercentOutput, ClimberConstants.kClimberPowerDown);
         m_climberMotorLeft.set(ControlMode.PercentOutput, ClimberConstants.kClimberPowerDown);
+    }
+
+    public void climberUpSlow() {
+        m_climberMotorRight.set(ControlMode.PercentOutput, ClimberConstants.kClimberSlowUp);
+        m_climberMotorLeft.set(ControlMode.PercentOutput, ClimberConstants.kClimberSlowUp);
+    }
+
+    public void climberDownSlow() {
+        m_climberMotorRight.set(ControlMode.PercentOutput, ClimberConstants.kClimberSlowDown);
+        m_climberMotorLeft.set(ControlMode.PercentOutput, ClimberConstants.kClimberSlowDown);
     }
 
     public void stop() {
@@ -84,5 +97,20 @@ public class ClimberSubsystem extends SubsystemBase {
         m_climberMotorRight.overrideLimitSwitchesEnable(true);
         m_climberMotorLeft.overrideLimitSwitchesEnable(true);
     }
+
+    public double getClimberRightEncoder(){
+        return m_climberMotorRight.getSelectedSensorPosition();
+    }
+
+    public double getClimberLeftEncoder(){
+        return m_climberMotorLeft.getSelectedSensorPosition();
+    }
+
+    @Override
+    public void periodic() {
+        SmartDashboard.putNumber("Climber Right Encoder", getClimberRightEncoder());
+        SmartDashboard.putNumber("Climber Left Encoder", getClimberLeftEncoder());
+    }
+
 }
 
