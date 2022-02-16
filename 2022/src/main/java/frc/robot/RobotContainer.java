@@ -6,6 +6,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
@@ -33,6 +34,7 @@ public class RobotContainer {
   private final XboxController operatorController = new XboxController(Constants.OPERATOR_CONTROLLER_PORT);
 
   private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem();
+  private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
 
   private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
   private final ClimberSubsystem m_climberSubsystem = new ClimberSubsystem();
@@ -57,6 +59,7 @@ public class RobotContainer {
     driverController.getLeftXAxis().setInverted(true);
 
     CommandScheduler.getInstance().registerSubsystem(drivetrainSubsystem);
+    CommandScheduler.getInstance().registerSubsystem(intakeSubsystem);
     CommandScheduler.getInstance().registerSubsystem(m_climberSubsystem);
     CommandScheduler.getInstance().setDefaultCommand(drivetrainSubsystem, new DriveCommand(drivetrainSubsystem, getDriveForwardAxis(), getDriveStrafeAxis(), getDriveRotationAxis()));
 
@@ -77,12 +80,18 @@ public class RobotContainer {
       () -> drivetrainSubsystem.resetGyroAngle(Rotation2.ZERO)
     );
 
+    /*
     driverController.getAButton().whenPressed(
       new BasicDriveCommand(drivetrainSubsystem, new Vector2(-0.5, 0.0), 0.0, false).withTimeout(0.3)
     );
+    */
 
-    driverController.getLeftBumperButton().whenPressed(
-      new IntakeCommand(intakeSubsystem)
+    driverController.getRightTriggerAxis().getButton(0.05).whenHeld(
+      new IntakeCommand(driverController.getRightTriggerAxis().get(), intakeSubsystem)
+    );
+
+    driverController.getRightTriggerAxis().getButton(0.05).whenHeld(
+      new IntakeCommand(driverController.getLeftTriggerAxis().get(), intakeSubsystem)
     );
 
     operatorController.getLeftTriggerAxis().getButton(0.5).whenHeld(
