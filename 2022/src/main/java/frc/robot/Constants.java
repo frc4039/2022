@@ -5,6 +5,7 @@
 package frc.robot;
 
 import com.ctre.phoenix.motorcontrol.InvertType;
+import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.SPI.Port;
@@ -46,7 +47,7 @@ public final class Constants {
 
     public static final class IntakeConstants {
         public static final int kIntakeMotorPort = 20;
-        public static final boolean kIntakeInversion = false;
+        public static final TalonFXInvertType kIntakeInversion = TalonFXInvertType.Clockwise;
         public static final double kIntakePercent = 0.75;
 
     }

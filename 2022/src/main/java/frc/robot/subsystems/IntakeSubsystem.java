@@ -7,6 +7,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.IntakeConstants;
@@ -25,12 +26,14 @@ public class IntakeSubsystem extends SubsystemBase {
     m_intakeSolenoid = new DoubleSolenoid(Constants.kPCMCANID, PneumaticsModuleType.CTREPCM, 0, 1);
   }
 
-  public void intake() {
-    m_intakeMotor.set(ControlMode.PercentOutput, IntakeConstants.kIntakePercent);
+  public void intake(double speed) {
+    m_intakeMotor.set(ControlMode.PercentOutput, speed);
+    SmartDashboard.putNumber("Intake Speed", speed);
   }
 
-  public void outtake() {
-    m_intakeMotor.set(ControlMode.PercentOutput, -IntakeConstants.kIntakePercent);
+  public void outtake(double speed) {
+    m_intakeMotor.set(ControlMode.PercentOutput, -speed);
+    SmartDashboard.putNumber("Intake Speed", -speed);
   }
 
   public void extendIntake() {
@@ -51,6 +54,6 @@ public class IntakeSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    
+
   }
 }

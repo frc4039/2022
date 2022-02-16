@@ -6,6 +6,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
@@ -75,13 +76,20 @@ public class RobotContainer {
       () -> drivetrainSubsystem.resetGyroAngle(Rotation2.ZERO)
     );
 
+    /*
     driverController.getAButton().whenPressed(
       new BasicDriveCommand(drivetrainSubsystem, new Vector2(-0.5, 0.0), 0.0, false).withTimeout(0.3)
     );
+    */
 
-    driverController.getLeftBumperButton().whenHeld(
-      new IntakeCommand(intakeSubsystem)
+    driverController.getRightTriggerAxis().getButton(0.05).whenHeld(
+      new IntakeCommand(driverController.getRightTriggerAxis().get(), intakeSubsystem)
     );
+
+    driverController.getRightTriggerAxis().getButton(0.05).whenHeld(
+      new IntakeCommand(driverController.getLeftTriggerAxis().get(), intakeSubsystem)
+    );
+
   }
 
   public Command getAutonomousCommand() {

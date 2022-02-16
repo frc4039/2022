@@ -8,6 +8,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants.IntakeConstants;
 import frc.robot.subsystems.IntakeSubsystem;
 
 /**
@@ -15,9 +16,11 @@ import frc.robot.subsystems.IntakeSubsystem;
  */
 public class IntakeCommand extends CommandBase {
   private final IntakeSubsystem m_intakeSubsystem;
+  private double m_speed;
 
-  public IntakeCommand(IntakeSubsystem intakeSubsystem) {
+  public IntakeCommand(double speed, IntakeSubsystem intakeSubsystem) {
     m_intakeSubsystem = intakeSubsystem;
+    m_speed = speed;
     // m_stirrer = stirrer;
 
     // Use addRequirements() here to declare subsystem dependencies.
@@ -33,7 +36,7 @@ public class IntakeCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_intakeSubsystem.intake();
+    m_intakeSubsystem.intake(m_speed);
   }
 
   // Called once the command ends or is interrupted.
