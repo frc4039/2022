@@ -30,7 +30,7 @@ public class IntakeCommand extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_intakeSubsystem.extendIntake();
+    //m_intakeSubsystem.extendIntake();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -42,7 +42,7 @@ public class IntakeCommand extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_intakeSubsystem.retractIntake();
+    //m_intakeSubsystem.retractIntake();
     m_intakeSubsystem.stop();
   }
 
