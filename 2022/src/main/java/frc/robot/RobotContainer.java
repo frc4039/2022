@@ -4,20 +4,24 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
-import frc.robot.common.autonomous.AutonomousChooser;
-import frc.robot.common.autonomous.AutonomousTrajectories;
-import frc.robot.common.util.DriverReadout;
+//import frc.robot.common.autonomous.AutonomousChooser;
+//import frc.robot.common.autonomous.AutonomousTrajectories;
+//import frc.robot.common.util.DriverReadout;
 import frc.robot.common.math.Rotation2;
 import frc.robot.common.math.Vector2;
 import frc.robot.common.input.Axis;
 import frc.robot.common.input.DPadButton;
 import frc.robot.common.input.XboxController;
+import frc.robot.common.input.DPadButton.Direction;
+import frc.robot.Constants.*;
 
 import java.io.IOException;
 
@@ -33,31 +37,37 @@ public class RobotContainer {
   private final XboxController driverController = new XboxController(Constants.DRIVER_CONTROLLER_PORT);
   private final XboxController operatorController = new XboxController(Constants.OPERATOR_CONTROLLER_PORT);
 
-  private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem();
-  private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
 
+  //private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem();
+  private final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
+  private final FeederSubsystem feederSubsystem = new FeederSubsystem();
+  private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem();
   private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
   private final ClimberSubsystem m_climberSubsystem = new ClimberSubsystem();
 
-  private AutonomousTrajectories autonomousTrajectories;
-  private AutonomousChooser autonomousChooser;
 
-  private final DriverReadout driverReadout;
+  //private AutonomousTrajectories autonomousTrajectories;
+  //private AutonomousChooser autonomousChooser;
+
+  //private final DriverReadout driverReadout;
+
+  private final double RPM = 2800;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the button bindings
 
-    try {
-      autonomousTrajectories = new AutonomousTrajectories(DrivetrainSubsystem.TRAJECTORY_CONSTRAINTS);
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-    autonomousChooser = new AutonomousChooser(autonomousTrajectories);
+    // try {
+    //   //autonomousTrajectories = new AutonomousTrajectories(DrivetrainSubsystem.TRAJECTORY_CONSTRAINTS);
+    // } catch (IOException e) {
+    //   e.printStackTrace();
+    // }
+   // autonomousChooser = new AutonomousChooser(autonomousTrajectories);
 
     driverController.getLeftYAxis().setInverted(true);
     driverController.getLeftXAxis().setInverted(true);
-
+    CommandScheduler.getInstance().registerSubsystem(shooterSubsystem);
+    CommandScheduler.getInstance().registerSubsystem(feederSubsystem);
     CommandScheduler.getInstance().registerSubsystem(drivetrainSubsystem);
     CommandScheduler.getInstance().registerSubsystem(intakeSubsystem);
     CommandScheduler.getInstance().registerSubsystem(m_climberSubsystem);
@@ -76,13 +86,44 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    driverController.getBackButton().whenPressed(
-      () -> drivetrainSubsystem.resetGyroAngle(Rotation2.ZERO)
+    //driverController.getBackButton().whenPressed(
+      //() -> drivetrainSubsystem.resetGyroAngle(Rotation2.ZERO)
+    //);
+
+    //B button stops shooter
+    driverController.getBButton().whenPressed(
+      new ParallelCommandGroup(
+        new InstantCommand(shooterSubsystem::stop, shooterSubsystem),
+        new InstantCommand(feederSubsystem::stop, feederSubsystem)
+      )
     );
 
+    //D-pad up increases shooter RPM by 25
+    driverController.getDPadButton(Direction.UP).whenPressed(
+      new ChangeShooterRPM(shooterSubsystem, true)
+    );
+
+    //D-pad down decreases shooter RPM by 25
+    driverController.getDPadButton(Direction.DOWN).whenPressed(
+      new ChangeShooterRPM(shooterSubsystem, false)
+    );
+
+    //D-pad right decreases shooter RPM by 25
+    driverController.getDPadButton(Direction.RIGHT).whenPressed(
+      new ChangePreShooterRPM(shooterSubsystem, false)
+    );
+
+    //D-pad left increases shooter RPM by 25
+    driverController.getDPadButton(Direction.LEFT).whenPressed(
+      new ChangePreShooterRPM(shooterSubsystem, true)
+    );
+
+    //A button shoots
+
     /*
+
     driverController.getAButton().whenPressed(
-      new BasicDriveCommand(drivetrainSubsystem, new Vector2(-0.5, 0.0), 0.0, false).withTimeout(0.3)
+      new ShootCommand(shooterSubsystem, feederSubsystem)
     );
     */
 
@@ -111,9 +152,18 @@ public class RobotContainer {
     );
   }
 
-  public Command getAutonomousCommand() {
-    return autonomousChooser.getCommand(this);
+
+    driverController.getLeftBumperButton().whenPressed(
+      new ParallelCommandGroup(
+        new InstantCommand(shooterSubsystem::shooterSlowBackward, shooterSubsystem),
+        new InstantCommand(feederSubsystem::feederSlowBackward, feederSubsystem)
+      )
+    );
   }
+
+  // public Command getAutonomousCommand() {
+  //   return autonomousChooser.getCommand(this);
+  // }
 
   private Axis getDriveForwardAxis() {
     return driverController.getLeftYAxis();
@@ -127,9 +177,9 @@ public class RobotContainer {
     return driverController.getRightXAxis();
   }
 
-  public DrivetrainSubsystem getDrivetrainSubsystem() {
-    return drivetrainSubsystem;
-  }
+  // public DrivetrainSubsystem getDrivetrainSubsystem() {
+  //   return drivetrainSubsystem;
+  // }
 
   public XboxController getDriverController() {
     return driverController;
@@ -139,7 +189,11 @@ public class RobotContainer {
     return operatorController;
   }
 
-  public AutonomousChooser getAutonomousChooser() {
-    return autonomousChooser;
+  // public AutonomousChooser getAutonomousChooser() {
+  //   return autonomousChooser;
+  // }
+
+  public void PrintAllValues(){
+    shooterSubsystem.printShooterValues();
   }
 }

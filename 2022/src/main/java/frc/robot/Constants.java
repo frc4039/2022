@@ -6,9 +6,7 @@ package frc.robot;
 
 import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
-
 import edu.wpi.first.wpilibj.DoubleSolenoid;
-
 import edu.wpi.first.wpilibj.SPI.Port;
 import edu.wpi.first.wpilibj.motorcontrol.Talon;
 
@@ -62,11 +60,60 @@ public final class Constants {
         public static final double kClimberPowerDown = -1.0;
         public static final double kClimberSlowUp = 0.1;
         public static final double kClimberSlowDown = -0.1;
-
+      
         //testing on 2/12 showed something around 470k encoder ticks might be right
         public static final double kFullyClimbedTicks = 472000;
         public static final int kTimeoutMs = 30;
     }
+
+
+    public static final class ShooterConstants {
+        
+        public static final int kShooterMotorPort1 = 30;
+        public static final int kShooterMotorPort2 = 31;
+
+        public static final TalonFXInvertType kShooterInversion1 = TalonFXInvertType.CounterClockwise;
+        public static final TalonFXInvertType kShooterInversion2 = TalonFXInvertType.Clockwise;
+        public static final boolean kSensorInversion = false;
+
+        public static final double kShooterP = 0.15;
+        public static final double kShooterI = 0.0;
+        public static final double kShooterD = 0.0;
+        public static final double kShooterF = 0.0135;
+
+        public static final double kShooterCurrentLimit = 30.0;
+
+        public static final double kShooterGearRatio = 64.0 / 20.0;
+
+        public static final double kShooterRPMLowest = 3000;
+        public static final double kShooterRPMLow = 3250;
+        public static final double kShooterRPMMid = 3500;
+        public static final double kShooterRPMHigh = 3750;
+        public static final double kShooterRPMHighest = 4000;
+
+        public static final int kPreShooterPort = 32;
+        public static final int kFeederPort = 33;
+        public static final TalonFXInvertType kPreShooterInversion = TalonFXInvertType.Clockwise;
+        public static final boolean kFeederInversion = true;
+        public static final double kPreShooterPercent = 0.5;
+        public static final double kFeederPercent = 1.0;
+        public static final double kPreShooterP = 0;
+        public static final double kPreShooterI = 0;
+        public static final double kPreShooterD = 0;
+        public static final double kPreShooterF = 0;
+        public static final double kPreShooterIZ = 0;
+        public static final double kPreShooterMaxOutput = 1;
+        public static final double kPreShooterMinOutput = -1;
+        public static final double kPreShooterMaxRPM = 5700;
+
+        //TODO: preShooter gear ratio
+        public static final double kPreShooterGearRatio = 1;
+
+        public static final double kRPMWindow = 0.97;
+        public static final double kPreShooterRPMWindow = 0.97;
+    }
+
+
   
   public static final class IntakeConstants {
         public static final int kIntakeMotorPort = 20;
