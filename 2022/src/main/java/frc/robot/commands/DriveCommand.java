@@ -4,6 +4,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.common.math.Vector2;
+import frc.robot.Constants;
 import frc.robot.common.input.Axis;
 
 public class DriveCommand extends CommandBase {
@@ -24,7 +25,7 @@ public class DriveCommand extends CommandBase {
 
     @Override
     public void execute() {
-        drivetrainSubsystem.drive(new Vector2(forward.get(true), strafe.get(true)), rotation.get(true), true);
+        drivetrainSubsystem.drive(new Vector2(forward.get(true), strafe.get(true)), rotation.get(true) * Constants.kRotationScale, true);
     }
 
     @Override
