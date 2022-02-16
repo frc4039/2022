@@ -12,9 +12,9 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
-//import frc.robot.common.autonomous.AutonomousChooser;
-//import frc.robot.common.autonomous.AutonomousTrajectories;
-//import frc.robot.common.util.DriverReadout;
+import frc.robot.common.autonomous.AutonomousChooser;
+import frc.robot.common.autonomous.AutonomousTrajectories;
+import frc.robot.common.util.DriverReadout;
 import frc.robot.common.math.Rotation2;
 import frc.robot.common.math.Vector2;
 import frc.robot.common.input.Axis;
@@ -37,8 +37,6 @@ public class RobotContainer {
   private final XboxController driverController = new XboxController(Constants.DRIVER_CONTROLLER_PORT);
   private final XboxController operatorController = new XboxController(Constants.OPERATOR_CONTROLLER_PORT);
 
-
-  //private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem();
   private final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
   private final FeederSubsystem feederSubsystem = new FeederSubsystem();
   private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem();
@@ -46,10 +44,10 @@ public class RobotContainer {
   private final ClimberSubsystem m_climberSubsystem = new ClimberSubsystem();
 
 
-  //private AutonomousTrajectories autonomousTrajectories;
-  //private AutonomousChooser autonomousChooser;
+  private AutonomousTrajectories autonomousTrajectories;
+  private AutonomousChooser autonomousChooser;
 
-  //private final DriverReadout driverReadout;
+  private final DriverReadout driverReadout;
 
   private final double RPM = 2800;
 
@@ -57,12 +55,12 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the button bindings
 
-    // try {
-    //   //autonomousTrajectories = new AutonomousTrajectories(DrivetrainSubsystem.TRAJECTORY_CONSTRAINTS);
-    // } catch (IOException e) {
-    //   e.printStackTrace();
-    // }
-   // autonomousChooser = new AutonomousChooser(autonomousTrajectories);
+    try {
+      autonomousTrajectories = new AutonomousTrajectories(DrivetrainSubsystem.TRAJECTORY_CONSTRAINTS);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    autonomousChooser = new AutonomousChooser(autonomousTrajectories);
 
     driverController.getLeftYAxis().setInverted(true);
     driverController.getLeftXAxis().setInverted(true);
@@ -150,8 +148,6 @@ public class RobotContainer {
     operatorController.getRightBumperButton().whenHeld(
       new ClimberUpSlowCommand(m_climberSubsystem)
     );
-  }
-
 
     driverController.getLeftBumperButton().whenPressed(
       new ParallelCommandGroup(
@@ -161,9 +157,9 @@ public class RobotContainer {
     );
   }
 
-  // public Command getAutonomousCommand() {
-  //   return autonomousChooser.getCommand(this);
-  // }
+  public Command getAutonomousCommand() {
+    return autonomousChooser.getCommand(this);
+  }
 
   private Axis getDriveForwardAxis() {
     return driverController.getLeftYAxis();
@@ -177,9 +173,9 @@ public class RobotContainer {
     return driverController.getRightXAxis();
   }
 
-  // public DrivetrainSubsystem getDrivetrainSubsystem() {
-  //   return drivetrainSubsystem;
-  // }
+  public DrivetrainSubsystem getDrivetrainSubsystem() {
+    return drivetrainSubsystem;
+  }
 
   public XboxController getDriverController() {
     return driverController;
@@ -189,9 +185,9 @@ public class RobotContainer {
     return operatorController;
   }
 
-  // public AutonomousChooser getAutonomousChooser() {
-  //   return autonomousChooser;
-  // }
+  public AutonomousChooser getAutonomousChooser() {
+    return autonomousChooser;
+  }
 
   public void PrintAllValues(){
     shooterSubsystem.printShooterValues();
