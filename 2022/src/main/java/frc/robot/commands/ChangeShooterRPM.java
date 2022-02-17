@@ -33,7 +33,7 @@ public class ChangeShooterRPM extends CommandBase {
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
-        SmartDashboard.putNumber("Shooter RPM", m_shooter.ShooterRPM);
+        SmartDashboard.putNumber("Shooter RPM, SetPoint", m_shooter.ShooterRPM);
     }
 
     // Returns true when the command should end.

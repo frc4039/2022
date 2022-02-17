@@ -26,14 +26,12 @@ public class IntakeSubsystem extends SubsystemBase {
     //m_intakeSolenoid = new DoubleSolenoid(Constants.kPCMCANID, PneumaticsModuleType.CTREPCM, 0, 1);
   }
 
-  public void intake(double speed) {
-    m_intakeMotor.set(ControlMode.PercentOutput, speed);
-    SmartDashboard.putNumber("Intake Speed", speed);
+  public void intake() {
+    m_intakeMotor.set(ControlMode.PercentOutput, IntakeConstants.kIntakePercent);
   }
 
-  public void outtake(double speed) {
-    m_intakeMotor.set(ControlMode.PercentOutput, -speed);
-    SmartDashboard.putNumber("Intake Speed", -speed);
+  public void outtake() {
+    m_intakeMotor.set(ControlMode.PercentOutput, IntakeConstants.kOutakePercent);
   }
 
   /*

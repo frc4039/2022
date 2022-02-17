@@ -118,8 +118,8 @@ public final class Constants {
   public static final class IntakeConstants {
         public static final int kIntakeMotorPort = 20;
         public static final TalonFXInvertType kIntakeInversion = TalonFXInvertType.Clockwise;
-        public static final double kIntakePercent = 0.75;
-
+        public static final double kIntakePercent = 0.50;
+        public static final double kOutakePercent = 0.50;
     }
 
 }
