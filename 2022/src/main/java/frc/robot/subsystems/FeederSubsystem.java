@@ -36,7 +36,7 @@ public class FeederSubsystem extends SubsystemBase {
   }
 
   public void reverseFeeder() {
-    m_feederMotor.set(ShooterConstants.kFeederPercent);
+    m_feederMotor.set(-ShooterConstants.kFeederPercent);
   }
 
   public void feederSlowBackward() {
