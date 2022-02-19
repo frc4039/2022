@@ -93,13 +93,7 @@ public class RobotContainer {
 
     
     driverController.getRightTriggerAxis().getButton(0.1).whenHeld(
-      new SequentialCommandGroup(
-        new ParallelDeadlineGroup(
-          new WaitCommand(0.5),
-          new FeederCommand(feederSubsystem, -ShooterConstants.kSlowFeederPercent)
-        ),
         new ShootCommand(shooterSubsystem, feederSubsystem)
-      )
     );
 
     //TODO Change back to this once intake pneumatics are ready

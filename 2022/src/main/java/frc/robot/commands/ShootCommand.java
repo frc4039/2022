@@ -36,16 +36,18 @@ public class ShootCommand extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_shooter.shoot();
+    //m_shooter.shoot();
     m_shooter.runPreShooter();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    /*
     if ((m_shooter.returnCurrentRPM() > m_shooter.ShooterRPM * ShooterConstants.kRPMWindow) && (m_shooter.returnPreShooterCurrentRPM() > m_shooter.PreShooterRPM * ShooterConstants.kPreShooterRPMWindow)) {
       m_feeder.runFeeder(ShooterConstants.kFeederPercent);
     }
+    */
   }
 
   // Called once the command ends or is interrupted.

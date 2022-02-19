@@ -76,35 +76,28 @@ public final class Constants {
         public static final TalonFXInvertType kShooterInversion2 = TalonFXInvertType.Clockwise;
         public static final boolean kSensorInversion = false;
 
-        public static final double kShooterP = 100; // 0.15;
+        public static final double kShooterP = 0.1;
         public static final double kShooterI = 0.0;
         public static final double kShooterD = 0.0;
-        public static final double kShooterF = 0.0135;
+        public static final double kShooterF = 0.047;
 
         public static final double kShooterCurrentLimit = 30.0;
 
         public static final double kShooterGearRatio = 42.0 / 42.0;
 
-        public static final double kShooterRPMLowest = 3000;
-        public static final double kShooterRPMLow = 3250;
-        public static final double kShooterRPMMid = 3500;
-        public static final double kShooterRPMHigh = 3750;
-        public static final double kShooterRPMHighest = 4000;
-
         public static final int kPreShooterPort = 32;
         public static final int kFeederPort = 33;
         public static final TalonFXInvertType kPreShooterInversion = TalonFXInvertType.Clockwise;
+        public static final boolean kPreShooterSensorInversion = false;
         public static final boolean kFeederInversion = false;
         public static final double kPreShooterPercent = 0.5;
         public static final double kFeederPercent = 1.0;
         public static final double kSlowFeederPercent = 0.25;
 
-        public static final double kPreShooterP = 0.15;
+        public static final double kPreShooterP = 0.025;
         public static final double kPreShooterI = 0;
         public static final double kPreShooterD = 0;
-        public static final double kPreShooterF = 0.0135;
-
-        public static final double kPreShooterIZ = 0;
+        public static final double kPreShooterF = 0.0485;
 
         //TODO: preShooter gear ratio
         public static final double kPreShooterGearRatio = 1;

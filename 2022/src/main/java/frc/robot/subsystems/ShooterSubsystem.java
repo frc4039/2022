@@ -54,12 +54,6 @@ public class ShooterSubsystem extends SubsystemBase {
 
     m_shooterMotor2.follow(m_shooterMotor1);
 
-    m_shooterMotor1.configNominalOutputForward(1);
-    m_shooterMotor1.configNominalOutputReverse(0);
-
-    m_shooterMotor2.configNominalOutputForward(1);
-    m_shooterMotor2.configNominalOutputReverse(0);
-
     m_shooterMotor1.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 30);
     m_shooterMotor1.config_kF(0, ShooterConstants.kShooterF, 30);
     m_shooterMotor1.config_kP(0, ShooterConstants.kShooterP, 30);
@@ -78,21 +72,18 @@ public class ShooterSubsystem extends SubsystemBase {
     m_preShooterMotor = new TalonFX(ShooterConstants.kPreShooterPort);
     m_preShooterMotor.configFactoryDefault();
     m_preShooterMotor.setInverted(ShooterConstants.kPreShooterInversion);
-    m_preShooterMotor.setSensorPhase(ShooterConstants.kSensorInversion);
-    m_shooterMotor1.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 30);
-    m_preShooterMotor.config_kF(0, ShooterConstants.kShooterF, 30);
-    m_preShooterMotor.config_kP(0, ShooterConstants.kShooterP, 30);
-    m_preShooterMotor.config_kI(0, ShooterConstants.kShooterI, 30);
-    m_preShooterMotor.config_kD(0, ShooterConstants.kShooterD, 30);
+    m_preShooterMotor.setSensorPhase(ShooterConstants.kPreShooterSensorInversion);
+    m_preShooterMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 30);
+    m_preShooterMotor.config_kF(0, ShooterConstants.kPreShooterF, 30);
+    m_preShooterMotor.config_kP(0, ShooterConstants.kPreShooterP, 30);
+    m_preShooterMotor.config_kI(0, ShooterConstants.kPreShooterI, 30);
+    m_preShooterMotor.config_kD(0, ShooterConstants.kPreShooterD, 30);
     m_preShooterMotor.enableVoltageCompensation(false);
-    
-    m_preShooterMotor.configNominalOutputForward(1);
-    m_preShooterMotor.configNominalOutputReverse(0);
 
   }
 
   public void shoot() {
-      m_shooterMotor1.set(ControlMode.Velocity, ShooterRPM * ShooterConstants.kShooterGearRatio * 2048 / 600.0);
+   //m_shooterMotor1.set(ControlMode.Velocity, ShooterRPM * ShooterConstants.kShooterGearRatio * 2048 / 600.0);
   }
 
   public void stop() {
@@ -111,6 +102,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
   public void printShooterValues() {
     SmartDashboard.putNumber("Shooter RPM", returnCurrentRPM());
+    SmartDashboard.putNumber("PreShooter RPM", returnPreShooterCurrentRPM());
   }
 
   public double returnCurrentRPM() {
@@ -122,7 +114,8 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public void runPreShooter() {
-    m_preShooterMotor.set(ControlMode.Velocity, PreShooterRPM * ShooterConstants.kPreShooterGearRatio * 2048 / 600.0);
+    m_preShooterMotor.set(ControlMode.Velocity, 2500 * ShooterConstants.kPreShooterGearRatio * 2048 / 600.0);
+  //m_preShooterMotor.set(ControlMode.Velocity, PreShooterRPM * ShooterConstants.kPreShooterGearRatio * 2048 / 600.0);
   }
 
   @Override
