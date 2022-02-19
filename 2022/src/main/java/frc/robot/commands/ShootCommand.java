@@ -44,7 +44,7 @@ public class ShootCommand extends CommandBase {
   @Override
   public void execute() {
     if ((m_shooter.returnCurrentRPM() > m_shooter.ShooterRPM * ShooterConstants.kRPMWindow) && (m_shooter.returnPreShooterCurrentRPM() > m_shooter.PreShooterRPM * ShooterConstants.kPreShooterRPMWindow)) {
-      m_feeder.runFeeder();
+      m_feeder.runFeeder(ShooterConstants.kFeederPercent);
     }
   }
 

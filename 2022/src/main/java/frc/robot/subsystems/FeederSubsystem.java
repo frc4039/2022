@@ -1,20 +1,10 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
-import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
-
-import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 import frc.robot.Constants.ShooterConstants;
-
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class FeederSubsystem extends SubsystemBase {
 
@@ -31,12 +21,12 @@ public class FeederSubsystem extends SubsystemBase {
     m_feederMotor.set(0.0);
   }
 
-  public void runFeeder() {
-    m_feederMotor.set(ShooterConstants.kFeederPercent);
+  public void runFeeder(double speed) {
+    m_feederMotor.set(speed);
   }
 
-  public void reverseFeeder() {
-    m_feederMotor.set(-ShooterConstants.kFeederPercent);
+  public void reverseFeeder(double speed) {
+    m_feederMotor.set(speed);
   }
 
   public void feederSlowBackward() {

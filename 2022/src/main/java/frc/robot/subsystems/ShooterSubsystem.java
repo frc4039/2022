@@ -5,6 +5,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
@@ -53,6 +54,12 @@ public class ShooterSubsystem extends SubsystemBase {
 
     m_shooterMotor2.follow(m_shooterMotor1);
 
+    m_shooterMotor1.configNominalOutputForward(1);
+    m_shooterMotor1.configNominalOutputReverse(0);
+
+    m_shooterMotor2.configNominalOutputForward(1);
+    m_shooterMotor2.configNominalOutputReverse(0);
+
     m_shooterMotor1.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 30);
     m_shooterMotor1.config_kF(0, ShooterConstants.kShooterF, 30);
     m_shooterMotor1.config_kP(0, ShooterConstants.kShooterP, 30);
@@ -78,6 +85,10 @@ public class ShooterSubsystem extends SubsystemBase {
     m_preShooterMotor.config_kI(0, ShooterConstants.kShooterI, 30);
     m_preShooterMotor.config_kD(0, ShooterConstants.kShooterD, 30);
     m_preShooterMotor.enableVoltageCompensation(false);
+    
+    m_preShooterMotor.configNominalOutputForward(1);
+    m_preShooterMotor.configNominalOutputReverse(0);
+
   }
 
   public void shoot() {

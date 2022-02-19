@@ -9,6 +9,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
@@ -91,8 +93,19 @@ public class RobotContainer {
 
     
     driverController.getRightTriggerAxis().getButton(0.1).whenHeld(
-      new ShootCommand(shooterSubsystem, feederSubsystem)
+      new SequentialCommandGroup(
+        new ParallelDeadlineGroup(
+          new WaitCommand(0.5),
+          new FeederCommand(feederSubsystem, -ShooterConstants.kSlowFeederPercent)
+        ),
+        new ShootCommand(shooterSubsystem, feederSubsystem)
+      )
     );
+
+    //TODO Change back to this once intake pneumatics are ready
+    // driverController.getRightTriggerAxis().getButton(0.1).whenHeld(
+    //   new ShootCommand(shooterSubsystem, feederSubsystem)
+    // );
 
     //D-pad up increases shooter RPM by 25
     driverController.getDPadButton(Direction.UP).whenPressed(
@@ -124,7 +137,10 @@ public class RobotContainer {
     */
 
     driverController.getLeftTriggerAxis().getButton(0.1).whenHeld(
-      new IntakeCommand(intakeSubsystem)
+      new ParallelCommandGroup(
+        new IntakeCommand(intakeSubsystem),
+        new FeederCommand(feederSubsystem, ShooterConstants.kSlowFeederPercent)
+      )
     );
 
     operatorController.getLeftTriggerAxis().getButton(0.5).whenHeld(
@@ -144,11 +160,11 @@ public class RobotContainer {
     );
 
     operatorController.getAButton().whenPressed(
-      new InstantCommand(feederSubsystem::runFeeder, feederSubsystem)
+      new FeederCommand(feederSubsystem, ShooterConstants.kFeederPercent)
     );
 
     operatorController.getBButton().whenPressed(
-      new InstantCommand(feederSubsystem::reverseFeeder, feederSubsystem)
+      new FeederCommand(feederSubsystem, -ShooterConstants.kFeederPercent)
     );
 
     operatorController.getXButton().whenPressed(

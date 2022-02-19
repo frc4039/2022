@@ -76,7 +76,7 @@ public final class Constants {
         public static final TalonFXInvertType kShooterInversion2 = TalonFXInvertType.Clockwise;
         public static final boolean kSensorInversion = false;
 
-        public static final double kShooterP = 0.15;
+        public static final double kShooterP = 100; // 0.15;
         public static final double kShooterI = 0.0;
         public static final double kShooterD = 0.0;
         public static final double kShooterF = 0.0135;
@@ -97,6 +97,7 @@ public final class Constants {
         public static final boolean kFeederInversion = false;
         public static final double kPreShooterPercent = 0.5;
         public static final double kFeederPercent = 1.0;
+        public static final double kSlowFeederPercent = 0.25;
 
         public static final double kPreShooterP = 0.15;
         public static final double kPreShooterI = 0;
