@@ -4,9 +4,12 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.Constants.IntakeConstants;
 import frc.robot.common.UpdateManager;
 import frc.robot.common.math.RigidTransform2;
 
@@ -22,6 +25,8 @@ public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
 
   private RobotContainer m_robotContainer = new RobotContainer();
+
+  private Compressor pcmCompressor = new Compressor(Constants.kPCMCANID, PneumaticsModuleType.CTREPCM);
 
   private UpdateManager updateManager = new UpdateManager(
       m_robotContainer.getDrivetrainSubsystem()
@@ -49,6 +54,7 @@ public class Robot extends TimedRobot {
     //TODO: removed based on 2910 code, probably have to add all subsystems to UpdateManager
     //m_robotContainer = new RobotContainer();
     updateManager.startLoop(5.0e-3);
+    pcmCompressor.enableDigital();
   }
 
   /**

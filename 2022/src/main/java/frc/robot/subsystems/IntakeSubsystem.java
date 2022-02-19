@@ -16,14 +16,14 @@ public class IntakeSubsystem extends SubsystemBase {
 
   private final TalonFX m_intakeMotor;
 
-  //private final DoubleSolenoid m_intakeSolenoid; 
+  private final DoubleSolenoid m_intakeSolenoid; 
 
   public IntakeSubsystem() {
     m_intakeMotor = new TalonFX(IntakeConstants.kIntakeMotorPort);
     m_intakeMotor.configFactoryDefault(); 
     m_intakeMotor.setInverted(IntakeConstants.kIntakeInversion);
 
-    //m_intakeSolenoid = new DoubleSolenoid(Constants.kPCMCANID, PneumaticsModuleType.CTREPCM, 0, 1);
+    m_intakeSolenoid = new DoubleSolenoid(Constants.kPCMCANID, PneumaticsModuleType.CTREPCM, 0, 1);
   }
 
   public void intake() {
@@ -34,19 +34,19 @@ public class IntakeSubsystem extends SubsystemBase {
     m_intakeMotor.set(ControlMode.PercentOutput, IntakeConstants.kOutakePercent);
   }
 
-  /*
+  
   public void extendIntake() {
-      m_intakeSolenoid.set(DoubleSolenoid.Value.kForward);
+      m_intakeSolenoid.set(DoubleSolenoid.Value.kReverse);
   }
 
   public void retractIntake() {
-      m_intakeSolenoid.set(DoubleSolenoid.Value.kReverse);
+      m_intakeSolenoid.set(DoubleSolenoid.Value.kForward);
   }
 
   public void neutralIntake() {
       m_intakeSolenoid.set(DoubleSolenoid.Value.kOff);
   }
-  */
+  
   
   public void stop() {
     m_intakeMotor.set(ControlMode.PercentOutput, 0);

@@ -23,8 +23,8 @@ public class ShooterSubsystem extends SubsystemBase {
   private final TalonFX m_shooterMotor2;
   private final TalonFX m_preShooterMotor;
 
-  public double ShooterRPM = 2800;
-  public double PreShooterRPM = 2800;
+  public double ShooterRPM = ShooterConstants.kShooterRPM;
+  public double PreShooterRPM = ShooterConstants.kPreShooterRPM;
  
   public ShooterSubsystem() {
     /*
@@ -59,15 +59,9 @@ public class ShooterSubsystem extends SubsystemBase {
     m_shooterMotor1.config_kP(0, ShooterConstants.kShooterP, 30);
     m_shooterMotor1.config_kI(0, ShooterConstants.kShooterI, 30);
     m_shooterMotor1.config_kD(0, ShooterConstants.kShooterD, 30);
-
-    //m_shooterMotor1.configAllSettings(shooterConfiguration);
-    //m_shooterMotor2.configAllSettings(shooterConfiguration);
     
     m_shooterMotor1.enableVoltageCompensation(false);
     m_shooterMotor2.enableVoltageCompensation(false);
-
-    //m_shooterMotor1.config_kF(ShooterConstants.kPIDLoopIdx, ShooterConstants.kF, ShooterConstants.kTimeoutMs);
-    //m_shooterMotor1.config_kP(ShooterConstants.kPIDLoopIdx, ShooterConstants.kP, ShooterConstants.kTimeoutMs);
   
     m_preShooterMotor = new TalonFX(ShooterConstants.kPreShooterPort);
     m_preShooterMotor.configFactoryDefault();
@@ -83,7 +77,7 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public void shoot() {
-   //m_shooterMotor1.set(ControlMode.Velocity, ShooterRPM * ShooterConstants.kShooterGearRatio * 2048 / 600.0);
+    m_shooterMotor1.set(ControlMode.Velocity, ShooterRPM * ShooterConstants.kShooterGearRatio * 2048 / 600.0);
   }
 
   public void stop() {
@@ -114,8 +108,7 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public void runPreShooter() {
-    m_preShooterMotor.set(ControlMode.Velocity, 2500 * ShooterConstants.kPreShooterGearRatio * 2048 / 600.0);
-  //m_preShooterMotor.set(ControlMode.Velocity, PreShooterRPM * ShooterConstants.kPreShooterGearRatio * 2048 / 600.0);
+    m_preShooterMotor.set(ControlMode.Velocity, PreShooterRPM * ShooterConstants.kPreShooterGearRatio * 2048 / 600.0);
   }
 
   @Override

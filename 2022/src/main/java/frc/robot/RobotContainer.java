@@ -102,25 +102,44 @@ public class RobotContainer {
     // );
 
     //D-pad up increases shooter RPM by 25
-    driverController.getDPadButton(Direction.UP).whenPressed(
+    operatorController.getDPadButton(Direction.UP).whenPressed(
       new ChangeShooterRPM(shooterSubsystem, true)
     );
 
     //D-pad down decreases shooter RPM by 25
-    driverController.getDPadButton(Direction.DOWN).whenPressed(
+    operatorController.getDPadButton(Direction.DOWN).whenPressed(
       new ChangeShooterRPM(shooterSubsystem, false)
     );
 
     //D-pad right decreases shooter RPM by 25
-    driverController.getDPadButton(Direction.RIGHT).whenPressed(
+    operatorController.getDPadButton(Direction.LEFT).whenPressed(
       new ChangePreShooterRPM(shooterSubsystem, false)
     );
 
     //D-pad left increases shooter RPM by 25
-    driverController.getDPadButton(Direction.LEFT).whenPressed(
+    operatorController.getDPadButton(Direction.RIGHT).whenPressed(
       new ChangePreShooterRPM(shooterSubsystem, true)
     );
 
+    
+    operatorController.getDPadButton(Direction.UPRIGHT).whenPressed(
+      new SequentialCommandGroup(
+        new ChangePreShooterRPM(shooterSubsystem, true),
+        new ChangeShooterRPM(shooterSubsystem, true)
+      )
+    );
+
+    operatorController.getDPadButton(Direction.DOWNLEFT).whenPressed(
+      new SequentialCommandGroup(
+        new ChangePreShooterRPM(shooterSubsystem, false),
+        new ChangeShooterRPM(shooterSubsystem, false)
+      )
+    );
+    
+    driverController.getLeftTriggerAxis().getButton(0.1).whenHeld(
+      new IntakeCommand(intakeSubsystem)
+    );
+    
     //A button shoots
 
     /*
@@ -130,12 +149,8 @@ public class RobotContainer {
     );
     */
 
-    driverController.getLeftTriggerAxis().getButton(0.1).whenHeld(
-      new ParallelCommandGroup(
-        new IntakeCommand(intakeSubsystem),
-        new FeederCommand(feederSubsystem, ShooterConstants.kSlowFeederPercent)
-      )
-    );
+    /*
+    
 
     operatorController.getLeftTriggerAxis().getButton(0.5).whenHeld(
       new ClimberDownCommand(m_climberSubsystem)
@@ -176,6 +191,7 @@ public class RobotContainer {
     operatorController.getBButton().whenReleased(
       new InstantCommand(feederSubsystem::stop, feederSubsystem)
     );
+    */
 
   }
 

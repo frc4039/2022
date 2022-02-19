@@ -28,7 +28,7 @@ public class IntakeCommand extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    //m_intakeSubsystem.extendIntake();
+    m_intakeSubsystem.extendIntake();
     m_intakeSubsystem.intake();
   }
 
@@ -41,7 +41,7 @@ public class IntakeCommand extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    //m_intakeSubsystem.retractIntake();
+    m_intakeSubsystem.retractIntake();
     m_intakeSubsystem.stop();
   }
 
