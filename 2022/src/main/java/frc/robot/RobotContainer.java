@@ -121,7 +121,10 @@ public class RobotContainer {
           new FeederCommand(feederSubsystem, -ShooterConstants.kSlowFeederPercent),
           new InstantCommand(shooterSubsystem::shooterSlowBackward, shooterSubsystem)
         ),
-        new InstantCommand(shooterSubsystem::shoot, shooterSubsystem)
+        new ParallelDeadlineGroup(
+          new WaitCommand(3.0),
+          new InstantCommand(shooterSubsystem::shoot, shooterSubsystem)
+        )
       )
     );
 
@@ -160,19 +163,19 @@ public class RobotContainer {
       )
     );
 
-    operatorController.getLeftTriggerAxis().getButton(0.5).and(driverController.getBackButton()).whileActiveOnce(
+    operatorController.getLeftTriggerAxis().getButton(0.5).and(operatorController.getBackButton()).whileActiveOnce(
       new ClimberDownCommand(m_climberSubsystem)
     );
 
-    operatorController.getLeftBumperButton().and(driverController.getBackButton()).whileActiveOnce(
+    operatorController.getLeftBumperButton().and(operatorController.getBackButton()).whileActiveOnce(
       new ClimberDownSlowCommand(m_climberSubsystem)
     );
     
-    operatorController.getRightTriggerAxis().getButton(0.5).and(driverController.getBackButton()).whileActiveOnce(
+    operatorController.getRightTriggerAxis().getButton(0.5).and(operatorController.getBackButton()).whileActiveOnce(
       new ClimberUpCommand(m_climberSubsystem)
     );
 
-    operatorController.getRightBumperButton().and(driverController.getBackButton()).whileActiveOnce(
+    operatorController.getRightBumperButton().and(operatorController.getBackButton()).whileActiveOnce(
       new ClimberUpSlowCommand(m_climberSubsystem)
     );
 

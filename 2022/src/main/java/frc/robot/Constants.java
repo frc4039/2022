@@ -93,7 +93,7 @@ public final class Constants {
         public static final boolean kPreShooterSensorInversion = false;
         public static final boolean kFeederInversion = false;
         public static final double kPreShooterPercent = 0.5;
-        public static final double kFeederPercent = 0.5;
+        public static final double kFeederPercent = 0.4;
         public static final double kSlowFeederPercent = 0.25;
 
         public static final double kPreShooterP = 0.025;
