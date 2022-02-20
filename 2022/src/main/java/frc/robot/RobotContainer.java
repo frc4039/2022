@@ -4,8 +4,13 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
@@ -14,9 +19,12 @@ import frc.robot.common.autonomous.AutonomousTrajectories;
 import frc.robot.common.util.DriverReadout;
 import frc.robot.common.math.Rotation2;
 import frc.robot.common.math.Vector2;
+import frc.robot.common.swervelib.DriveController;
 import frc.robot.common.input.Axis;
 import frc.robot.common.input.DPadButton;
 import frc.robot.common.input.XboxController;
+import frc.robot.common.input.DPadButton.Direction;
+import frc.robot.Constants.*;
 
 import java.io.IOException;
 
@@ -28,19 +36,23 @@ import java.io.IOException;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-
+  //TODO Clean up m_ for subsystems
   private final XboxController driverController = new XboxController(Constants.DRIVER_CONTROLLER_PORT);
   private final XboxController operatorController = new XboxController(Constants.OPERATOR_CONTROLLER_PORT);
 
+  private final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
+  private final FeederSubsystem feederSubsystem = new FeederSubsystem();
   private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem();
-
   private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
   private final ClimberSubsystem m_climberSubsystem = new ClimberSubsystem();
+
 
   private AutonomousTrajectories autonomousTrajectories;
   private AutonomousChooser autonomousChooser;
 
   private final DriverReadout driverReadout;
+
+  private final double RPM = 2800;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -55,8 +67,10 @@ public class RobotContainer {
 
     driverController.getLeftYAxis().setInverted(true);
     driverController.getLeftXAxis().setInverted(true);
-
+    CommandScheduler.getInstance().registerSubsystem(shooterSubsystem);
+    CommandScheduler.getInstance().registerSubsystem(feederSubsystem);
     CommandScheduler.getInstance().registerSubsystem(drivetrainSubsystem);
+    CommandScheduler.getInstance().registerSubsystem(intakeSubsystem);
     CommandScheduler.getInstance().registerSubsystem(m_climberSubsystem);
     CommandScheduler.getInstance().setDefaultCommand(drivetrainSubsystem, new DriveCommand(drivetrainSubsystem, getDriveForwardAxis(), getDriveStrafeAxis(), getDriveRotationAxis()));
 
@@ -73,33 +87,98 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+    //Driver back button resets gyro
     driverController.getBackButton().whenPressed(
       () -> drivetrainSubsystem.resetGyroAngle(Rotation2.ZERO)
     );
 
-    driverController.getAButton().whenPressed(
-      new BasicDriveCommand(drivetrainSubsystem, new Vector2(-0.5, 0.0), 0.0, false).withTimeout(0.3)
+    //Driver Right Trigger shoots
+    driverController.getRightTriggerAxis().getButton(0.1).whenHeld(
+        new ShootCommand(shooterSubsystem, feederSubsystem)
     );
 
-    driverController.getLeftBumperButton().whenPressed(
+    //Operator A button intakes balls
+    operatorController.getAButton().whenHeld(
       new IntakeCommand(intakeSubsystem)
     );
 
-    operatorController.getLeftTriggerAxis().getButton(0.5).whenHeld(
+    //Operator A button when released indexes balls
+    operatorController.getAButton().whenReleased(
+      new SequentialCommandGroup(
+        new WaitCommand(0.5),
+        new ParallelDeadlineGroup(
+          new WaitCommand(0.5), 
+          new FeederCommand(feederSubsystem, ShooterConstants.kSlowFeederPercent)
+        )
+      )
+    );
+
+    //indexed balls away from preshooter, then spools up shooter
+    operatorController.getYButton().whenPressed(
+      new SequentialCommandGroup(
+        new ParallelDeadlineGroup(
+          new WaitCommand(0.5), 
+          new FeederCommand(feederSubsystem, -ShooterConstants.kSlowFeederPercent),
+          new InstantCommand(shooterSubsystem::shooterSlowBackward, shooterSubsystem)
+        ),
+        new ParallelDeadlineGroup(
+          new WaitCommand(3.0),
+          new InstantCommand(shooterSubsystem::shoot, shooterSubsystem)
+        )
+      )
+    );
+
+    //D-pad up increases shooter RPM by 25
+    operatorController.getDPadButton(Direction.UP).whenPressed(
+      new ChangeShooterRPM(shooterSubsystem, true)
+    );
+
+    //D-pad down decreases shooter RPM by 25
+    operatorController.getDPadButton(Direction.DOWN).whenPressed(
+      new ChangeShooterRPM(shooterSubsystem, false)
+    );
+
+    //D-pad right decreases shooter RPM by 25
+    operatorController.getDPadButton(Direction.LEFT).whenPressed(
+      new ChangePreShooterRPM(shooterSubsystem, false)
+    );
+
+    //D-pad left increases shooter RPM by 25
+    operatorController.getDPadButton(Direction.RIGHT).whenPressed(
+      new ChangePreShooterRPM(shooterSubsystem, true)
+    );
+
+    
+    operatorController.getDPadButton(Direction.UPRIGHT).whenPressed(
+      new SequentialCommandGroup(
+        new ChangePreShooterRPM(shooterSubsystem, true),
+        new ChangeShooterRPM(shooterSubsystem, true)
+      )
+    );
+
+    operatorController.getDPadButton(Direction.DOWNLEFT).whenPressed(
+      new SequentialCommandGroup(
+        new ChangePreShooterRPM(shooterSubsystem, false),
+        new ChangeShooterRPM(shooterSubsystem, false)
+      )
+    );
+
+    operatorController.getLeftTriggerAxis().getButton(0.5).and(operatorController.getBackButton()).whileActiveOnce(
       new ClimberDownCommand(m_climberSubsystem)
     );
 
-    operatorController.getLeftBumperButton().whenHeld(
+    operatorController.getLeftBumperButton().and(operatorController.getBackButton()).whileActiveOnce(
       new ClimberDownSlowCommand(m_climberSubsystem)
     );
     
-    operatorController.getRightTriggerAxis().getButton(0.5).whenHeld(
+    operatorController.getRightTriggerAxis().getButton(0.5).and(operatorController.getBackButton()).whileActiveOnce(
       new ClimberUpCommand(m_climberSubsystem)
     );
 
-    operatorController.getRightBumperButton().whenHeld(
+    operatorController.getRightBumperButton().and(operatorController.getBackButton()).whileActiveOnce(
       new ClimberUpSlowCommand(m_climberSubsystem)
     );
+
   }
 
   public Command getAutonomousCommand() {
@@ -132,5 +211,9 @@ public class RobotContainer {
 
   public AutonomousChooser getAutonomousChooser() {
     return autonomousChooser;
+  }
+
+  public void PrintAllValues(){
+    shooterSubsystem.printShooterValues();
   }
 }
