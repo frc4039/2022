@@ -87,28 +87,41 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+    //Driver back button resets gyro
     driverController.getBackButton().whenPressed(
       () -> drivetrainSubsystem.resetGyroAngle(Rotation2.ZERO)
     );
 
+    //Driver Right Trigger shoots
     driverController.getRightTriggerAxis().getButton(0.1).whenHeld(
-      new SequentialCommandGroup(
-        new ParallelDeadlineGroup(
-          new WaitCommand(0.5), 
-          new FeederCommand(feederSubsystem, -ShooterConstants.kSlowFeederPercent)
-        ),
         new ShootCommand(shooterSubsystem, feederSubsystem)
-      )
     );
 
-    driverController.getLeftTriggerAxis().getButton(0.1).whenHeld(
+    //Operator A button intakes balls
+    operatorController.getAButton().whenHeld(
       new IntakeCommand(intakeSubsystem)
     );
 
-    driverController.getLeftTriggerAxis().getButton(0.1).whenReleased(
-      new ParallelDeadlineGroup(
-        new WaitCommand(0.5), 
-        new FeederCommand(feederSubsystem, ShooterConstants.kSlowFeederPercent)
+    //Operator A button when released indexes balls
+    operatorController.getAButton().whenReleased(
+      new SequentialCommandGroup(
+        new WaitCommand(0.5),
+        new ParallelDeadlineGroup(
+          new WaitCommand(0.5), 
+          new FeederCommand(feederSubsystem, ShooterConstants.kSlowFeederPercent)
+        )
+      )
+    );
+
+    //indexed balls away from preshooter, then spools up shooter
+    operatorController.getYButton().whenPressed(
+      new SequentialCommandGroup(
+        new ParallelDeadlineGroup(
+          new WaitCommand(0.5), 
+          new FeederCommand(feederSubsystem, -ShooterConstants.kSlowFeederPercent),
+          new InstantCommand(shooterSubsystem::shooterSlowBackward, shooterSubsystem)
+        ),
+        new InstantCommand(shooterSubsystem::shoot, shooterSubsystem)
       )
     );
 
@@ -146,45 +159,21 @@ public class RobotContainer {
         new ChangeShooterRPM(shooterSubsystem, false)
       )
     );
-     
-    operatorController.getLeftTriggerAxis().getButton(0.5).whenHeld(
+
+    operatorController.getLeftTriggerAxis().getButton(0.5).and(driverController.getBackButton()).whileActiveOnce(
       new ClimberDownCommand(m_climberSubsystem)
     );
 
-    operatorController.getLeftBumperButton().whenHeld(
+    operatorController.getLeftBumperButton().and(driverController.getBackButton()).whileActiveOnce(
       new ClimberDownSlowCommand(m_climberSubsystem)
     );
     
-    operatorController.getRightTriggerAxis().getButton(0.5).whenHeld(
+    operatorController.getRightTriggerAxis().getButton(0.5).and(driverController.getBackButton()).whileActiveOnce(
       new ClimberUpCommand(m_climberSubsystem)
     );
 
-    operatorController.getRightBumperButton().whenHeld(
+    operatorController.getRightBumperButton().and(driverController.getBackButton()).whileActiveOnce(
       new ClimberUpSlowCommand(m_climberSubsystem)
-    );
-
-    operatorController.getAButton().whenPressed(
-      new FeederCommand(feederSubsystem, ShooterConstants.kFeederPercent)
-    );
-
-    operatorController.getBButton().whenPressed(
-      new FeederCommand(feederSubsystem, -ShooterConstants.kFeederPercent)
-    );
-
-    operatorController.getXButton().whenPressed(
-      new InstantCommand(feederSubsystem::feederSlowBackward, feederSubsystem)
-    );
-
-    operatorController.getXButton().whenReleased(
-      new InstantCommand(feederSubsystem::stop, feederSubsystem)
-    );
-
-    operatorController.getAButton().whenReleased(
-      new InstantCommand(feederSubsystem::stop, feederSubsystem)
-    );
-
-    operatorController.getBButton().whenReleased(
-      new InstantCommand(feederSubsystem::stop, feederSubsystem)
     );
 
   }
