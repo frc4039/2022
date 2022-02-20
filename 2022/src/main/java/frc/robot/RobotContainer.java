@@ -91,15 +91,26 @@ public class RobotContainer {
       () -> drivetrainSubsystem.resetGyroAngle(Rotation2.ZERO)
     );
 
-    
     driverController.getRightTriggerAxis().getButton(0.1).whenHeld(
+      new SequentialCommandGroup(
+        new ParallelDeadlineGroup(
+          new WaitCommand(0.5), 
+          new FeederCommand(feederSubsystem, -ShooterConstants.kSlowFeederPercent)
+        ),
         new ShootCommand(shooterSubsystem, feederSubsystem)
+      )
     );
 
-    //TODO Change back to this once intake pneumatics are ready
-    // driverController.getRightTriggerAxis().getButton(0.1).whenHeld(
-    //   new ShootCommand(shooterSubsystem, feederSubsystem)
-    // );
+    driverController.getLeftTriggerAxis().getButton(0.1).whenHeld(
+      new IntakeCommand(intakeSubsystem)
+    );
+
+    driverController.getLeftTriggerAxis().getButton(0.1).whenReleased(
+      new ParallelDeadlineGroup(
+        new WaitCommand(0.5), 
+        new FeederCommand(feederSubsystem, ShooterConstants.kSlowFeederPercent)
+      )
+    );
 
     //D-pad up increases shooter RPM by 25
     operatorController.getDPadButton(Direction.UP).whenPressed(
@@ -135,23 +146,7 @@ public class RobotContainer {
         new ChangeShooterRPM(shooterSubsystem, false)
       )
     );
-    
-    driverController.getLeftTriggerAxis().getButton(0.1).whenHeld(
-      new IntakeCommand(intakeSubsystem)
-    );
-    
-    //A button shoots
-
-    /*
-
-    driverController.getAButton().whenPressed(
-      new ShootCommand(shooterSubsystem, feederSubsystem)
-    );
-    */
-
-    /*
-    
-
+     
     operatorController.getLeftTriggerAxis().getButton(0.5).whenHeld(
       new ClimberDownCommand(m_climberSubsystem)
     );
@@ -191,7 +186,6 @@ public class RobotContainer {
     operatorController.getBButton().whenReleased(
       new InstantCommand(feederSubsystem::stop, feederSubsystem)
     );
-    */
 
   }
 
