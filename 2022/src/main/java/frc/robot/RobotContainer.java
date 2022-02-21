@@ -67,6 +67,7 @@ public class RobotContainer {
 
     driverController.getLeftYAxis().setInverted(true);
     driverController.getLeftXAxis().setInverted(true);
+    driverController.getRightXAxis().setInverted(true);
     CommandScheduler.getInstance().registerSubsystem(shooterSubsystem);
     CommandScheduler.getInstance().registerSubsystem(feederSubsystem);
     CommandScheduler.getInstance().registerSubsystem(drivetrainSubsystem);
@@ -199,6 +200,18 @@ public class RobotContainer {
 
   public DrivetrainSubsystem getDrivetrainSubsystem() {
     return drivetrainSubsystem;
+  }
+
+  public IntakeSubsystem getIntakeSubsystem() {
+    return intakeSubsystem;
+  }
+
+  public ShooterSubsystem getShooterSubsystem() {
+    return shooterSubsystem;
+  }
+
+  public FeederSubsystem getFeederSubsystem() {
+    return feederSubsystem;
   }
 
   public XboxController getDriverController() {
