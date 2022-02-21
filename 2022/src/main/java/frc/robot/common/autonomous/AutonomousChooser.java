@@ -12,7 +12,6 @@ import frc.robot.commands.*;
 import frc.robot.common.control.Trajectory;
 import frc.robot.common.math.RigidTransform2;
 import frc.robot.common.math.Rotation2;
-import frc.robot.subsystems.ShooterSubsystem;
 
 public class AutonomousChooser {
     private final AutonomousTrajectories trajectories;
@@ -22,126 +21,53 @@ public class AutonomousChooser {
     public AutonomousChooser(AutonomousTrajectories trajectories) {
         this.trajectories = trajectories;
 
-        autonomousModeChooser.setDefaultOption("10 feet forward", AutonomousMode.TEN_FEET_FORWARD_TEST);
-        autonomousModeChooser.addOption("10 feet forward slow", AutonomousMode.TEN_FEET_FORWARD_SLOW_TEST);
-        autonomousModeChooser.addOption("10 feet right", AutonomousMode.TEN_FEET_RIGHT_TEST);
-        autonomousModeChooser.addOption("10 feet right slow", AutonomousMode.TEN_FEET_RIGHT_SLOW_TEST);
-        autonomousModeChooser.addOption("10 feet forward rotating", AutonomousMode.TEN_FEET_FORWARD_ROTATE_TEST);
-        autonomousModeChooser.addOption("10 feet forward rotating slow", AutonomousMode.TEN_FEET_FORWARD_ROTATE_SLOW_TEST);
-        autonomousModeChooser.addOption("Multiple steps", AutonomousMode.STEPS_TEST);
-        autonomousModeChooser.addOption("Multiple steps slow", AutonomousMode.STEPS_SLOW_TEST);
-        autonomousModeChooser.addOption("Pick up and shoot", AutonomousMode.PICK_UP_N_SHOOT);
+        autonomousModeChooser.setDefaultOption("SELECT AUTO", AutonomousMode.NONE);
+        autonomousModeChooser.setDefaultOption("Double JBC", AutonomousMode.DOUBLE_JBC);
+        autonomousModeChooser.addOption("McDouble", AutonomousMode.MC_DOUBLE);
     }
 
     public SendableChooser<AutonomousMode> getAutonomousModeChooser() {
         return autonomousModeChooser;
     }
 
-    private Command getTenFeetForwardTestAutoCommand(RobotContainer container) {
+    private SequentialCommandGroup getNoAutoCommand(RobotContainer container) {
         SequentialCommandGroup command = new SequentialCommandGroup();
 
-        resetRobotPose(command, container, trajectories.getTenFeetForwardTestAuto());
-        follow(command, container, trajectories.getTenFeetForwardTestAuto());
+        resetRobotPose(command, container, trajectories.getNoAuto());
 
         return command;
     }
 
-    private Command getTenFeetForwardSlowTestAutoCommand(RobotContainer container) {
+    private SequentialCommandGroup getDoubleJBCAutoCommand(RobotContainer container) {
         SequentialCommandGroup command = new SequentialCommandGroup();
 
-        resetRobotPose(command, container, trajectories.getTenFeetForwardSlowTestAuto());
-        follow(command, container, trajectories.getTenFeetForwardSlowTestAuto());
+        resetRobotPose(command, container, trajectories.getDoubleJBCAuto1());
+        followAndIntake(command, container, trajectories.getDoubleJBCAuto1());
+        followAndPreShoot(command, container, trajectories.getDoubleJBCAuto2());
+        shoot(command, container, 1.0);
 
         return command;
     }
 
-    private Command getTenFeetRightTestAutoCommand(RobotContainer container) {
+    private SequentialCommandGroup getMcDoubleAutoCommand(RobotContainer container) {
         SequentialCommandGroup command = new SequentialCommandGroup();
 
-        resetRobotPose(command, container, trajectories.getTenFeetRightTestAuto());
-        follow(command, container, trajectories.getTenFeetRightTestAuto());
-
-        return command;
-    }
-
-    private Command getTenFeetRightSlowTestAutoCommand(RobotContainer container) {
-        SequentialCommandGroup command = new SequentialCommandGroup();
-
-        resetRobotPose(command, container, trajectories.getTenFeetRightSlowTestAuto());
-        follow(command, container, trajectories.getTenFeetRightSlowTestAuto());
-
-        return command;
-    }
-
-    private Command getTenFeetForwardRotatingTestAutoCommand(RobotContainer container) {
-        SequentialCommandGroup command = new SequentialCommandGroup();
-
-        resetRobotPose(command, container, trajectories.getTenFeetForwardRotatingTestAuto());
-        follow(command, container, trajectories.getTenFeetForwardRotatingTestAuto());
-
-        return command;
-    }
-
-    private Command getTenFeetForwardRotatingSlowTestAutoCommand(RobotContainer container) {
-        SequentialCommandGroup command = new SequentialCommandGroup();
-
-        resetRobotPose(command, container, trajectories.getTenFeetForwardRotatingSlowTestAuto());
-        follow(command, container, trajectories.getTenFeetForwardRotatingSlowTestAuto());
-
-        return command;
-    }
-
-    private Command getMultipleStepsTestAutoCommand(RobotContainer container) {
-        SequentialCommandGroup command = new SequentialCommandGroup();
-
-        resetRobotPose(command, container, trajectories.getMultipleStepsTestAuto());
-        follow(command, container, trajectories.getMultipleStepsTestAuto());
-
-        return command;
-    }
-
-    private Command getMultipleStepsSlowTestAutoCommand(RobotContainer container) {
-        SequentialCommandGroup command = new SequentialCommandGroup();
-
-        resetRobotPose(command, container, trajectories.getMultipleStepsSlowTestAuto());
-        follow(command, container, trajectories.getMultipleStepsSlowTestAuto());
-
-        return command;
-    }
-
-    private SequentialCommandGroup getPickUpNShootAutoCommand(RobotContainer container) {
-        SequentialCommandGroup command = new SequentialCommandGroup();
-
-        resetRobotPose(command, container, trajectories.getPickUpNShootAuto1());
-        followAndIntake(command, container, trajectories.getPickUpNShootAuto1());
-        follow(command, container, trajectories.getPickUpNShootAuto2());
-        shoot(command, container);
+        resetRobotPose(command, container, trajectories.getMcDoubleAuto1());
+        followAndIntake(command, container, trajectories.getMcDoubleAuto1());
+        followAndPreShoot(command, container, trajectories.getMcDoubleAuto2());
+        shoot(command, container, 1.0);
 
         return command;
     }
 
     public Command getCommand(RobotContainer container) {
         switch (autonomousModeChooser.getSelected()) {
-            case TEN_FEET_FORWARD_TEST:
-                return getTenFeetForwardTestAutoCommand(container);
-            case TEN_FEET_FORWARD_SLOW_TEST:
-                return getTenFeetForwardSlowTestAutoCommand(container);
-            case TEN_FEET_RIGHT_TEST:
-                return getTenFeetRightTestAutoCommand(container);
-            case TEN_FEET_RIGHT_SLOW_TEST:
-                return getTenFeetRightSlowTestAutoCommand(container);
-            case TEN_FEET_FORWARD_ROTATE_TEST:
-                return getTenFeetForwardRotatingTestAutoCommand(container);
-            case TEN_FEET_FORWARD_ROTATE_SLOW_TEST:
-                return getTenFeetForwardRotatingSlowTestAutoCommand(container);
-            case STEPS_TEST:
-                return getMultipleStepsTestAutoCommand(container);
-            case STEPS_SLOW_TEST:
-                return getMultipleStepsSlowTestAutoCommand(container);
-            case PICK_UP_N_SHOOT:
-                return getPickUpNShootAutoCommand(container);
+            case DOUBLE_JBC:
+                return getDoubleJBCAutoCommand(container);
+            case MC_DOUBLE:
+                return getMcDoubleAutoCommand(container);
             default:
-                return getTenFeetForwardTestAutoCommand(container);
+                return getNoAutoCommand(container);
         }
     }
 
@@ -164,9 +90,9 @@ public class AutonomousChooser {
             )));
     }
 
-    private void shoot(SequentialCommandGroup command, RobotContainer container) {
+    private void shoot(SequentialCommandGroup command, RobotContainer container, Double timeout) {
         command.addCommands(new ShootCommand(container.getShooterSubsystem(), container.getFeederSubsystem())
-            .withTimeout(3.0));
+            .withTimeout(timeout));
     }
 
     private void resetRobotPose(SequentialCommandGroup command, RobotContainer container, Trajectory trajectory) {
@@ -176,14 +102,8 @@ public class AutonomousChooser {
     }
 
     private enum AutonomousMode {
-        TEN_FEET_FORWARD_TEST,
-        TEN_FEET_FORWARD_SLOW_TEST,
-        TEN_FEET_RIGHT_TEST,
-        TEN_FEET_RIGHT_SLOW_TEST,
-        TEN_FEET_FORWARD_ROTATE_TEST,
-        TEN_FEET_FORWARD_ROTATE_SLOW_TEST,
-        STEPS_TEST,
-        STEPS_SLOW_TEST,
-        PICK_UP_N_SHOOT
+        NONE,
+        DOUBLE_JBC,
+        MC_DOUBLE,
     }
 }
