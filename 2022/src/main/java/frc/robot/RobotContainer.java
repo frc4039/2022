@@ -4,25 +4,19 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
-import frc.robot.Constants.*;
 import frc.robot.common.autonomous.AutonomousChooser;
 import frc.robot.common.autonomous.AutonomousTrajectories;
 import frc.robot.common.util.DriverReadout;
 import frc.robot.common.math.Rotation2;
-import frc.robot.common.math.Vector2;
-import frc.robot.common.swervelib.DriveController;
 import frc.robot.common.input.Axis;
-import frc.robot.common.input.DPadButton;
 import frc.robot.common.input.XboxController;
 import frc.robot.common.input.DPadButton.Direction;
 
@@ -110,6 +104,40 @@ public class RobotContainer {
       )
     );
 
+    operatorController.getDPadButton(Direction.UPRIGHT).whenPressed(
+      new SequentialCommandGroup(
+        new ChangePreShooterRPM(preShooterSubsystem, true),
+        new ChangeShooterRPM(shooterSubsystem, true)
+      )
+    );
+
+    operatorController.getDPadButton(Direction.DOWNLEFT).whenPressed(
+      new SequentialCommandGroup(
+        new ChangePreShooterRPM(preShooterSubsystem, false),
+        new ChangeShooterRPM(shooterSubsystem, false)
+      )
+    );
+
+    operatorController.getBackButton().and(operatorController.getStartButton()).whileActiveOnce(
+      new InstantCommand(m_climberSubsystem::initiateClimb, m_climberSubsystem)
+    );
+
+    operatorController.getLeftTriggerAxis().getButton(0.5).whenHeld(
+      new ClimberDownCommand(m_climberSubsystem)
+    );
+
+    operatorController.getLeftBumperButton().whenHeld(
+      new ClimberDownSlowCommand(m_climberSubsystem)
+    );
+    
+    operatorController.getRightTriggerAxis().getButton(0.5).whenHeld(
+      new ClimberUpCommand(m_climberSubsystem)
+    );
+
+    operatorController.getRightBumperButton().whenHeld(
+      new ClimberUpSlowCommand(m_climberSubsystem)
+    );
+
     //D-pad up increases shooter RPM by 25
     operatorController.getDPadButton(Direction.UP).whenPressed(
       new ChangeShooterRPM(shooterSubsystem, true)
@@ -129,38 +157,6 @@ public class RobotContainer {
     operatorController.getDPadButton(Direction.RIGHT).whenPressed(
       new ChangePreShooterRPM(preShooterSubsystem, true)
     );
-
-    
-    operatorController.getDPadButton(Direction.UPRIGHT).whenPressed(
-      new SequentialCommandGroup(
-        new ChangePreShooterRPM(preShooterSubsystem, true),
-        new ChangeShooterRPM(shooterSubsystem, true)
-      )
-    );
-
-    operatorController.getDPadButton(Direction.DOWNLEFT).whenPressed(
-      new SequentialCommandGroup(
-        new ChangePreShooterRPM(preShooterSubsystem, false),
-        new ChangeShooterRPM(shooterSubsystem, false)
-      )
-    );
-
-    operatorController.getLeftTriggerAxis().getButton(0.5).and(operatorController.getBackButton()).whileActiveOnce(
-      new ClimberDownCommand(m_climberSubsystem)
-    );
-
-    operatorController.getLeftBumperButton().and(operatorController.getBackButton()).whileActiveOnce(
-      new ClimberDownSlowCommand(m_climberSubsystem)
-    );
-    
-    operatorController.getRightTriggerAxis().getButton(0.5).and(operatorController.getBackButton()).whileActiveOnce(
-      new ClimberUpCommand(m_climberSubsystem)
-    );
-
-    operatorController.getRightBumperButton().and(operatorController.getBackButton()).whileActiveOnce(
-      new ClimberUpSlowCommand(m_climberSubsystem)
-    );
-
   }
 
   public Command getAutonomousCommand() {
