@@ -3,17 +3,23 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.ShooterConstants;
+import frc.robot.Constants.FeederConstants;
 
 public class FeederSubsystem extends SubsystemBase {
 
   private final CANSparkMax m_feederMotor;
+  private static DigitalInput m_BreakBeamIntake;
+  private static DigitalInput m_BreakBeamPreShooter;
 
   public FeederSubsystem() {
-    m_feederMotor = new CANSparkMax(ShooterConstants.kFeederPort, MotorType.kBrushless);
+    m_feederMotor = new CANSparkMax(FeederConstants.kFeederPort, MotorType.kBrushless);
     m_feederMotor.restoreFactoryDefaults();
-    m_feederMotor.setInverted(ShooterConstants.kFeederInversion);
+    m_feederMotor.setInverted(FeederConstants.kFeederInversion);
+
+    m_BreakBeamIntake = new DigitalInput(FeederConstants.kBreakBeamIntakePort);
+    m_BreakBeamPreShooter = new DigitalInput(FeederConstants.kBreakBeamPreShooterPort);
   }
 
   
@@ -25,12 +31,20 @@ public class FeederSubsystem extends SubsystemBase {
     m_feederMotor.set(speed);
   }
 
-  public void reverseFeeder(double speed) {
-    m_feederMotor.set(speed);
+  public void runFeederReverse(double speed) {
+    m_feederMotor.set(-speed);
   }
 
-  public void feederSlowBackward() {
-    m_feederMotor.set(-0.1);
+  public boolean getBreakBeamIntake(){
+    return m_BreakBeamIntake.get();
+  }
+
+  public boolean getBreakBeamPreShooter(){
+    return m_BreakBeamPreShooter.get();
+  }
+
+  public boolean getBothBreakBeams(){
+    return m_BreakBeamIntake.get() && m_BreakBeamPreShooter.get();
   }
 
   @Override

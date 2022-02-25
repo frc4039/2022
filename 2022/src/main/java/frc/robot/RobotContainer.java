@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
+import frc.robot.Constants.*;
 import frc.robot.common.autonomous.AutonomousChooser;
 import frc.robot.common.autonomous.AutonomousTrajectories;
 import frc.robot.common.util.DriverReadout;
@@ -24,7 +25,6 @@ import frc.robot.common.input.Axis;
 import frc.robot.common.input.DPadButton;
 import frc.robot.common.input.XboxController;
 import frc.robot.common.input.DPadButton.Direction;
-import frc.robot.Constants.*;
 
 import java.io.IOException;
 
@@ -73,7 +73,7 @@ public class RobotContainer {
     CommandScheduler.getInstance().registerSubsystem(intakeSubsystem);
     CommandScheduler.getInstance().registerSubsystem(m_climberSubsystem);
     CommandScheduler.getInstance().setDefaultCommand(drivetrainSubsystem, new DriveCommand(drivetrainSubsystem, getDriveForwardAxis(), getDriveStrafeAxis(), getDriveRotationAxis()));
-
+    CommandScheduler.getInstance().setDefaultCommand(feederSubsystem, new FeederManagementCommand(feederSubsystem));
 
     driverReadout = new DriverReadout(this);
 
@@ -102,29 +102,11 @@ public class RobotContainer {
       new IntakeCommand(intakeSubsystem)
     );
 
-    //Operator A button when released indexes balls
-    operatorController.getAButton().whenReleased(
-      new SequentialCommandGroup(
-        new WaitCommand(0.5),
-        new ParallelDeadlineGroup(
-          new WaitCommand(0.5), 
-          new FeederCommand(feederSubsystem, ShooterConstants.kSlowFeederPercent)
-        )
-      )
-    );
-
-    //indexed balls away from preshooter, then spools up shooter
+    //Operator Y buttom spools up shooter
     operatorController.getYButton().whenPressed(
-      new SequentialCommandGroup(
-        new ParallelDeadlineGroup(
-          new WaitCommand(0.5), 
-          new FeederCommand(feederSubsystem, -ShooterConstants.kSlowFeederPercent),
-          new InstantCommand(preShooterSubsystem::reversePreShooter, preShooterSubsystem)
-        ),
-        new ParallelDeadlineGroup(
-          new WaitCommand(3.0),
-          new InstantCommand(shooterSubsystem::shoot, shooterSubsystem)
-        )
+      new ParallelDeadlineGroup(
+        new WaitCommand(3.0),
+        new InstantCommand(shooterSubsystem::shoot, shooterSubsystem)
       )
     );
 
