@@ -41,6 +41,7 @@ public class RobotContainer {
   private final XboxController operatorController = new XboxController(Constants.OPERATOR_CONTROLLER_PORT);
 
   private final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
+  private final PreShooterSubsystem preShooterSubsystem = new PreShooterSubsystem();
   private final FeederSubsystem feederSubsystem = new FeederSubsystem();
   private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem();
   private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
@@ -51,8 +52,6 @@ public class RobotContainer {
   private AutonomousChooser autonomousChooser;
 
   private final DriverReadout driverReadout;
-
-  private final double RPM = 2800;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -68,6 +67,7 @@ public class RobotContainer {
     driverController.getLeftYAxis().setInverted(true);
     driverController.getLeftXAxis().setInverted(true);
     CommandScheduler.getInstance().registerSubsystem(shooterSubsystem);
+    CommandScheduler.getInstance().registerSubsystem(preShooterSubsystem);
     CommandScheduler.getInstance().registerSubsystem(feederSubsystem);
     CommandScheduler.getInstance().registerSubsystem(drivetrainSubsystem);
     CommandScheduler.getInstance().registerSubsystem(intakeSubsystem);
@@ -94,7 +94,7 @@ public class RobotContainer {
 
     //Driver Right Trigger shoots
     driverController.getRightTriggerAxis().getButton(0.1).whenHeld(
-        new ShootCommand(shooterSubsystem, feederSubsystem)
+        new ShootCommand(shooterSubsystem, preShooterSubsystem, feederSubsystem)
     );
 
     //Operator A button intakes balls
@@ -119,7 +119,7 @@ public class RobotContainer {
         new ParallelDeadlineGroup(
           new WaitCommand(0.5), 
           new FeederCommand(feederSubsystem, -ShooterConstants.kSlowFeederPercent),
-          new InstantCommand(shooterSubsystem::shooterSlowBackward, shooterSubsystem)
+          new InstantCommand(preShooterSubsystem::reversePreShooter, preShooterSubsystem)
         ),
         new ParallelDeadlineGroup(
           new WaitCommand(3.0),
@@ -140,25 +140,25 @@ public class RobotContainer {
 
     //D-pad right decreases shooter RPM by 25
     operatorController.getDPadButton(Direction.LEFT).whenPressed(
-      new ChangePreShooterRPM(shooterSubsystem, false)
+      new ChangePreShooterRPM(preShooterSubsystem, false)
     );
 
     //D-pad left increases shooter RPM by 25
     operatorController.getDPadButton(Direction.RIGHT).whenPressed(
-      new ChangePreShooterRPM(shooterSubsystem, true)
+      new ChangePreShooterRPM(preShooterSubsystem, true)
     );
 
     
     operatorController.getDPadButton(Direction.UPRIGHT).whenPressed(
       new SequentialCommandGroup(
-        new ChangePreShooterRPM(shooterSubsystem, true),
+        new ChangePreShooterRPM(preShooterSubsystem, true),
         new ChangeShooterRPM(shooterSubsystem, true)
       )
     );
 
     operatorController.getDPadButton(Direction.DOWNLEFT).whenPressed(
       new SequentialCommandGroup(
-        new ChangePreShooterRPM(shooterSubsystem, false),
+        new ChangePreShooterRPM(preShooterSubsystem, false),
         new ChangeShooterRPM(shooterSubsystem, false)
       )
     );
