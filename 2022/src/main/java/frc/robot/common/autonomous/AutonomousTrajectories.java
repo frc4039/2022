@@ -32,12 +32,18 @@ public class AutonomousTrajectories {
     private Trajectory mcFlurryAuto4;
 
     public AutonomousTrajectories(TrajectoryConstraint[] trajectoryConstraints) throws IOException {
+        TrajectoryConstraint[] normalConstraints = Arrays.copyOf(trajectoryConstraints, trajectoryConstraints.length + 1);
         TrajectoryConstraint[] slowConstraints = Arrays.copyOf(trajectoryConstraints, trajectoryConstraints.length + 1);
         
         // Top speed
         slowConstraints[slowConstraints.length - 1] = new MaxVelocityConstraint(4.0 * 12.0);
         // Acceleration speed
         slowConstraints[slowConstraints.length - 2] = new MaxAccelerationConstraint(4.0 * 12.0);
+
+        // Top speed
+        normalConstraints[normalConstraints.length - 1] = new MaxVelocityConstraint(8.0 * 12.0);
+        // Acceleration speed
+        normalConstraints[normalConstraints.length - 2] = new MaxAccelerationConstraint(8.0 * 12.0);
 
         noAuto = new Trajectory(
             new SimplePathBuilder(new Vector2(0.0, 0.0), Rotation2.ZERO)
@@ -85,28 +91,29 @@ public class AutonomousTrajectories {
             new SimplePathBuilder(new Vector2(-27.114, -133.206), Rotation2.fromDegrees(-90))
                 .lineTo(new Vector2(-124.607, -113.762), Rotation2.fromDegrees(90))
                 .build(),
-                slowConstraints, SAMPLE_DISTANCE
+                normalConstraints, SAMPLE_DISTANCE
         );
 
         frostyAuto3 = new Trajectory(
             new SimplePathBuilder(new Vector2(-124.607, -113.762), Rotation2.fromDegrees(90))
-                .lineTo(new Vector2(-126.853, -93.018), Rotation2.fromDegrees(51.61381))
+                .lineTo(new Vector2(-126.853, -93.018), Rotation2.fromDegrees(42))
                 .build(),
                 slowConstraints, SAMPLE_DISTANCE
         );
 
         frostyAuto4 = new Trajectory(
-            new SimplePathBuilder(new Vector2(-126.853, -93.018), Rotation2.fromDegrees(51.61381))
-                .lineTo(new Vector2(-268.659, -107.732), Rotation2.fromDegrees(-133.75))
+            new SimplePathBuilder(new Vector2(-126.853, -93.018), Rotation2.fromDegrees(42))
+                .lineTo(new Vector2(-246.659, -107.732), Rotation2.fromDegrees(-133.75))
+                .lineTo(new Vector2(-250.659, -117.732), Rotation2.fromDegrees(-133.75))
                 .build(),
-                slowConstraints, SAMPLE_DISTANCE
+                normalConstraints, SAMPLE_DISTANCE
         );
 
         frostyAuto5 = new Trajectory(
-            new SimplePathBuilder(new Vector2(-268.659, -107.732), Rotation2.fromDegrees(-133.75))
-                .lineTo(new Vector2(-126.853, -93.018), Rotation2.fromDegrees(51.61381))
+            new SimplePathBuilder(new Vector2(-250.659, -117.732), Rotation2.fromDegrees(-133.75))
+                .lineTo(new Vector2(-126.853, -93.018), Rotation2.fromDegrees(42))
                 .build(),
-                slowConstraints, SAMPLE_DISTANCE
+                normalConstraints, SAMPLE_DISTANCE
         );
 
         mcFlurryAuto1 = new Trajectory(
@@ -125,16 +132,16 @@ public class AutonomousTrajectories {
 
         mcFlurryAuto3 = new Trajectory(
             new SimplePathBuilder(new Vector2(-158.627, 31.792), Rotation2.fromDegrees(-11.6395))
-                .lineTo(new Vector2(-268.659, -107.732), Rotation2.fromDegrees(-133.75))
+                .lineTo(new Vector2(-268.659, -129.732), Rotation2.fromDegrees(-133.75))
                 .build(),
-                slowConstraints, SAMPLE_DISTANCE
+                normalConstraints, SAMPLE_DISTANCE
         );
 
         mcFlurryAuto4 = new Trajectory(
-            new SimplePathBuilder(new Vector2(-268.659, -107.732), Rotation2.fromDegrees(-133.75))
+            new SimplePathBuilder(new Vector2(-268.659, -129.732), Rotation2.fromDegrees(-133.75))
                 .lineTo(new Vector2(-158.627, 31.792), Rotation2.fromDegrees(-11.6395))
                 .build(),
-                slowConstraints, SAMPLE_DISTANCE
+                normalConstraints, SAMPLE_DISTANCE
         );
 
     }
