@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.Constants.FeederConstants;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 import frc.robot.common.autonomous.AutonomousChooser;
@@ -60,6 +61,7 @@ public class RobotContainer {
 
     driverController.getLeftYAxis().setInverted(true);
     driverController.getLeftXAxis().setInverted(true);
+    driverController.getRightXAxis().setInverted(true);
     CommandScheduler.getInstance().registerSubsystem(shooterSubsystem);
     CommandScheduler.getInstance().registerSubsystem(preShooterSubsystem);
     CommandScheduler.getInstance().registerSubsystem(feederSubsystem);
@@ -98,9 +100,12 @@ public class RobotContainer {
 
     //Operator Y buttom spools up shooter
     operatorController.getYButton().whenPressed(
-      new ParallelDeadlineGroup(
-        new WaitCommand(3.0),
-        new InstantCommand(shooterSubsystem::shoot, shooterSubsystem)
+      new SequentialCommandGroup(
+        new FeederCommand(feederSubsystem, -FeederConstants.kFeederFeedPercent).withTimeout(0.25),
+        new ParallelDeadlineGroup(
+          new WaitCommand(3.0),
+          new InstantCommand(shooterSubsystem::shoot, shooterSubsystem)
+        )
       )
     );
 

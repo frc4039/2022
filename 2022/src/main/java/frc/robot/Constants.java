@@ -27,7 +27,7 @@ public final class Constants {
 
 
     public static final double kDeadband = 0.075;
-    public static final double kRotationScale = 0.5;
+    public static final double kRotationScale = 0.25;
 
     public static final int DRIVETRAIN_FRONT_LEFT_DRIVE_MOTOR = 1;
     public static final int DRIVETRAIN_FRONT_RIGHT_DRIVE_MOTOR = 3;
@@ -114,8 +114,8 @@ public final class Constants {
         public static final double kFeederFeedPercent = 0.25;
         public static final double kFeederShootPercent = 0.4;
 
-        public static final int kBreakBeamIntakePort = 0;
-        public static final int kBreakBeamPreShooterPort = 2;
+        public static final int kBreakBeamIntakePort = 9;
+        public static final int kBreakBeamPreShooterPort = 7;
     }
 
 

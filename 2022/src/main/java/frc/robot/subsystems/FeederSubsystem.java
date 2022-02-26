@@ -4,6 +4,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.FeederConstants;
 
@@ -36,19 +37,20 @@ public class FeederSubsystem extends SubsystemBase {
   }
 
   public boolean getBreakBeamIntake(){
-    return m_BreakBeamIntake.get();
+    return !m_BreakBeamIntake.get();
   }
 
   public boolean getBreakBeamPreShooter(){
-    return m_BreakBeamPreShooter.get();
+    return !m_BreakBeamPreShooter.get();
   }
 
   public boolean getBothBreakBeams(){
-    return m_BreakBeamIntake.get() && m_BreakBeamPreShooter.get();
+    return !m_BreakBeamIntake.get() && !m_BreakBeamPreShooter.get();
   }
 
   @Override
   public void periodic() {
-    
+    SmartDashboard.putBoolean("Intake BB", getBreakBeamIntake());
+    SmartDashboard.putBoolean("PreShooter BB", getBreakBeamPreShooter());    
   }
 }

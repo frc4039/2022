@@ -23,7 +23,8 @@ public class FeederManagementCommand extends CommandBase {
 	@Override
 	public void execute() {
         if (m_feeder.getBothBreakBeams()){
-            m_feeder.runFeederReverse(FeederConstants.kFeederFeedPercent);
+            //m_feeder.runFeederReverse(FeederConstants.kFeederFeedPercent);
+			m_feeder.stop();
         } else if (m_feeder.getBreakBeamIntake()){
             m_feeder.runFeeder(FeederConstants.kFeederFeedPercent);
         } else if (m_feeder.getBreakBeamPreShooter()){
