@@ -4,6 +4,7 @@ package frc.robot.subsystems;
 
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
@@ -45,12 +46,14 @@ public class ShooterSubsystem extends SubsystemBase {
     m_shooterMotor1.config_kI(0, ShooterConstants.kShooterI, 30);
     m_shooterMotor1.config_kD(0, ShooterConstants.kShooterD, 30);
     
-    m_shooterMotor1.enableVoltageCompensation(false);
-    m_shooterMotor2.enableVoltageCompensation(false);
+    m_shooterMotor1.configVoltageCompSaturation(11.0);
+    m_shooterMotor2.configVoltageCompSaturation(11.0);
+    m_shooterMotor1.enableVoltageCompensation(true);
+    m_shooterMotor2.enableVoltageCompensation(true);
   }
 
   public void shoot() {
-    m_shooterMotor1.set(ControlMode.Velocity, ShooterRPM * ShooterConstants.kShooterGearRatio * 2048 / 600.0);
+    m_shooterMotor1.set(ControlMode.Velocity, ShooterRPM * ShooterConstants.kShooterGearRatio * 2048 / 600.0, DemandType.ArbitraryFeedForward, 0.0000213*ShooterRPM - 0.00206);
   }
 
   public void stop() {
