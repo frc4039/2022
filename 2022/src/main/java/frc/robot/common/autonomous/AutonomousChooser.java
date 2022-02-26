@@ -22,8 +22,10 @@ public class AutonomousChooser {
         this.trajectories = trajectories;
 
         autonomousModeChooser.setDefaultOption("SELECT AUTO", AutonomousMode.NONE);
-        autonomousModeChooser.setDefaultOption("Double JBC", AutonomousMode.DOUBLE_JBC);
+        autonomousModeChooser.addOption("Double JBC", AutonomousMode.DOUBLE_JBC);
         autonomousModeChooser.addOption("McDouble", AutonomousMode.MC_DOUBLE);
+        autonomousModeChooser.addOption("Frosty", AutonomousMode.FROSTY);
+        autonomousModeChooser.addOption("McFlurry", AutonomousMode.MC_FLURRY);
     }
 
     public SendableChooser<AutonomousMode> getAutonomousModeChooser() {
@@ -60,12 +62,47 @@ public class AutonomousChooser {
         return command;
     }
 
+    private SequentialCommandGroup getFrostyAutoCommand(RobotContainer container) {
+        SequentialCommandGroup command = new SequentialCommandGroup();
+
+        resetRobotPose(command, container, trajectories.getFrostyAuto1());
+        followAndIntake(command, container, trajectories.getFrostyAuto1());
+        follow(command, container, trajectories.getFrostyAuto2());
+        followAndIntake(command, container, trajectories.getFrostyAuto3());
+        shoot(command, container, 1.0);
+        follow(command, container, trajectories.getFrostyAuto4());
+        intake(command, container, 2.0);
+        follow(command, container, trajectories.getFrostyAuto5());
+        shoot(command, container, 1.0);
+
+        return command;
+    }
+
+    private SequentialCommandGroup getMcFlurryAutoCommand(RobotContainer container) {
+        SequentialCommandGroup command = new SequentialCommandGroup();
+
+        resetRobotPose(command, container, trajectories.getMcFlurryAuto1());
+        followAndIntake(command, container, trajectories.getMcFlurryAuto1());
+        follow(command, container, trajectories.getMcFlurryAuto2());
+        shoot(command, container, 1.0);
+        follow(command, container, trajectories.getMcFlurryAuto3());
+        intake(command, container, 2.0);
+        follow(command, container, trajectories.getMcFlurryAuto4());
+        shoot(command, container, 1.0);
+
+        return command;
+    }
+
     public Command getCommand(RobotContainer container) {
         switch (autonomousModeChooser.getSelected()) {
             case DOUBLE_JBC:
                 return getDoubleJBCAutoCommand(container);
             case MC_DOUBLE:
                 return getMcDoubleAutoCommand(container);
+            case FROSTY:
+                return getFrostyAutoCommand(container);
+            case MC_FLURRY:
+                return getMcFlurryAutoCommand(container);
             default:
                 return getNoAutoCommand(container);
         }
@@ -95,6 +132,11 @@ public class AutonomousChooser {
             .withTimeout(timeout));
     }
 
+    private void intake(SequentialCommandGroup command, RobotContainer container, Double timeout) {
+        command.addCommands(new IntakeCommand(container.getIntakeSubsystem())
+            .withTimeout(timeout));
+    }
+
     private void resetRobotPose(SequentialCommandGroup command, RobotContainer container, Trajectory trajectory) {
         //command.addCommands(new InstantCommand(() -> container.getDrivetrainSubsystem().resetGyroAngle(trajectory.calculate(0.0).getPathState().getRotation())));
         command.addCommands(new InstantCommand(() -> container.getDrivetrainSubsystem().resetPose(
@@ -105,5 +147,7 @@ public class AutonomousChooser {
         NONE,
         DOUBLE_JBC,
         MC_DOUBLE,
+        FROSTY,
+        MC_FLURRY,
     }
 }

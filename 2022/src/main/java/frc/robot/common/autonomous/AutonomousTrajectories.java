@@ -21,7 +21,15 @@ public class AutonomousTrajectories {
     private Trajectory doubleJBCAuto2;
     private Trajectory mcDoubleAuto1;
     private Trajectory mcDoubleAuto2;
-
+    private Trajectory frostyAuto1;
+    private Trajectory frostyAuto2;
+    private Trajectory frostyAuto3;
+    private Trajectory frostyAuto4;
+    private Trajectory frostyAuto5;
+    private Trajectory mcFlurryAuto1;
+    private Trajectory mcFlurryAuto2;
+    private Trajectory mcFlurryAuto3;
+    private Trajectory mcFlurryAuto4;
 
     public AutonomousTrajectories(TrajectoryConstraint[] trajectoryConstraints) throws IOException {
         TrajectoryConstraint[] slowConstraints = Arrays.copyOf(trajectoryConstraints, trajectoryConstraints.length + 1);
@@ -66,6 +74,69 @@ public class AutonomousTrajectories {
                 slowConstraints, SAMPLE_DISTANCE
         );
 
+        frostyAuto1 = new Trajectory(
+            new SimplePathBuilder(new Vector2(-27.114, -93.212), Rotation2.fromDegrees(-88.5))
+                .lineTo(new Vector2(-27.114, -133.206), Rotation2.fromDegrees(-90))
+                .build(),
+                slowConstraints, SAMPLE_DISTANCE
+        );
+
+        frostyAuto2 = new Trajectory(
+            new SimplePathBuilder(new Vector2(-27.114, -133.206), Rotation2.fromDegrees(-90))
+                .lineTo(new Vector2(-124.607, -113.762), Rotation2.fromDegrees(90))
+                .build(),
+                slowConstraints, SAMPLE_DISTANCE
+        );
+
+        frostyAuto3 = new Trajectory(
+            new SimplePathBuilder(new Vector2(-124.607, -113.762), Rotation2.fromDegrees(90))
+                .lineTo(new Vector2(-126.853, -93.018), Rotation2.fromDegrees(51.61381))
+                .build(),
+                slowConstraints, SAMPLE_DISTANCE
+        );
+
+        frostyAuto4 = new Trajectory(
+            new SimplePathBuilder(new Vector2(-126.853, -93.018), Rotation2.fromDegrees(51.61381))
+                .lineTo(new Vector2(-268.659, -107.732), Rotation2.fromDegrees(-133.75))
+                .build(),
+                slowConstraints, SAMPLE_DISTANCE
+        );
+
+        frostyAuto5 = new Trajectory(
+            new SimplePathBuilder(new Vector2(-268.659, -107.732), Rotation2.fromDegrees(-133.75))
+                .lineTo(new Vector2(-126.853, -93.018), Rotation2.fromDegrees(51.61381))
+                .build(),
+                slowConstraints, SAMPLE_DISTANCE
+        );
+
+        mcFlurryAuto1 = new Trajectory(
+            new SimplePathBuilder(new Vector2(-87.408, 42.08), Rotation2.fromDegrees(136.5))
+                .lineTo(new Vector2(-116.451, 70.019), Rotation2.fromDegrees(135))
+                .build(),
+                slowConstraints, SAMPLE_DISTANCE
+        );
+
+        mcFlurryAuto2 = new Trajectory(
+            new SimplePathBuilder(new Vector2(-116.451, 70.019), Rotation2.fromDegrees(135))
+                .lineTo(new Vector2(-158.627, 31.792), Rotation2.fromDegrees(-11.6395))
+                .build(),
+                slowConstraints, SAMPLE_DISTANCE
+        );
+
+        mcFlurryAuto3 = new Trajectory(
+            new SimplePathBuilder(new Vector2(-158.627, 31.792), Rotation2.fromDegrees(-11.6395))
+                .lineTo(new Vector2(-268.659, -107.732), Rotation2.fromDegrees(-133.75))
+                .build(),
+                slowConstraints, SAMPLE_DISTANCE
+        );
+
+        mcFlurryAuto4 = new Trajectory(
+            new SimplePathBuilder(new Vector2(-268.659, -107.732), Rotation2.fromDegrees(-133.75))
+                .lineTo(new Vector2(-158.627, 31.792), Rotation2.fromDegrees(-11.6395))
+                .build(),
+                slowConstraints, SAMPLE_DISTANCE
+        );
+
     }
 
     public Trajectory getNoAuto() {
@@ -86,5 +157,41 @@ public class AutonomousTrajectories {
 
     public Trajectory getMcDoubleAuto2() {
         return mcDoubleAuto2;
+    }
+
+    public Trajectory getFrostyAuto1() {
+        return frostyAuto1;
+    }
+
+    public Trajectory getFrostyAuto2() {
+        return frostyAuto2;
+    }
+
+    public Trajectory getFrostyAuto3() {
+        return frostyAuto3;
+    }
+
+    public Trajectory getFrostyAuto4() {
+        return frostyAuto4;
+    }
+
+    public Trajectory getFrostyAuto5() {
+        return frostyAuto5;
+    }
+
+    public Trajectory getMcFlurryAuto1() {
+        return mcFlurryAuto1;
+    }
+
+    public Trajectory getMcFlurryAuto2() {
+        return mcFlurryAuto2;
+    }
+
+    public Trajectory getMcFlurryAuto3() {
+        return mcFlurryAuto3;
+    }
+
+    public Trajectory getMcFlurryAuto4() {
+        return mcFlurryAuto4;
     }
 }
