@@ -17,6 +17,8 @@ public class ClimberSubsystem extends SubsystemBase {
 
     private final TalonFX m_climberMotorLeft;
 
+    private boolean enableClimb = false;
+
     public ClimberSubsystem() {
         m_climberMotorRight = new TalonFX(ClimberConstants.kClimberMotorRightPort);
         m_climberMotorLeft = new TalonFX(ClimberConstants.kClimberMotorLeftPort);
@@ -52,28 +54,44 @@ public class ClimberSubsystem extends SubsystemBase {
     }
     
     public void climberUp() {
-        m_climberMotorRight.set(ControlMode.PercentOutput, ClimberConstants.kClimberPowerUp);
-        m_climberMotorLeft.set(ControlMode.PercentOutput, ClimberConstants.kClimberPowerUp);
+        if (enableClimb) {
+            m_climberMotorRight.set(ControlMode.PercentOutput, ClimberConstants.kClimberPowerUp);
+            m_climberMotorLeft.set(ControlMode.PercentOutput, ClimberConstants.kClimberPowerUp);
+        }
     }
 
     public void climberDown() {
-        m_climberMotorRight.set(ControlMode.PercentOutput, ClimberConstants.kClimberPowerDown);
-        m_climberMotorLeft.set(ControlMode.PercentOutput, ClimberConstants.kClimberPowerDown);
+        if (enableClimb) {
+            m_climberMotorRight.set(ControlMode.PercentOutput, ClimberConstants.kClimberPowerDown);
+            m_climberMotorLeft.set(ControlMode.PercentOutput, ClimberConstants.kClimberPowerDown);
+        }
     }
 
     public void climberUpSlow() {
-        m_climberMotorRight.set(ControlMode.PercentOutput, ClimberConstants.kClimberSlowUp);
-        m_climberMotorLeft.set(ControlMode.PercentOutput, ClimberConstants.kClimberSlowUp);
+        if (enableClimb) {
+            m_climberMotorRight.set(ControlMode.PercentOutput, ClimberConstants.kClimberSlowUp);
+            m_climberMotorLeft.set(ControlMode.PercentOutput, ClimberConstants.kClimberSlowUp);
+        }
     }
 
     public void climberDownSlow() {
-        m_climberMotorRight.set(ControlMode.PercentOutput, ClimberConstants.kClimberSlowDown);
-        m_climberMotorLeft.set(ControlMode.PercentOutput, ClimberConstants.kClimberSlowDown);
+        if (enableClimb) {
+            m_climberMotorRight.set(ControlMode.PercentOutput, ClimberConstants.kClimberSlowDown);
+            m_climberMotorLeft.set(ControlMode.PercentOutput, ClimberConstants.kClimberSlowDown);
+        }
     }
 
     public void stop() {
         m_climberMotorRight.set(ControlMode.PercentOutput, 0);
         m_climberMotorLeft.set(ControlMode.PercentOutput, 0);
+    }
+
+    public void initiateClimb(){
+        enableClimb = true;
+    }
+
+    public boolean getClimbeEnable(){
+        return enableClimb;
     }
 
     public boolean getTopRightLimit() {
@@ -82,7 +100,6 @@ public class ClimberSubsystem extends SubsystemBase {
 
     public boolean getTopLeftLimit() {
         return m_climberMotorLeft.getSensorCollection().isFwdLimitSwitchClosed() == 1;
-    
     }
 
     public boolean getBottomRightLimit() {
