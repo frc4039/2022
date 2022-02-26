@@ -53,7 +53,7 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public void shoot() {
-    m_shooterMotor1.set(ControlMode.Velocity, ShooterRPM * ShooterConstants.kShooterGearRatio * 2048 / 600.0, DemandType.ArbitraryFeedForward, 0.0000213*ShooterRPM - 0.00206);
+    m_shooterMotor1.set(ControlMode.Velocity, ShooterRPM * ShooterConstants.kShooterGearRatio * 2048 / 600.0);
   }
 
   public void stop() {

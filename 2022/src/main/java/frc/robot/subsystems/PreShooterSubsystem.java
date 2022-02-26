@@ -61,6 +61,7 @@ public class PreShooterSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
+    SmartDashboard.putNumber("PreShooter RPM", returnPreShooterCurrentRPM());
     
   }
 }
