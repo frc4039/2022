@@ -51,8 +51,32 @@ public class ClimberSubsystem extends SubsystemBase {
         m_climberMotorRight.configForwardSoftLimitEnable(true);
         */
         
+        m_climberMotorRight.config_kF(0, ClimberConstants.kClimberF, 30);
+        m_climberMotorRight.config_kP(0, ClimberConstants.kClimberP, 30);
+        m_climberMotorRight.config_kI(0, ClimberConstants.kClimberI, 30);
+        m_climberMotorRight.config_kD(0, ClimberConstants.kClimberD, 30);
+
+        m_climberMotorLeft.config_kF(0, ClimberConstants.kClimberF, 30);
+        m_climberMotorLeft.config_kP(0, ClimberConstants.kClimberP, 30);
+        m_climberMotorLeft.config_kI(0, ClimberConstants.kClimberI, 30);
+        m_climberMotorLeft.config_kD(0, ClimberConstants.kClimberD, 30);
     }
-    
+
+    public void setClimberVelocityUp() {
+        if(enableClimb) {
+            m_climberMotorRight.set(ControlMode.Velocity, ClimberConstants.kClimberVelocityUp);
+            m_climberMotorLeft.set(ControlMode.Velocity, ClimberConstants.kClimberVelocityUp);     
+        }
+    }
+
+    public void setClimberVelocityDown() {
+        if(enableClimb) {
+            m_climberMotorRight.set(ControlMode.Velocity, ClimberConstants.kClimberVelocityDown);
+            m_climberMotorLeft.set(ControlMode.Velocity, ClimberConstants.kClimberVelocityDown);
+        }
+    }
+
+    //TODO tune PID for velocity instaid of percent output in climber up/down
     public void climberUp() {
         if (enableClimb) {
             m_climberMotorRight.set(ControlMode.PercentOutput, ClimberConstants.kClimberPowerUp);
