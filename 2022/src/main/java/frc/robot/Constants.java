@@ -115,8 +115,8 @@ public final class Constants {
         //TODO: preShooter gear ratio
         public static final double kPreShooterGearRatio = 3.0/1.0;
 
-        public static final double kRPMWindow = 0.90;
-        public static final double kPreShooterRPMWindow = 0.85;
+        public static final double kRPMWindow = 0.95;
+        public static final double kPreShooterRPMWindow = 0.95;
     }
 
 
