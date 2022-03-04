@@ -196,6 +196,10 @@ public class RobotContainer {
     return autonomousChooser;
   }
 
+  public void disableClimber(){
+    m_climberSubsystem.disableClimb();
+  }
+
   public void PrintAllValues(){
     shooterSubsystem.printShooterValues();
   }

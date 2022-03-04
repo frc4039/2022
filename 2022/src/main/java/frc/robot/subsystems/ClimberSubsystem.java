@@ -170,6 +170,10 @@ public class ClimberSubsystem extends SubsystemBase {
         enableClimb = true;
     }
 
+    public void disableClimb(){
+        enableClimb = false;
+    }
+    
     public boolean getClimbeEnable(){
         return enableClimb;
     }
@@ -206,6 +210,7 @@ public class ClimberSubsystem extends SubsystemBase {
         SmartDashboard.putBoolean("Climber Top Left BB", getTopLeftBB());
         SmartDashboard.putBoolean("Climber Bottom Right LS", getBottomRightLimit());
         SmartDashboard.putBoolean("Climber Bottom Left LS", getBottomLeftLimit());
+        SmartDashboard.putBoolean("Climber Enable", getClimbeEnable());
     }
 
 }
