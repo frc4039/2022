@@ -94,7 +94,7 @@ public final class Constants {
 
         public static final double kShooterP = 0.02;
         public static final double kShooterI = 0.0;
-        public static final double kShooterD = 0.0;
+        public static final double kShooterD = 2.7;
         public static final double kShooterF = 0.055;
 
         public static final double kShooterCurrentLimit = 30.0;
