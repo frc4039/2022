@@ -79,6 +79,11 @@ public class ClimberSubsystem extends SubsystemBase {
 
     public void setClimberVelocityDown() {
         if(enableClimb) {
+             /*
+            if (getTopRightBB()) {
+                m_climberMotorRight.set(ControlMode.PercentOutput, 0);
+            } else {}
+            */
             m_climberMotorRight.set(ControlMode.Velocity, ClimberConstants.kClimberVelocityDown);
             m_climberMotorLeft.set(ControlMode.Velocity, ClimberConstants.kClimberVelocityDown);
         }

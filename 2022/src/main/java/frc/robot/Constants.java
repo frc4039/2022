@@ -51,8 +51,8 @@ public final class Constants {
 
 
     public static final class ClimberConstants{
-        public static final TalonFXInvertType kClimberMotorRightInversion = TalonFXInvertType.Clockwise;
-        public static final TalonFXInvertType kClimberMotorLeftInversion = TalonFXInvertType.CounterClockwise;
+        public static final TalonFXInvertType kClimberMotorRightInversion = TalonFXInvertType.CounterClockwise;
+        public static final TalonFXInvertType kClimberMotorLeftInversion = TalonFXInvertType.Clockwise;
         public static final int kClimberMotorRightPort = 40;
         public static final int kClimberMotorLeftPort = 41; 
       
