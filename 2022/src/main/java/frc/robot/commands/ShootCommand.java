@@ -49,7 +49,7 @@ public class ShootCommand extends CommandBase {
     if ((m_shooter.returnCurrentRPM() > m_shooter.ShooterRPM * ShooterConstants.kRPMWindow)
       && (m_shooter.returnCurrentRPM() < m_shooter.ShooterRPM * (2 - ShooterConstants.kRPMWindow))
       && (m_preShooter.returnPreShooterCurrentRPM() > m_preShooter.PreShooterRPM * ShooterConstants.kPreShooterRPMWindow)
-      && (m_preShooter.returnPreShooterCurrentRPM() < m_preShooter.PreShooterRPM * (2 - ShooterConstants.kRPMWindow))
+      && (m_preShooter.returnPreShooterCurrentRPM() < m_preShooter.PreShooterRPM * (2 - ShooterConstants.kPreShooterRPMWindow))
       )  {
             m_feeder.runFeeder(ShooterConstants.kFeederPercent);
     }
