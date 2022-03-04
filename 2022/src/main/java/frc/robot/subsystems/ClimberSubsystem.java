@@ -100,6 +100,21 @@ public class ClimberSubsystem extends SubsystemBase {
         }
     }
 
+    public void climberInitiateUp() {
+        if (enableClimb) {
+            if (getTopRightBB()) {
+                m_climberMotorRight.set(ControlMode.PercentOutput, 0);
+            } else {
+                m_climberMotorRight.set(ControlMode.PercentOutput, ClimberConstants.kClimberPowerUp);
+            }
+            if (getTopLeftBB()) {
+                m_climberMotorLeft.set(ControlMode.PercentOutput, 0);
+            } else {
+                m_climberMotorLeft.set(ControlMode.PercentOutput, ClimberConstants.kClimberPowerUp);
+            }
+        }
+    }
+
     //TODO tune PID for velocity instaid of percent output in climber up/down
     public void climberUp() {
         if (enableClimb) {
@@ -200,6 +215,11 @@ public class ClimberSubsystem extends SubsystemBase {
 
     public double getClimberLeftEncoder(){
         return m_climberMotorLeft.getSelectedSensorPosition();
+    }
+
+    public void setEncodersZero(){
+        m_climberMotorLeft.setSelectedSensorPosition(0);
+        m_climberMotorRight.setSelectedSensorPosition(0);
     }
 
     @Override

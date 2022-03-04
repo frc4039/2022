@@ -77,6 +77,9 @@ public final class Constants {
         public static final int kLeftBottomLimitSwitchPort = 3;
         public static final int kRightTopBreakBeamPort = 0;
         public static final int kLeftTopBreakBeamPort = 1;
+
+        public static final double kLeftClimberPreClimb = 40000;
+        public static final double kRightClimberPreClimb = 40000;
     }
 
 

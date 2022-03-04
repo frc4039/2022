@@ -123,8 +123,11 @@ public class RobotContainer {
       )
     );
 
-    operatorController.getBackButton().and(operatorController.getStartButton()).whileActiveOnce(
-      new InstantCommand(m_climberSubsystem::initiateClimb, m_climberSubsystem)
+    operatorController.getBackButton().and(operatorController.getStartButton()).whenActive(
+      new SequentialCommandGroup(
+        new ClimberEncoderZeroCommand(m_climberSubsystem),
+        new ClimberPreClimbCommand(m_climberSubsystem)
+      )
     );
 
     operatorController.getLeftTriggerAxis().getButton(0.5).whenHeld(
