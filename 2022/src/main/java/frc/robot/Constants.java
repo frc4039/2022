@@ -72,6 +72,11 @@ public final class Constants {
         public static final double kClimberP = 0;
         public static final double kClimberI = 0;
         public static final double kClimberD = 0;
+
+        public static final int kRightBottomLimitSwitchPort = 2;
+        public static final int kLeftBottomLimitSwitchPort = 3;
+        public static final int kRightTopBreakBeamPort = 0;
+        public static final int kLeftTopBreakBeamPort = 1;
     }
 
 
