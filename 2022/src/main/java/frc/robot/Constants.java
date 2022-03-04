@@ -51,8 +51,8 @@ public final class Constants {
 
 
     public static final class ClimberConstants{
-        public static final TalonFXInvertType kClimberMotorRightInversion = TalonFXInvertType.Clockwise;
-        public static final TalonFXInvertType kClimberMotorLeftInversion = TalonFXInvertType.CounterClockwise;
+        public static final TalonFXInvertType kClimberMotorRightInversion = TalonFXInvertType.CounterClockwise;
+        public static final TalonFXInvertType kClimberMotorLeftInversion = TalonFXInvertType.Clockwise;
         public static final int kClimberMotorRightPort = 40;
         public static final int kClimberMotorLeftPort = 41; 
       
@@ -64,6 +64,19 @@ public final class Constants {
         //testing on 2/12 showed something around 470k encoder ticks might be right
         public static final double kFullyClimbedTicks = 472000;
         public static final int kTimeoutMs = 30;
+        
+        public static final double kClimberVelocityUp = 200.5;
+        public static final double kClimberVelocityDown = -200.5;
+
+        public static final double kClimberF = 0;
+        public static final double kClimberP = 0;
+        public static final double kClimberI = 0;
+        public static final double kClimberD = 0;
+
+        public static final int kRightBottomLimitSwitchPort = 2;
+        public static final int kLeftBottomLimitSwitchPort = 3;
+        public static final int kRightTopBreakBeamPort = 0;
+        public static final int kLeftTopBreakBeamPort = 1;
     }
 
 
@@ -100,7 +113,7 @@ public final class Constants {
         public static final double kPreShooterF = 0.05;
 
         //TODO: preShooter gear ratio
-        public static final double kPreShooterGearRatio = 1;
+        public static final double kPreShooterGearRatio = 1/3;
 
         public static final double kRPMWindow = 0.90;
         public static final double kPreShooterRPMWindow = 0.85;

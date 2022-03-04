@@ -30,6 +30,6 @@ public class ClimberUpSlowCommand extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return m_climberSubsystem.getTopRightLimit() && m_climberSubsystem.getTopLeftLimit();
+        return m_climberSubsystem.getTopRightBB() && m_climberSubsystem.getTopLeftBB();
     }
 }
