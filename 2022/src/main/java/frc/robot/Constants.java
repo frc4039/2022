@@ -87,7 +87,7 @@ public final class Constants {
         public static final int kShooterMotorPort2 = 31;
 
         public static final double kShooterRPM = 2100;
-        public static final double kPreShooterRPM = 1000;
+        public static final double kPreShooterRPM = 500;
         public static final TalonFXInvertType kShooterInversion1 = TalonFXInvertType.CounterClockwise;
         public static final TalonFXInvertType kShooterInversion2 = TalonFXInvertType.Clockwise;
         public static final boolean kSensorInversion = false;
