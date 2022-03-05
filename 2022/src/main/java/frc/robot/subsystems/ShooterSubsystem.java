@@ -55,7 +55,7 @@ public class ShooterSubsystem extends SubsystemBase {
     m_shooterMotor1.enableVoltageCompensation(true);
     m_shooterMotor2.enableVoltageCompensation(true);
 
-    m_shooterHood = new DoubleSolenoid(Constants.kPCMCANID, PneumaticsModuleType.CTREPCM, 0, 1);
+    m_shooterHood = new DoubleSolenoid(Constants.kPCMCANID, PneumaticsModuleType.CTREPCM, 2, 3);
   }
 
   public void shoot() {
