@@ -1,14 +1,10 @@
 package frc.robot.common.autonomous;
 
 import frc.robot.common.control.*;
-import frc.robot.common.io.PathReader;
 import frc.robot.common.math.Rotation2;
 import frc.robot.common.math.Vector2;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.Arrays;
 
 public class AutonomousTrajectories {
@@ -61,7 +57,7 @@ public class AutonomousTrajectories {
 
         twoRightAuto2 = new Trajectory(
             new SimplePathBuilder(new Vector2(-18, -128.5), Rotation2.fromDegrees(270.0))
-                .lineTo(new Vector2(-6, -40.0), Rotation2.fromDegrees(338.0))
+                .lineTo(new Vector2(-6, -40.0), Rotation2.fromDegrees(68.0))
                 .build(),
                 slowConstraints, SAMPLE_DISTANCE
         );
@@ -75,7 +71,7 @@ public class AutonomousTrajectories {
 
         twoLeftAuto2 = new Trajectory(
             new SimplePathBuilder(new Vector2(-116.5, 70), Rotation2.fromDegrees(136.5))
-                .lineTo(new Vector2(-43.0, 22.0), Rotation2.fromDegrees(340.0))
+                .lineTo(new Vector2(-40.0, 20.0), Rotation2.fromDegrees(340.0))
                 .build(),
                 slowConstraints, SAMPLE_DISTANCE
         );
@@ -89,13 +85,13 @@ public class AutonomousTrajectories {
 
         fiveRightAuto2 = new Trajectory(
             new SimplePathBuilder(new Vector2(-27.114, -133.206), Rotation2.fromDegrees(-90))
-                .lineTo(new Vector2(-124.607, -113.762), Rotation2.fromDegrees(90))
+                .lineTo(new Vector2(-127.607, -113.762), Rotation2.fromDegrees(90))
                 .build(),
                 normalConstraints, SAMPLE_DISTANCE
         );
 
         fiveRightAuto3 = new Trajectory(
-            new SimplePathBuilder(new Vector2(-124.607, -113.762), Rotation2.fromDegrees(90))
+            new SimplePathBuilder(new Vector2(-127.607, -113.762), Rotation2.fromDegrees(90))
                 .lineTo(new Vector2(-126.853, -93.018), Rotation2.fromDegrees(42))
                 .build(),
                 slowConstraints, SAMPLE_DISTANCE
@@ -103,14 +99,15 @@ public class AutonomousTrajectories {
 
         fiveRightAuto4 = new Trajectory(
             new SimplePathBuilder(new Vector2(-126.853, -93.018), Rotation2.fromDegrees(42))
-                .lineTo(new Vector2(-246.659, -107.732), Rotation2.fromDegrees(-133.75))
-                .lineTo(new Vector2(-250.659, -117.732), Rotation2.fromDegrees(-133.75))
+                .lineTo(new Vector2(-252.659, -100.732), Rotation2.fromDegrees(-133.75))
+                .lineTo(new Vector2(-257.659, -112.732), Rotation2.fromDegrees(-133.75))
                 .build(),
                 normalConstraints, SAMPLE_DISTANCE
         );
 
         fiveRightAuto5 = new Trajectory(
-            new SimplePathBuilder(new Vector2(-250.659, -117.732), Rotation2.fromDegrees(-133.75))
+            new SimplePathBuilder(new Vector2(-262.659, -117.732), Rotation2.fromDegrees(-133.75))
+                .lineTo(new Vector2(-154, -98), Rotation2.fromDegrees(35))
                 .lineTo(new Vector2(-126.853, -93.018), Rotation2.fromDegrees(42))
                 .build(),
                 normalConstraints, SAMPLE_DISTANCE

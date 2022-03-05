@@ -23,7 +23,6 @@ import frc.robot.common.math.Rotation2;
 import frc.robot.common.input.Axis;
 import frc.robot.common.input.XboxController2;
 import frc.robot.common.input.DPadButton.Direction;
-import edu.wpi.first.wpilibj.XboxController;
 
 import java.io.IOException;
 
@@ -38,8 +37,8 @@ public class RobotContainer {
   //TODO Clean up m_ for subsystems
   private final XboxController2 driverController = new XboxController2(Constants.DRIVER_CONTROLLER_PORT);
   private final XboxController2 operatorController = new XboxController2(Constants.OPERATOR_CONTROLLER_PORT);
-  private final XboxController driverRumble = new XboxController(Constants.DRIVER_CONTROLLER_PORT);
-  private final XboxController operatorRumble = new XboxController(Constants.OPERATOR_CONTROLLER_PORT);
+  // private final XboxController driverRumble = new XboxController(Constants.DRIVER_CONTROLLER_PORT);
+  // private final XboxController operatorRumble = new XboxController(Constants.OPERATOR_CONTROLLER_PORT);
 
   private final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
   private final PreShooterSubsystem preShooterSubsystem = new PreShooterSubsystem();
@@ -100,10 +99,18 @@ public class RobotContainer {
     driverController.getRightTriggerAxis().getButton(0.1).whenHeld(
         new ShootCommand(shooterSubsystem, preShooterSubsystem, feederSubsystem)
     );
-    
-    intakeBB.whenActive(
-      new RumbleBothCommand(this).withTimeout(2.0)
+
+    driverController.getAButton().whenPressed(
+      new InstantCommand(shooterSubsystem::extendShooterHood, shooterSubsystem)
     );
+
+    driverController.getBButton().whenPressed(
+      new InstantCommand(shooterSubsystem::retractShooterHood, shooterSubsystem)
+    );
+    
+    // intakeBB.whenActive(
+    //   new RumbleBothCommand(this).withTimeout(2.0)
+    // );
   
     //Operator A button intakes balls
     operatorController.getAButton().whenHeld(
@@ -150,11 +157,11 @@ public class RobotContainer {
       new ClimberDownSlowCommand(m_climberSubsystem)
     );
     
-    operatorController.getRightTriggerAxis().getButton(0.5).whenHeld(
+    operatorController.getRightTriggerAxis().getButton(0.5).whenPressed(
       new ClimberUpCommand(m_climberSubsystem)
     );
 
-    operatorController.getRightBumperButton().whenHeld(
+    operatorController.getRightBumperButton().whenPressed(
       new ClimberUpSlowCommand(m_climberSubsystem)
     );
 
@@ -223,13 +230,13 @@ public class RobotContainer {
     return operatorController;
   }
 
-  public XboxController getDriverRumble() {
-    return driverRumble;
-  }
+  // public XboxController getDriverRumble() {
+  //   return driverRumble;
+  // }
 
-  public XboxController getOperatorRumble() {
-    return operatorRumble;
-  }
+  // public XboxController getOperatorRumble() {
+  //   return operatorRumble;
+  // }
 
   public AutonomousChooser getAutonomousChooser() {
     return autonomousChooser;
