@@ -4,12 +4,15 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.FeederConstants;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
@@ -18,8 +21,9 @@ import frc.robot.common.autonomous.AutonomousTrajectories;
 import frc.robot.common.util.DriverReadout;
 import frc.robot.common.math.Rotation2;
 import frc.robot.common.input.Axis;
-import frc.robot.common.input.XboxController;
+import frc.robot.common.input.XboxController2;
 import frc.robot.common.input.DPadButton.Direction;
+import edu.wpi.first.wpilibj.XboxController;
 
 import java.io.IOException;
 
@@ -32,8 +36,10 @@ import java.io.IOException;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   //TODO Clean up m_ for subsystems
-  private final XboxController driverController = new XboxController(Constants.DRIVER_CONTROLLER_PORT);
-  private final XboxController operatorController = new XboxController(Constants.OPERATOR_CONTROLLER_PORT);
+  private final XboxController2 driverController = new XboxController2(Constants.DRIVER_CONTROLLER_PORT);
+  private final XboxController2 operatorController = new XboxController2(Constants.OPERATOR_CONTROLLER_PORT);
+  private final XboxController driverRumble = new XboxController(Constants.DRIVER_CONTROLLER_PORT);
+  private final XboxController operatorRumble = new XboxController(Constants.OPERATOR_CONTROLLER_PORT);
 
   private final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
   private final PreShooterSubsystem preShooterSubsystem = new PreShooterSubsystem();
@@ -47,6 +53,8 @@ public class RobotContainer {
   private AutonomousChooser autonomousChooser;
 
   private final DriverReadout driverReadout;
+
+  private final Trigger intakeBB = new Trigger(feederSubsystem::getBreakBeamIntake);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -92,7 +100,11 @@ public class RobotContainer {
     driverController.getRightTriggerAxis().getButton(0.1).whenHeld(
         new ShootCommand(shooterSubsystem, preShooterSubsystem, feederSubsystem)
     );
-
+    
+    intakeBB.whenActive(
+      new RumbleBothCommand(this).withTimeout(2.0)
+    );
+  
     //Operator A button intakes balls
     operatorController.getAButton().whenHeld(
       new IntakeCommand(intakeSubsystem)
@@ -184,12 +196,20 @@ public class RobotContainer {
     return drivetrainSubsystem;
   }
 
-  public XboxController getDriverController() {
+  public XboxController2 getDriverController() {
     return driverController;
   }
 
-  public XboxController getOperatorController() {
+  public XboxController2 getOperatorController() {
     return operatorController;
+  }
+
+  public XboxController getDriverRumble() {
+    return driverRumble;
+  }
+
+  public XboxController getOperatorRumble() {
+    return operatorRumble;
   }
 
   public AutonomousChooser getAutonomousChooser() {
