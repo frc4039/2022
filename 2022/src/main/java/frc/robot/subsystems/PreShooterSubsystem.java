@@ -56,7 +56,7 @@ public class PreShooterSubsystem extends SubsystemBase {
   }
 
   public void reversePreShooter() {
-    m_preShooterMotor.set(ControlMode.Velocity, -ShooterConstants.kPreShooterPercent);
+    m_preShooterMotor.set(ControlMode.Velocity, -PreShooterRPM * ShooterConstants.kPreShooterGearRatio * 2048 / 600.0);
   }
 
   @Override
