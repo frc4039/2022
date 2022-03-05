@@ -49,7 +49,6 @@ public final class Constants {
     public static final double DRIVETRAIN_BACK_LEFT_ENCODER_OFFSET = -Math.toRadians(338.29);
     public static final double DRIVETRAIN_BACK_RIGHT_ENCODER_OFFSET = -Math.toRadians(204.61);
 
-
     public static final class ClimberConstants{
         public static final TalonFXInvertType kClimberMotorRightInversion = TalonFXInvertType.CounterClockwise;
         public static final TalonFXInvertType kClimberMotorLeftInversion = TalonFXInvertType.Clockwise;
