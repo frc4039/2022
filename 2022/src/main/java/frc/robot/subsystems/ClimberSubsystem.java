@@ -100,6 +100,21 @@ public class ClimberSubsystem extends SubsystemBase {
         }
     }
 
+    public void climberInitiateUp() {
+        if (enableClimb) {
+            if (getTopRightBB()) {
+                m_climberMotorRight.set(ControlMode.PercentOutput, 0);
+            } else {
+                m_climberMotorRight.set(ControlMode.PercentOutput, ClimberConstants.kClimberPowerUp);
+            }
+            if (getTopLeftBB()) {
+                m_climberMotorLeft.set(ControlMode.PercentOutput, 0);
+            } else {
+                m_climberMotorLeft.set(ControlMode.PercentOutput, ClimberConstants.kClimberPowerUp);
+            }
+        }
+    }
+
     //TODO tune PID for velocity instaid of percent output in climber up/down
     public void climberUp() {
         if (enableClimb) {
@@ -170,6 +185,10 @@ public class ClimberSubsystem extends SubsystemBase {
         enableClimb = true;
     }
 
+    public void disableClimb(){
+        enableClimb = false;
+    }
+    
     public boolean getClimbeEnable(){
         return enableClimb;
     }
@@ -198,6 +217,11 @@ public class ClimberSubsystem extends SubsystemBase {
         return m_climberMotorLeft.getSelectedSensorPosition();
     }
 
+    public void setEncodersZero(){
+        m_climberMotorLeft.setSelectedSensorPosition(0);
+        m_climberMotorRight.setSelectedSensorPosition(0);
+    }
+
     @Override
     public void periodic() {
         SmartDashboard.putNumber("Climber Right Encoder", getClimberRightEncoder());
@@ -206,6 +230,7 @@ public class ClimberSubsystem extends SubsystemBase {
         SmartDashboard.putBoolean("Climber Top Left BB", getTopLeftBB());
         SmartDashboard.putBoolean("Climber Bottom Right LS", getBottomRightLimit());
         SmartDashboard.putBoolean("Climber Bottom Left LS", getBottomLeftLimit());
+        SmartDashboard.putBoolean("Climber Enable", getClimbeEnable());
     }
 
 }
