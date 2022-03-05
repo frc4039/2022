@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -55,6 +56,7 @@ public class Robot extends TimedRobot {
     //m_robotContainer = new RobotContainer();
     updateManager.startLoop(5.0e-3);
     pcmCompressor.enableDigital();
+    CameraServer.startAutomaticCapture();
   }
 
   /**
@@ -76,7 +78,9 @@ public class Robot extends TimedRobot {
 
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+    m_robotContainer.disableClimber();
+  }
 
   @Override
   public void disabledPeriodic() {}

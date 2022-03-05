@@ -27,7 +27,7 @@ public final class Constants {
 
 
     public static final double kDeadband = 0.075;
-    public static final double kRotationScale = 0.1;
+    public static final double kRotationScale = 0.25;
 
     public static final int DRIVETRAIN_FRONT_LEFT_DRIVE_MOTOR = 1;
     public static final int DRIVETRAIN_FRONT_RIGHT_DRIVE_MOTOR = 3;
@@ -44,14 +44,14 @@ public final class Constants {
     public static final int DRIVETRAIN_BACK_LEFT_ENCODER_PORT = 13;
     public static final int DRIVETRAIN_BACK_RIGHT_ENCODER_PORT = 14;
 
-    public static final double DRIVETRAIN_FRONT_LEFT_ENCODER_OFFSET = -Math.toRadians(202.5);
-    public static final double DRIVETRAIN_FRONT_RIGHT_ENCODER_OFFSET = -Math.toRadians(27.33 + 180.0);
-    public static final double DRIVETRAIN_BACK_LEFT_ENCODER_OFFSET = -Math.toRadians(208.21);
-    public static final double DRIVETRAIN_BACK_RIGHT_ENCODER_OFFSET = -Math.toRadians(345.32 - 180.0);
+    public static final double DRIVETRAIN_FRONT_LEFT_ENCODER_OFFSET = -Math.toRadians(203.20);
+    public static final double DRIVETRAIN_FRONT_RIGHT_ENCODER_OFFSET = -Math.toRadians(258.05);
+    public static final double DRIVETRAIN_BACK_LEFT_ENCODER_OFFSET = -Math.toRadians(338.29);
+    public static final double DRIVETRAIN_BACK_RIGHT_ENCODER_OFFSET = -Math.toRadians(204.61);
 
     public static final class ClimberConstants{
-        public static final TalonFXInvertType kClimberMotorRightInversion = TalonFXInvertType.Clockwise;
-        public static final TalonFXInvertType kClimberMotorLeftInversion = TalonFXInvertType.CounterClockwise;
+        public static final TalonFXInvertType kClimberMotorRightInversion = TalonFXInvertType.CounterClockwise;
+        public static final TalonFXInvertType kClimberMotorLeftInversion = TalonFXInvertType.Clockwise;
         public static final int kClimberMotorRightPort = 40;
         public static final int kClimberMotorLeftPort = 41; 
       
@@ -63,7 +63,24 @@ public final class Constants {
         //testing on 2/12 showed something around 470k encoder ticks might be right
         public static final double kFullyClimbedTicks = 472000;
         public static final int kTimeoutMs = 30;
+        
+        public static final double kClimberVelocityUp = 200.5;
+        public static final double kClimberVelocityDown = -200.5;
+
+        public static final double kClimberF = 0;
+        public static final double kClimberP = 0;
+        public static final double kClimberI = 0;
+        public static final double kClimberD = 0;
+
+        public static final int kRightBottomLimitSwitchPort = 2;
+        public static final int kLeftBottomLimitSwitchPort = 3;
+        public static final int kRightTopBreakBeamPort = 0;
+        public static final int kLeftTopBreakBeamPort = 1;
+
+        public static final double kLeftClimberPreClimb = 40000;
+        public static final double kRightClimberPreClimb = 40000;
     }
+
 
 
     public static final class ShooterConstants {
@@ -71,44 +88,54 @@ public final class Constants {
         public static final int kShooterMotorPort1 = 30;
         public static final int kShooterMotorPort2 = 31;
 
-        public static final double kShooterRPM = 2600;
-        public static final double kPreShooterRPM = 1000;
+        public static final double kShooterRPM = 2100;
+        public static final double kPreShooterRPM = 500;
         public static final TalonFXInvertType kShooterInversion1 = TalonFXInvertType.CounterClockwise;
         public static final TalonFXInvertType kShooterInversion2 = TalonFXInvertType.Clockwise;
         public static final boolean kSensorInversion = false;
 
-        public static final double kShooterP = 0.1;
+        public static final double kShooterP = 0.02;
         public static final double kShooterI = 0.0;
         public static final double kShooterD = 0.0;
-        public static final double kShooterF = 0.047;
+        public static final double kShooterF = 0.055;
 
         public static final double kShooterCurrentLimit = 30.0;
 
         public static final double kShooterGearRatio = 42.0 / 42.0;
 
         public static final int kPreShooterPort = 32;
-        public static final int kFeederPort = 33;
         public static final TalonFXInvertType kPreShooterInversion = TalonFXInvertType.Clockwise;
         public static final boolean kPreShooterSensorInversion = false;
-        public static final boolean kFeederInversion = false;
         public static final double kPreShooterPercent = 0.5;
         public static final double kFeederPercent = 0.4;
-        public static final double kSlowFeederPercent = 0.25;
 
         public static final double kPreShooterP = 0.025;
         public static final double kPreShooterI = 0;
         public static final double kPreShooterD = 0;
-        public static final double kPreShooterF = 0.0485;
+        public static final double kPreShooterF = 0.05;
 
-        public static final double kPreShooterGearRatio = 1;
+        //TODO: preShooter gear ratio
+        public static final double kPreShooterGearRatio = 3.0/1.0;
 
-        public static final double kRPMWindow = 0.90;
-        public static final double kPreShooterRPMWindow = 0.85;
+        public static final double kRPMWindow = 0.95;
+        public static final double kPreShooterRPMWindow = 0.95;
+    }
+
+
+    public static final class FeederConstants {
+        
+        public static final int kFeederPort = 33;
+        public static final boolean kFeederInversion = false;
+        public static final double kFeederFeedPercent = 0.25;
+        public static final double kFeederShootPercent = 0.4;
+
+        public static final int kBreakBeamIntakePort = 9;
+        public static final int kBreakBeamPreShooterPort = 7;
     }
 
 
   
-  public static final class IntakeConstants {
+    public static final class IntakeConstants {
         public static final int kIntakeMotorPort = 20;
         public static final TalonFXInvertType kIntakeInversion = TalonFXInvertType.Clockwise;
         public static final double kIntakePercent = 0.50;

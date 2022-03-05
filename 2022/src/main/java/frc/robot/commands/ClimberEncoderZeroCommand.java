@@ -3,11 +3,11 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ClimberSubsystem;
 
-public class ClimberUpSlowCommand extends CommandBase {
+public class ClimberEncoderZeroCommand extends CommandBase {
     private final ClimberSubsystem m_climberSubsystem;
     
 
-    public ClimberUpSlowCommand(ClimberSubsystem climberSubsystem) {
+    public ClimberEncoderZeroCommand(ClimberSubsystem climberSubsystem) {
         m_climberSubsystem = climberSubsystem;
 
         addRequirements(m_climberSubsystem);
@@ -15,7 +15,8 @@ public class ClimberUpSlowCommand extends CommandBase {
 
     @Override
     public void initialize() {
-       m_climberSubsystem.climberUpSlow();
+        m_climberSubsystem.initiateClimb();
+        m_climberSubsystem.climberDown();
     }
 
     @Override
@@ -26,10 +27,11 @@ public class ClimberUpSlowCommand extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         m_climberSubsystem.stop();
+        m_climberSubsystem.setEncodersZero();
     }
 
     @Override
     public boolean isFinished() {
-        return m_climberSubsystem.getTopRightBB() && m_climberSubsystem.getTopLeftBB();
+        return m_climberSubsystem.getBottomLeftLimit() && m_climberSubsystem.getBottomRightLimit();
     }
 }
