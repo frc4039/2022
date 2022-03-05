@@ -195,6 +195,10 @@ public class RobotContainer {
     return shooterSubsystem;
   }
 
+  public PreShooterSubsystem getPreShooterSubsystem() {
+    return preShooterSubsystem;
+  }
+
   public FeederSubsystem getFeederSubsystem() {
     return feederSubsystem;
   }

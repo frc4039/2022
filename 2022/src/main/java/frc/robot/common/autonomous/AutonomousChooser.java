@@ -3,10 +3,12 @@ package frc.robot.common.autonomous;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.RobotContainer;
+import frc.robot.Constants.FeederConstants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.commands.*;
 import frc.robot.common.control.Trajectory;
@@ -23,16 +25,10 @@ public class AutonomousChooser {
         this.trajectories = trajectories;
 
         autonomousModeChooser.setDefaultOption("SELECT AUTO", AutonomousMode.NONE);
-        autonomousModeChooser.addOption("Double JBC", AutonomousMode.DOUBLE_JBC);
-        autonomousModeChooser.addOption("McDouble", AutonomousMode.MC_DOUBLE);
-        autonomousModeChooser.addOption("Frosty", AutonomousMode.FROSTY);
-        autonomousModeChooser.addOption("McFlurry1", AutonomousMode.MC_FLURRY1);
-        autonomousModeChooser.addOption("McFlurry2", AutonomousMode.MC_FLURRY2);
-        autonomousModeChooser.addOption("McFlurry3", AutonomousMode.MC_FLURRY3);
-        autonomousModeChooser.addOption("McFlurry4", AutonomousMode.MC_FLURRY4);
-        autonomousModeChooser.addOption("McFlurry5", AutonomousMode.MC_FLURRY5);
-        autonomousModeChooser.addOption("McFlurry6", AutonomousMode.MC_FLURRY6);
-        autonomousModeChooser.addOption("McFlurry7", AutonomousMode.MC_FLURRY7);
+        autonomousModeChooser.addOption("(RIGHT) 2 Ball", AutonomousMode.TWO_RIGHT);
+        autonomousModeChooser.addOption("(LEFT) 2 Ball", AutonomousMode.TWO_LEFT);
+        autonomousModeChooser.addOption("(RIGHT/HP) 5 Ball", AutonomousMode.FIVE_RIGHT);
+        autonomousModeChooser.addOption("(LEFT/HP) 4 Ball", AutonomousMode.FOUR_LEFT);
     }
 
     public SendableChooser<AutonomousMode> getAutonomousModeChooser() {
@@ -47,153 +43,119 @@ public class AutonomousChooser {
         return command;
     }
 
-    private SequentialCommandGroup getDoubleJBCAutoCommand(RobotContainer container) {
+    private SequentialCommandGroup getTwoRightAutoCommand(RobotContainer container) {
         SequentialCommandGroup command = new SequentialCommandGroup();
 
-        resetRobotPose(command, container, trajectories.getDoubleJBCAuto1());
-        followAndIntake(command, container, trajectories.getDoubleJBCAuto1());
-        followAndPreShoot(command, container, trajectories.getDoubleJBCAuto2());
-        shoot(command, container, 1.0);
+        resetRobotPose(command, container, trajectories.getTwoRightAuto1());
+        followAndIntake(command, container, trajectories.getTwoRightAuto1());
+        followAndPreShoot(command, container, trajectories.getTwoRightAuto2());
+        shoot(command, container, 10.0);
 
         return command;
     }
 
-    private SequentialCommandGroup getMcDoubleAutoCommand(RobotContainer container) {
+    private SequentialCommandGroup getTwoLeftAutoCommand(RobotContainer container) {
         SequentialCommandGroup command = new SequentialCommandGroup();
 
-        resetRobotPose(command, container, trajectories.getMcDoubleAuto1());
-        followAndIntake(command, container, trajectories.getMcDoubleAuto1());
-        followAndPreShoot(command, container, trajectories.getMcDoubleAuto2());
-        shoot(command, container, 1.0);
+        resetRobotPose(command, container, trajectories.getTwoLeftAuto1());
+        followAndIntake(command, container, trajectories.getTwoLeftAuto1());
+        followAndPreShoot(command, container, trajectories.getTwoLeftAuto2());
+        shoot(command, container, 10.0);
 
         return command;
     }
 
-    private SequentialCommandGroup getFrostyAutoCommand(RobotContainer container) {
+    private SequentialCommandGroup getFiveRightAutoCommand(RobotContainer container) {
         SequentialCommandGroup command = new SequentialCommandGroup();
 
-        resetRobotPose(command, container, trajectories.getFrostyAuto1());
-        followAndIntake(command, container, trajectories.getFrostyAuto1());
-        followAndIntake(command, container, trajectories.getFrostyAuto2());
-        followIntakeAndPreShoot(command, container, trajectories.getFrostyAuto3());
+        resetRobotPose(command, container, trajectories.getFiveRightAuto1());
+        followAndIntake(command, container, trajectories.getFiveRightAuto1());
+        followAndIntake(command, container, trajectories.getFiveRightAuto2());
+        followIntakeAndPreShoot(command, container, trajectories.getFiveRightAuto3());
         shoot(command, container, 2.5);
-        followAndIntake(command, container, trajectories.getFrostyAuto4());
+        followAndIntake(command, container, trajectories.getFiveRightAuto4());
         intake(command, container, 2.0);
-        followAndPreShoot(command, container, trajectories.getFrostyAuto5());
+        followAndPreShoot(command, container, trajectories.getFiveRightAuto5());
         shoot(command, container, 2.0);
 
         return command;
     }
 
-    private SequentialCommandGroup getMcFlurryAutoCommand(RobotContainer container, int part) {
+    private SequentialCommandGroup getFourLeftAutoCommand(RobotContainer container) {
         SequentialCommandGroup command = new SequentialCommandGroup();
 
-        switch (part) {
-            case 1:
-                resetRobotPose(command, container, trajectories.getMcFlurryAuto1());
-                followAndIntake(command, container, trajectories.getMcFlurryAuto1());
-                break;
-            case 2:
-                resetRobotPose(command, container, trajectories.getMcFlurryAuto2());
-                follow(command, container, trajectories.getMcFlurryAuto2());
-                break;
-            case 3:
-                shoot(command, container, 2.0);
-                break;
-            case 4:
-                resetRobotPose(command, container, trajectories.getMcFlurryAuto3());
-                follow(command, container, trajectories.getMcFlurryAuto3());
-                break;
-            case 5:
-                intake(command, container, 2.0);
-                break;
-            case 6:
-                resetRobotPose(command, container, trajectories.getMcFlurryAuto4());
-                follow(command, container, trajectories.getMcFlurryAuto4());
-                break;
-            case 7:
-                shoot(command, container, 2.0);
-                break;
-        }
+        resetRobotPose(command, container, trajectories.getFourLeftAuto1());
+        followAndIntake(command, container, trajectories.getFourLeftAuto1());
+        follow(command, container, trajectories.getFourLeftAuto2());
+        shoot(command, container, 2.0);
+        follow(command, container, trajectories.getFourLeftAuto3());
+        intake(command, container, 2.0);
+        follow(command, container, trajectories.getFourLeftAuto4());
+        shoot(command, container, 2.0);
 
         return command;
     }
 
     public Command getCommand(RobotContainer container) {
         switch (autonomousModeChooser.getSelected()) {
-            case DOUBLE_JBC:
-                return getDoubleJBCAutoCommand(container);
-            case MC_DOUBLE:
-                return getMcDoubleAutoCommand(container);
-            case FROSTY:
-                return getFrostyAutoCommand(container);
-            case MC_FLURRY1:
-                return getMcFlurryAutoCommand(container, 1);
-            case MC_FLURRY2:
-                return getMcFlurryAutoCommand(container, 2);
-            case MC_FLURRY3:
-                return getMcFlurryAutoCommand(container, 3);
-            case MC_FLURRY4:
-                return getMcFlurryAutoCommand(container, 4);
-            case MC_FLURRY5:
-                return getMcFlurryAutoCommand(container, 5);
-            case MC_FLURRY6:
-                return getMcFlurryAutoCommand(container, 6);
-            case MC_FLURRY7:
-                return getMcFlurryAutoCommand(container, 7);
+            case TWO_RIGHT:
+                return getTwoRightAutoCommand(container);
+            case TWO_LEFT:
+                return getTwoLeftAutoCommand(container);
+            case FIVE_RIGHT:
+                return getFiveRightAutoCommand(container);
+            case FOUR_LEFT:
+                return getFourLeftAutoCommand(container);
             default:
                 return getNoAutoCommand(container);
         }
     }
 
     private void follow(SequentialCommandGroup command, RobotContainer container, Trajectory trajectory) {
-        command.addCommands(new FollowTrajectoryCommand(container.getDrivetrainSubsystem(), trajectory));
+        command.addCommands(new FollowTrajectoryCommand(container.getDrivetrainSubsystem(), trajectory)
+            .deadlineWith(
+                new FeederManagementCommand(container.getFeederSubsystem())
+            )
+        );
     }
 
     private void followAndIntake(SequentialCommandGroup command, RobotContainer container, Trajectory trajectory) {
         command.addCommands(new FollowTrajectoryCommand(container.getDrivetrainSubsystem(), trajectory)
                 .deadlineWith(new ParallelDeadlineGroup(
-                    new IntakeCommand(container.getIntakeSubsystem()),
-                    new FeederCommand(container.getFeederSubsystem(), ShooterConstants.kSlowFeederPercent)
-                )));
+                        new IntakeCommand(container.getIntakeSubsystem()),
+                        new FeederManagementCommand(container.getFeederSubsystem()))));
     }
 
     private void followIntakeAndPreShoot(SequentialCommandGroup command, RobotContainer container,
             Trajectory trajectory) {
         command.addCommands(new FollowTrajectoryCommand(container.getDrivetrainSubsystem(), trajectory)
-                .deadlineWith(new ParallelDeadlineGroup(
-                        new FeederCommand(container.getFeederSubsystem(), -ShooterConstants.kSlowFeederPercent)
-                                .withTimeout(0.5),
-                        new InstantCommand(container.getShooterSubsystem()::shooterSlowBackward,
-                                container.getShooterSubsystem()),
-                        new IntakeCommand(container.getIntakeSubsystem())))
-                .andThen(
-                        new InstantCommand(container.getShooterSubsystem()::shoot, container.getShooterSubsystem())));
+                .deadlineWith(
+                    new ParallelCommandGroup(
+                        new PreShootCommand(container.getPreShooterSubsystem(), container.getShooterSubsystem(), container.getFeederSubsystem()),
+                        new IntakeCommand(container.getIntakeSubsystem())
+                    )
+                ));
     }
 
     private void followAndPreShoot(SequentialCommandGroup command, RobotContainer container, Trajectory trajectory) {
         command.addCommands(new FollowTrajectoryCommand(container.getDrivetrainSubsystem(), trajectory)
-                .deadlineWith(new ParallelDeadlineGroup(
-                        new FeederCommand(container.getFeederSubsystem(), -ShooterConstants.kSlowFeederPercent)
-                                .withTimeout(0.5),
-                        new InstantCommand(container.getShooterSubsystem()::shooterSlowBackward,
-                                container.getShooterSubsystem())).andThen(
-                                        new InstantCommand(container.getShooterSubsystem()::shoot,
-                                                container.getShooterSubsystem()))));
+                .deadlineWith(
+                    new PreShootCommand(container.getPreShooterSubsystem(), container.getShooterSubsystem(), container.getFeederSubsystem()),
+                    new IntakeCommand(container.getIntakeSubsystem())
+                ));
     }
 
     private void shoot(SequentialCommandGroup command, RobotContainer container, Double timeout) {
-        command.addCommands(new ShootCommand(container.getShooterSubsystem(), container.getFeederSubsystem())
-                .withTimeout(timeout));
+        command.addCommands(new ShootCommand(container.getShooterSubsystem(), container.getPreShooterSubsystem(),
+                container.getFeederSubsystem())
+                        .withTimeout(timeout));
     }
 
     private void intake(SequentialCommandGroup command, RobotContainer container, Double timeout) {
         command.addCommands(new ParallelDeadlineGroup(
-            new IntakeCommand(container.getIntakeSubsystem()),
-            new FeederCommand(container.getFeederSubsystem(), ShooterConstants.kSlowFeederPercent)
-        )
-        .withTimeout(timeout)
-        );
+                new IntakeCommand(container.getIntakeSubsystem()),
+                new FeederCommand(container.getFeederSubsystem(), -FeederConstants.kFeederFeedPercent))
+                        .withTimeout(timeout));
     }
 
     private void resetRobotPose(SequentialCommandGroup command, RobotContainer container, Trajectory trajectory) {
@@ -206,16 +168,9 @@ public class AutonomousChooser {
 
     private enum AutonomousMode {
         NONE,
-        DOUBLE_JBC,
-        MC_DOUBLE,
-        FROSTY,
-        MC_FLURRY1,
-        MC_FLURRY2,
-        MC_FLURRY3,
-        MC_FLURRY4,
-        MC_FLURRY5,
-        MC_FLURRY6,
-        MC_FLURRY7,
-
+        TWO_RIGHT,
+        TWO_LEFT,
+        FIVE_RIGHT,
+        FOUR_LEFT,
     }
 }
