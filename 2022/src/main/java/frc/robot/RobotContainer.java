@@ -130,7 +130,7 @@ public class RobotContainer {
       new ClimberDownCommand(m_climberSubsystem)
     );
     
-    operatorController.getRightTriggerAxis().getButton(0.5).whenPressed(
+    operatorController.getRightTriggerAxis().getButton(0.5).whenHeld(
       new ClimberUpCommand(m_climberSubsystem)
     );
 
