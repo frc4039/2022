@@ -36,7 +36,7 @@ public class PreShootCommand extends CommandBase {
         } else {
             m_preShooter.stop();
             m_feeder.stop();
-            m_shooter.shoot();
+            m_shooter.shotType();
         }
     }
 
@@ -44,8 +44,8 @@ public class PreShootCommand extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         m_feeder.stop();
-        m_preShooter.runPreShooter();
-        m_shooter.shoot();
+        m_preShooter.preShotType();
+        m_shooter.shotType();
     }
 
     // Returns true when the command should end.
