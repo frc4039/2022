@@ -119,13 +119,7 @@ public class RobotContainer {
 
     //Operator Y buttom spools up shooter
     operatorController.getYButton().whenPressed(
-      new SequentialCommandGroup(
-        new FeederCommand(feederSubsystem, -FeederConstants.kFeederFeedPercent).withTimeout(0.25),
-        new ParallelDeadlineGroup(
-          new WaitCommand(3.0),
-          new InstantCommand(shooterSubsystem::shoot, shooterSubsystem)
-        )
-      )
+      new PreShootCommand(preShooterSubsystem, shooterSubsystem, feederSubsystem)
     );
 
     operatorController.getDPadButton(Direction.UPRIGHT).whenPressed(

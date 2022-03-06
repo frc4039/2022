@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.FeederSubsystem;
 import frc.robot.subsystems.PreShooterSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
-
+import frc.robot.Constants.FeederConstants;
 import frc.robot.Constants.ShooterConstants;
 
 /**
@@ -51,7 +51,7 @@ public class ShootCommand extends CommandBase {
       && (m_preShooter.returnPreShooterCurrentRPM() > m_preShooter.PreShooterRPM * ShooterConstants.kPreShooterRPMWindow)
       && (m_preShooter.returnPreShooterCurrentRPM() < m_preShooter.PreShooterRPM * (2 - ShooterConstants.kPreShooterRPMWindow))
       )  {
-            m_feeder.runFeeder(ShooterConstants.kFeederPercent);
+            m_feeder.runFeeder(FeederConstants.kFeederShootPercent);
     }
   }
 

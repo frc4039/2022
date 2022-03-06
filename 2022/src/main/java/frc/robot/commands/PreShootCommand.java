@@ -36,6 +36,7 @@ public class PreShootCommand extends CommandBase {
         } else {
             m_preShooter.stop();
             m_feeder.stop();
+            m_shooter.shoot();
         }
     }
 
@@ -50,6 +51,6 @@ public class PreShootCommand extends CommandBase {
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        return !m_feeder.getBreakBeamPreShooter();
+        return false;
     }
 }
