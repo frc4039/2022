@@ -22,6 +22,11 @@ public class ShootCommand extends CommandBase {
   private final ShooterSubsystem m_shooter;
   private final PreShooterSubsystem m_preShooter;
 
+  private double ShooterRPM = 0;
+  private double PreShooterRPM = 0;
+  private double RPMWindow = 0;
+  private double preShooterRPMWindow = 0;
+
   /**
    * Creates a new Shoot Command.
    *
@@ -39,19 +44,49 @@ public class ShootCommand extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_shooter.shoot();
-    m_preShooter.runPreShooter();
+    m_shooter.shotType();
+    m_preShooter.preShotType();
+
+    if (m_shooter.type == 0) {
+      ShooterRPM = ShooterConstants.kfenderHighShotRPM;
+      PreShooterRPM = ShooterConstants.kpreShooterFenderHighShotRPM;
+      RPMWindow = ShooterConstants.kfenderHighShotRPMWindow;
+      preShooterRPMWindow = ShooterConstants.kPreShooterFenderHighShotRPMWindow;
+    }
+    else if (m_shooter.type == 1) {
+      ShooterRPM = ShooterConstants.kfenderLowShotRPM;
+      PreShooterRPM = ShooterConstants.kpreShooterFenderLowShotRPM;
+      RPMWindow = ShooterConstants.kfenderLowShotRPMWindow;
+      preShooterRPMWindow = ShooterConstants.kPreShooterFenderLowShotRPMWindow;
+    }
+    else if (m_shooter.type == 2) {
+      ShooterRPM = ShooterConstants.klimelightShotRPM;
+      PreShooterRPM = ShooterConstants.kpreShooterLimelightShotRPM;
+      RPMWindow = ShooterConstants.klimelightShotRPMWindow;
+      preShooterRPMWindow = ShooterConstants.kPreShooterlimelightShotRPMWindow;
+    }
+    else {
+      ShooterRPM = ShooterConstants.kfenderHighShotRPM;
+      PreShooterRPM = ShooterConstants.kpreShooterFenderHighShotRPM;
+      RPMWindow = ShooterConstants.kfenderHighShotRPMWindow;
+      preShooterRPMWindow = ShooterConstants.kPreShooterFenderHighShotRPMWindow;
+    }
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if ((m_shooter.returnCurrentRPM() > m_shooter.ShooterRPM * ShooterConstants.kRPMWindow)
-      && (m_shooter.returnCurrentRPM() < m_shooter.ShooterRPM * (2 - ShooterConstants.kRPMWindow))
-      && (m_preShooter.returnPreShooterCurrentRPM() > m_preShooter.PreShooterRPM * ShooterConstants.kPreShooterRPMWindow)
-      && (m_preShooter.returnPreShooterCurrentRPM() < m_preShooter.PreShooterRPM * (2 - ShooterConstants.kPreShooterRPMWindow))
+
+    
+    if ((m_shooter.returnCurrentRPM() > ShooterRPM * (1 - RPMWindow))
+      && (m_shooter.returnCurrentRPM() < ShooterRPM * (1 + RPMWindow))
+      && (m_preShooter.returnPreShooterCurrentRPM() > PreShooterRPM * (1 - preShooterRPMWindow))
+      && (m_preShooter.returnPreShooterCurrentRPM() < PreShooterRPM * (1 + preShooterRPMWindow))
       )  {
             m_feeder.runFeeder(FeederConstants.kFeederShootPercent);
+    }
+    else {
+      m_feeder.stop();
     }
   }
 

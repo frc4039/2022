@@ -20,9 +20,9 @@ public class ShooterSubsystem extends SubsystemBase {
   private final TalonFX m_shooterMotor2;
 
   private final DoubleSolenoid m_shooterHood;
-
-  public double ShooterRPM = ShooterConstants.kShooterRPM;
  
+  public int type = 0;
+
   public ShooterSubsystem() {
 
     m_shooterMotor1 = new TalonFX(ShooterConstants.kShooterMotorPort1);
@@ -52,8 +52,31 @@ public class ShooterSubsystem extends SubsystemBase {
     m_shooterHood = new DoubleSolenoid(Constants.kPCMCANID, PneumaticsModuleType.CTREPCM, 2, 3);
   }
 
-  public void shoot() {
-    m_shooterMotor1.set(ControlMode.Velocity, ShooterRPM * ShooterConstants.kShooterGearRatio * 2048 / 600.0);
+  public void shoot(double shooterRPM) {
+    m_shooterMotor1.set(ControlMode.Velocity, shooterRPM * ShooterConstants.kShooterGearRatio * 2048 / 600.0);
+  }
+
+  private void fenderLowShot() {
+    shoot(ShooterConstants.kfenderLowShotRPM);
+  }
+
+  private void fenderHighShot() {
+    shoot(ShooterConstants.kfenderHighShotRPM);
+  }
+
+  private void limelightShot() {
+    shoot(ShooterConstants.klimelightShotRPM);
+  }
+
+  public void shotType() {
+    if(type == 0)
+      fenderHighShot();
+    else if(type == 1)
+      fenderLowShot();
+    else if (type == 2)
+      limelightShot();
+    else
+      fenderHighShot();
   }
 
   public void stop() {

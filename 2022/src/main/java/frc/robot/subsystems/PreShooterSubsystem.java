@@ -17,7 +17,7 @@ public class PreShooterSubsystem extends SubsystemBase {
 
   private final TalonFX m_preShooterMotor;
 
-  public double PreShooterRPM = ShooterConstants.kPreShooterRPM;
+  public int type = 0;
  
   public PreShooterSubsystem() {
       
@@ -51,12 +51,35 @@ public class PreShooterSubsystem extends SubsystemBase {
     return m_preShooterMotor.getSelectedSensorVelocity() * 600 / 2048 / ShooterConstants.kPreShooterGearRatio;
   }
 
-  public void runPreShooter() {
-    m_preShooterMotor.set(ControlMode.Velocity, PreShooterRPM * ShooterConstants.kPreShooterGearRatio * 2048 / 600.0);
+  public void runPreShooter(double preShooterRPM) {
+    m_preShooterMotor.set(ControlMode.Velocity, preShooterRPM * ShooterConstants.kPreShooterGearRatio * 2048 / 600.0);
+  }
+
+  public void fenderLowPreShoot() {
+    runPreShooter(ShooterConstants.kpreShooterFenderLowShotRPM);
+  }
+
+  public void fenderHighPreShoot() {
+    runPreShooter(ShooterConstants.kpreShooterFenderHighShotRPM);
+  }
+
+  public void limelightPreShoot() {
+    runPreShooter(ShooterConstants.kpreShooterLimelightShotRPM);
+  }
+
+  public void preShotType(){
+    if(type == 0)
+      fenderHighPreShoot();
+    else if(type == 1)
+      fenderLowPreShoot();
+    else if (type == 2)
+      limelightPreShoot();
+    else
+      fenderHighPreShoot();
   }
 
   public void reversePreShooter() {
-    m_preShooterMotor.set(ControlMode.Velocity, -PreShooterRPM * ShooterConstants.kPreShooterGearRatio * 2048 / 600.0);
+    m_preShooterMotor.set(ControlMode.Velocity, ShooterConstants.kpreShooterReverseRPM * ShooterConstants.kPreShooterGearRatio * 2048 / 600.0);
   }
 
   @Override

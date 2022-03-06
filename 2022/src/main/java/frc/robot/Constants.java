@@ -116,8 +116,21 @@ public final class Constants {
         //TODO: preShooter gear ratio
         public static final double kPreShooterGearRatio = 3.0/1.0;
 
-        public static final double kRPMWindow = 0.95;
-        public static final double kPreShooterRPMWindow = 0.95;
+        public static final double kfenderLowShotRPM = 1400;
+        public static final double kfenderHighShotRPM = 2100;
+        public static final double klimelightShotRPM = 2600;
+        
+        public static final double kpreShooterReverseRPM = 500;
+        public static final double kpreShooterLimelightShotRPM = 2600;
+        public static final double kpreShooterFenderLowShotRPM = 500;
+        public static final double kpreShooterFenderHighShotRPM = 500;
+
+        public static final double kfenderHighShotRPMWindow = 0.05;
+        public static final double kPreShooterFenderHighShotRPMWindow = 0.05;
+        public static final double kfenderLowShotRPMWindow = 0.2;
+        public static final double kPreShooterFenderLowShotRPMWindow = 0.2;
+        public static final double klimelightShotRPMWindow = 0.05;
+        public static final double kPreShooterlimelightShotRPMWindow = 0.05;
     }
 
 
