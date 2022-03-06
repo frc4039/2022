@@ -7,7 +7,10 @@ import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ClimberConstants;
@@ -25,6 +28,13 @@ public class ClimberSubsystem extends SubsystemBase {
     private final DigitalInput leftTopBreakBeam;
     private final DigitalInput rightTopBreakBeam;
 
+    
+    private final NetworkTableEntry topLeftBB;
+    private final NetworkTableEntry topRightBB;
+    private final NetworkTableEntry bottomLeftLimit;
+    private final NetworkTableEntry bottomRightLimit;
+    private final NetworkTableEntry climberEnable;
+    
 
     public ClimberSubsystem() {
         m_climberMotorRight = new TalonFX(ClimberConstants.kClimberMotorRightPort);
@@ -68,6 +78,29 @@ public class ClimberSubsystem extends SubsystemBase {
         rightBottomLimitSwitch = new DigitalInput(ClimberConstants.kRightBottomLimitSwitchPort);
         leftTopBreakBeam = new DigitalInput(ClimberConstants.kLeftTopBreakBeamPort);
         rightTopBreakBeam = new DigitalInput(ClimberConstants.kRightTopBreakBeamPort);
+
+        ShuffleboardTab tab = Shuffleboard.getTab("Driver Readout");
+        
+        topLeftBB = tab.add("Top Left B B", false)
+                .withPosition(2, 1)
+                .withSize(1, 1)
+                .getEntry();
+        topRightBB = tab.add("Top Right B B", false)
+                .withPosition(3, 1)
+                .withSize(1, 1)
+                .getEntry();
+        bottomLeftLimit = tab.add("Bottom Left Limit", false)
+                .withPosition(4, 1)
+                .withSize(1, 1)
+                .getEntry();
+        bottomRightLimit = tab.add("Bottom Right Limit", false)
+                .withPosition(5, 1)
+                .withSize(1, 1)
+                .getEntry();
+        climberEnable = tab.add("Climber Enabled", false)
+                .withPosition(6, 1)
+                .withSize(1, 1)
+                .getEntry();
     }
 
     public void setClimberVelocityUp() {
@@ -224,6 +257,7 @@ public class ClimberSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
+        /*
         SmartDashboard.putNumber("Climber Right Encoder", getClimberRightEncoder());
         SmartDashboard.putNumber("Climber Left Encoder", getClimberLeftEncoder());
         SmartDashboard.putBoolean("Climber Top Right BB", getTopRightBB());
@@ -231,6 +265,12 @@ public class ClimberSubsystem extends SubsystemBase {
         SmartDashboard.putBoolean("Climber Bottom Right LS", getBottomRightLimit());
         SmartDashboard.putBoolean("Climber Bottom Left LS", getBottomLeftLimit());
         SmartDashboard.putBoolean("Climber Enable", getClimbeEnable());
+        */
+        topRightBB.setBoolean(getTopRightBB());
+        topLeftBB.setBoolean(getTopLeftBB());
+        bottomLeftLimit.setBoolean(getBottomLeftLimit());
+        bottomRightLimit.setBoolean(getBottomRightLimit());
+        climberEnable.setBoolean(getClimbeEnable());
     }
 
 }

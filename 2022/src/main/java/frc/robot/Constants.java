@@ -44,10 +44,10 @@ public final class Constants {
     public static final int DRIVETRAIN_BACK_LEFT_ENCODER_PORT = 13;
     public static final int DRIVETRAIN_BACK_RIGHT_ENCODER_PORT = 14;
 
-    public static final double DRIVETRAIN_FRONT_LEFT_ENCODER_OFFSET = -Math.toRadians(203.20);
-    public static final double DRIVETRAIN_FRONT_RIGHT_ENCODER_OFFSET = -Math.toRadians(258.05);
-    public static final double DRIVETRAIN_BACK_LEFT_ENCODER_OFFSET = -Math.toRadians(338.29);
-    public static final double DRIVETRAIN_BACK_RIGHT_ENCODER_OFFSET = -Math.toRadians(204.61);
+    public static final double DRIVETRAIN_FRONT_LEFT_ENCODER_OFFSET = -Math.toRadians(200.5);
+    public static final double DRIVETRAIN_FRONT_RIGHT_ENCODER_OFFSET = -Math.toRadians(258.0);
+    public static final double DRIVETRAIN_BACK_LEFT_ENCODER_OFFSET = -Math.toRadians(337.7);
+    public static final double DRIVETRAIN_BACK_RIGHT_ENCODER_OFFSET = -Math.toRadians(204.4);
 
     public static final class ClimberConstants{
         public static final TalonFXInvertType kClimberMotorRightInversion = TalonFXInvertType.CounterClockwise;
@@ -107,7 +107,6 @@ public final class Constants {
         public static final TalonFXInvertType kPreShooterInversion = TalonFXInvertType.Clockwise;
         public static final boolean kPreShooterSensorInversion = false;
         public static final double kPreShooterPercent = 0.5;
-        public static final double kFeederPercent = 0.4;
 
         public static final double kPreShooterP = 0.025;
         public static final double kPreShooterI = 0;
@@ -127,7 +126,7 @@ public final class Constants {
         public static final int kFeederPort = 33;
         public static final boolean kFeederInversion = false;
         public static final double kFeederFeedPercent = 0.25;
-        public static final double kFeederShootPercent = 0.4;
+        public static final double kFeederShootPercent = 0.35;
 
         public static final int kBreakBeamIntakePort = 9;
         public static final int kBreakBeamPreShooterPort = 7;

@@ -96,6 +96,7 @@ public class DrivetrainSubsystem implements Subsystem, UpdateManager.Updatable {
     private final NetworkTableEntry odometryXEntry;
     private final NetworkTableEntry odometryYEntry;
     private final NetworkTableEntry odometryAngleEntry;
+    private final NetworkTableEntry gyroHeading;
 
     public DrivetrainSubsystem() {
         synchronized (sensorLock) {
@@ -191,6 +192,13 @@ public class DrivetrainSubsystem implements Subsystem, UpdateManager.Updatable {
         });
 
         tab.addNumber("Average Velocity", this::getAverageAbsoluteValueVelocity);
+
+        ShuffleboardTab DRtab = Shuffleboard.getTab("Driver Readout");
+        gyroHeading = DRtab.add("Gyro Heading", 0.0)
+            .withPosition(6,0)
+            .withSize(1,1)
+            .getEntry();
+        
     }
 
     public RigidTransform2 getPose() {
@@ -336,7 +344,8 @@ public class DrivetrainSubsystem implements Subsystem, UpdateManager.Updatable {
         odometryXEntry.setDouble(pose.translation.x);
         odometryYEntry.setDouble(pose.translation.y);
         odometryAngleEntry.setDouble(getPose().rotation.toDegrees());
-        SmartDashboard.putNumber("Gyro heading", getPose().rotation.toDegrees());
+        //SmartDashboard.putNumber("Gyro heading", getPose().rotation.toDegrees());
+        gyroHeading.setDouble(getPose().rotation.toDegrees());
     }
 
     public HolonomicMotionProfiledTrajectoryFollower getFollower() {

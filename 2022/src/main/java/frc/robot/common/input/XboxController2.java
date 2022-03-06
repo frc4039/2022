@@ -16,7 +16,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
  * @author Jacob Bublitz
  * @since 1.0
  */
-public final class XboxController extends Controller {
+public final class XboxController2 extends Controller {
 	private final Joystick joystick;
 
 	private final Button aButton;
@@ -42,7 +42,7 @@ public final class XboxController extends Controller {
 	/**
 	 * @param port The port the controller is on
 	 */
-	public XboxController(int port) {
+	public XboxController2(int port) {
 		joystick = new Joystick(port);
 
 		aButton = new JoystickButton(joystick, 1);
