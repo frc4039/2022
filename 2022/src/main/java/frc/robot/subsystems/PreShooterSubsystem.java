@@ -16,7 +16,7 @@ public class PreShooterSubsystem extends SubsystemBase {
 
   private final TalonFX m_preShooterMotor;
 
-  public int type = 0;
+  public String type = "high";
  
   public PreShooterSubsystem() {
       
@@ -67,11 +67,11 @@ public class PreShooterSubsystem extends SubsystemBase {
   }
 
   public void preShotType(){
-    if(type == 0)
+    if(type == "high")
       fenderHighPreShoot();
-    else if(type == 1)
+    else if(type == "low")
       fenderLowPreShoot();
-    else if (type == 2)
+    else if (type == "limelight")
       limelightPreShoot();
     else
       fenderHighPreShoot();

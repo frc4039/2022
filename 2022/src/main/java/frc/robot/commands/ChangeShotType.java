@@ -7,9 +7,9 @@ import frc.robot.subsystems.ShooterSubsystem;
 public class ChangeShotType extends CommandBase {
     private final ShooterSubsystem m_shooterSubsystem;
     private final PreShooterSubsystem m_preShooterSubsystem;
-    private final int m_type;
+    private final String m_type;
 
-    public ChangeShotType(ShooterSubsystem shooter, PreShooterSubsystem preShooter, int type) {
+    public ChangeShotType(ShooterSubsystem shooter, PreShooterSubsystem preShooter, String type) {
         m_shooterSubsystem = shooter;
         m_preShooterSubsystem = preShooter;
         m_type = type;

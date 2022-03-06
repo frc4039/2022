@@ -145,21 +145,21 @@ public class RobotContainer {
     operatorController.getDPadButton(Direction.UP).whenPressed(
       new ParallelCommandGroup(
         new ShooterHoodRetract(shooterSubsystem),
-        new ChangeShotType(shooterSubsystem, preShooterSubsystem, 2)
+        new ChangeShotType(shooterSubsystem, preShooterSubsystem, "limelight")
       )
     );
 
     operatorController.getDPadButton(Direction.RIGHT).whenPressed(
       new ParallelCommandGroup(
         new ShooterHoodRetract(shooterSubsystem),
-        new ChangeShotType(shooterSubsystem, preShooterSubsystem, 0)
+        new ChangeShotType(shooterSubsystem, preShooterSubsystem, "high")
       )
     );
 
     operatorController.getDPadButton(Direction.DOWN).whenPressed(
       new ParallelCommandGroup(
         new ShooterHoodRetract(shooterSubsystem),
-        new ChangeShotType(shooterSubsystem, preShooterSubsystem, 1)
+        new ChangeShotType(shooterSubsystem, preShooterSubsystem, "low")
       )
     );
   }

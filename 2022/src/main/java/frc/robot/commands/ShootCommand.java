@@ -47,19 +47,19 @@ public class ShootCommand extends CommandBase {
     m_shooter.shotType();
     m_preShooter.preShotType();
 
-    if (m_shooter.type == 0) {
+    if (m_shooter.type == "high") {
       ShooterRPM = ShooterConstants.kfenderHighShotRPM;
       PreShooterRPM = ShooterConstants.kpreShooterFenderHighShotRPM;
       RPMWindow = ShooterConstants.kfenderHighShotRPMWindow;
       preShooterRPMWindow = ShooterConstants.kPreShooterFenderHighShotRPMWindow;
     }
-    else if (m_shooter.type == 1) {
+    else if (m_shooter.type == "low") {
       ShooterRPM = ShooterConstants.kfenderLowShotRPM;
       PreShooterRPM = ShooterConstants.kpreShooterFenderLowShotRPM;
       RPMWindow = ShooterConstants.kfenderLowShotRPMWindow;
       preShooterRPMWindow = ShooterConstants.kPreShooterFenderLowShotRPMWindow;
     }
-    else if (m_shooter.type == 2) {
+    else if (m_shooter.type == "limelight") {
       ShooterRPM = ShooterConstants.klimelightShotRPM;
       PreShooterRPM = ShooterConstants.kpreShooterLimelightShotRPM;
       RPMWindow = ShooterConstants.klimelightShotRPMWindow;

@@ -10,8 +10,11 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.ShooterConstants;
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class ShooterSubsystem extends SubsystemBase {
@@ -21,7 +24,9 @@ public class ShooterSubsystem extends SubsystemBase {
 
   private final DoubleSolenoid m_shooterHood;
  
-  public int type = 0;
+  public String type = "high";
+  
+  private final NetworkTableEntry shuffleShotType;
 
   public ShooterSubsystem() {
 
@@ -50,6 +55,13 @@ public class ShooterSubsystem extends SubsystemBase {
     m_shooterMotor2.enableVoltageCompensation(true);
 
     m_shooterHood = new DoubleSolenoid(Constants.kPCMCANID, PneumaticsModuleType.CTREPCM, 2, 3);
+
+    ShuffleboardTab tab = Shuffleboard.getTab("Driver Readout");
+        
+        shuffleShotType = tab.add("Shot Type", "none")
+                .withPosition(1, 2)
+                .withSize(1, 1)
+                .getEntry();
   }
 
   public void shoot(double shooterRPM) {
@@ -69,11 +81,11 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public void shotType() {
-    if(type == 0)
+    if(type == "high")
       fenderHighShot();
-    else if(type == 1)
+    else if(type == "low")
       fenderLowShot();
-    else if (type == 2)
+    else if (type == "limelight")
       limelightShot();
     else
       fenderHighShot();
@@ -105,6 +117,6 @@ public class ShooterSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    
+    shuffleShotType.setString(type);
   }
 }
