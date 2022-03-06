@@ -224,6 +224,10 @@ public class RobotContainer {
     m_climberSubsystem.disableClimb();
   }
 
+  public void stopEverything(){
+    new StopEverythingCommand(m_climberSubsystem, drivetrainSubsystem, feederSubsystem, intakeSubsystem, preShooterSubsystem, shooterSubsystem);
+  }
+
   public void PrintAllValues(){
     shooterSubsystem.printShooterValues();
   }
