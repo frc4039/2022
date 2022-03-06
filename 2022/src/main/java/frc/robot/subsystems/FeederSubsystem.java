@@ -13,6 +13,8 @@ public class FeederSubsystem extends SubsystemBase {
   private final CANSparkMax m_feederMotor;
   private static DigitalInput m_BreakBeamIntake;
   private static DigitalInput m_BreakBeamPreShooter;
+  private static DigitalInput m_BreakBeamLowerBall;
+  private static DigitalInput m_BreakBeamUpperBall;
 
   public FeederSubsystem() {
     m_feederMotor = new CANSparkMax(FeederConstants.kFeederPort, MotorType.kBrushless);
@@ -21,6 +23,8 @@ public class FeederSubsystem extends SubsystemBase {
 
     m_BreakBeamIntake = new DigitalInput(FeederConstants.kBreakBeamIntakePort);
     m_BreakBeamPreShooter = new DigitalInput(FeederConstants.kBreakBeamPreShooterPort);
+    m_BreakBeamLowerBall = new DigitalInput(FeederConstants.kBreakBeamLowerBall);
+    m_BreakBeamUpperBall = new DigitalInput(FeederConstants.kBreakBeamUpperBall);
   }
 
   
@@ -46,6 +50,18 @@ public class FeederSubsystem extends SubsystemBase {
 
   public boolean getBothBreakBeams(){
     return !m_BreakBeamIntake.get() && !m_BreakBeamPreShooter.get();
+  }
+
+  public boolean getBreakBeamLowerBall() {
+    return !m_BreakBeamLowerBall.get();
+  }
+
+  public boolean getBreakBeamUpperBall() {
+    return !m_BreakBeamUpperBall.get();
+  }
+
+  public boolean getBothBallBreakBeams(){
+    return !m_BreakBeamLowerBall.get() && !m_BreakBeamUpperBall.get();
   }
 
   @Override

@@ -139,6 +139,9 @@ public final class Constants {
 
         public static final int kBreakBeamIntakePort = 9;
         public static final int kBreakBeamPreShooterPort = 7;
+        //todo: figure out ball BB ports
+        public static final int kBreakBeamLowerBall = 0;
+        public static final int kBreakBeamUpperBall = 0;
     }
 
 
