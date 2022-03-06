@@ -146,16 +146,16 @@ public class RobotContainer {
     operatorController.getLeftTriggerAxis().getButton(0.5).whenHeld(
       new ClimberDownCommand(m_climberSubsystem)
     );
-
-    operatorController.getLeftBumperButton().whenHeld(
-      new ClimberDownSlowCommand(m_climberSubsystem)
-    );
     
     operatorController.getRightTriggerAxis().getButton(0.5).whenPressed(
       new ClimberUpCommand(m_climberSubsystem)
     );
 
-    operatorController.getRightBumperButton().whenPressed(
+    operatorController.getLeftBumperButton().and(operatorController.getBackButton()).whileActiveOnce(
+      new ClimberDownSlowCommand(m_climberSubsystem)
+    );
+
+    operatorController.getRightBumperButton().and(operatorController.getBackButton()).whileActiveOnce(
       new ClimberUpSlowCommand(m_climberSubsystem)
     );
 

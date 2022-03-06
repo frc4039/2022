@@ -46,10 +46,7 @@ public class ClimberSubsystem extends SubsystemBase {
          m_climberMotorRight.setNeutralMode(NeutralMode.Brake);
         m_climberMotorLeft.setNeutralMode(NeutralMode.Brake);
 
-        m_climberMotorLeft.configReverseSoftLimitThreshold(0);
-        m_climberMotorLeft.configForwardSoftLimitThreshold(ClimberConstants.kFullyClimbedTicks);
-        m_climberMotorRight.configReverseSoftLimitThreshold(0);
-        m_climberMotorRight.configForwardSoftLimitThreshold(ClimberConstants.kFullyClimbedTicks);
+
         
         m_climberMotorLeft.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
         m_climberMotorRight.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
@@ -57,12 +54,15 @@ public class ClimberSubsystem extends SubsystemBase {
         m_climberMotorLeft.getSensorCollection().setIntegratedSensorPosition(0, ClimberConstants.kTimeoutMs);
         m_climberMotorRight.getSensorCollection().setIntegratedSensorPosition(0, ClimberConstants.kTimeoutMs);
 
-        /*
-        m_climberMotorLeft.configReverseSoftLimitEnable(true);
+
+        //m_climberMotorLeft.configReverseSoftLimitThreshold(0);
+        m_climberMotorLeft.configForwardSoftLimitThreshold(ClimberConstants.kFullyClimbedTicks);
+        //m_climberMotorRight.configReverseSoftLimitThreshold(0);
+        m_climberMotorRight.configForwardSoftLimitThreshold(ClimberConstants.kFullyClimbedTicks);
+        //m_climberMotorLeft.configReverseSoftLimitEnable(true);
         m_climberMotorLeft.configForwardSoftLimitEnable(true);
-        m_climberMotorRight.configReverseSoftLimitEnable(true);
+        //m_climberMotorRight.configReverseSoftLimitEnable(true);
         m_climberMotorRight.configForwardSoftLimitEnable(true);
-        */
         
         m_climberMotorRight.config_kF(0, ClimberConstants.kClimberF, 30);
         m_climberMotorRight.config_kP(0, ClimberConstants.kClimberP, 30);
@@ -180,32 +180,28 @@ public class ClimberSubsystem extends SubsystemBase {
     }
 
     public void climberUpSlow() {
-        if (enableClimb) {
-            if (getTopRightBB()) {
-                m_climberMotorRight.set(ControlMode.PercentOutput, 0);
-            } else {
-                m_climberMotorRight.set(ControlMode.PercentOutput, ClimberConstants.kClimberSlowUp);
-            }
-            if (getTopLeftBB()) {
-                m_climberMotorLeft.set(ControlMode.PercentOutput, 0);
-            } else {
-                m_climberMotorLeft.set(ControlMode.PercentOutput, ClimberConstants.kClimberSlowUp);
-            }
+        if (getTopRightBB()) {
+            m_climberMotorRight.set(ControlMode.PercentOutput, 0);
+        } else {
+            m_climberMotorRight.set(ControlMode.PercentOutput, ClimberConstants.kClimberSlowUp);
+        }
+        if (getTopLeftBB()) {
+            m_climberMotorLeft.set(ControlMode.PercentOutput, 0);
+        } else {
+            m_climberMotorLeft.set(ControlMode.PercentOutput, ClimberConstants.kClimberSlowUp);
         }
     }
 
     public void climberDownSlow() {
-        if (enableClimb) {
-            if (getBottomRightLimit()) {
-                m_climberMotorRight.set(ControlMode.PercentOutput, 0);
-            } else {
-                m_climberMotorRight.set(ControlMode.PercentOutput, ClimberConstants.kClimberSlowDown);
-            }
-            if (getBottomLeftLimit()) {
-                m_climberMotorLeft.set(ControlMode.PercentOutput, 0);
-            } else {
-                m_climberMotorLeft.set(ControlMode.PercentOutput, ClimberConstants.kClimberSlowDown);
-            }
+        if (getBottomRightLimit()) {
+            m_climberMotorRight.set(ControlMode.PercentOutput, 0);
+        } else {
+            m_climberMotorRight.set(ControlMode.PercentOutput, ClimberConstants.kClimberSlowDown);
+        }
+        if (getBottomLeftLimit()) {
+            m_climberMotorLeft.set(ControlMode.PercentOutput, 0);
+        } else {
+            m_climberMotorLeft.set(ControlMode.PercentOutput, ClimberConstants.kClimberSlowDown);
         }
     }
 

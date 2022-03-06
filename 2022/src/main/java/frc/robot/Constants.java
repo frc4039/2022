@@ -60,8 +60,8 @@ public final class Constants {
         public static final double kClimberSlowUp = 0.1;
         public static final double kClimberSlowDown = -0.1;
       
-        //testing on 2/12 showed something around 470k encoder ticks might be right
-        public static final double kFullyClimbedTicks = 472000;
+        //todo: make sure fullyclimbedticks is correct
+        public static final double kFullyClimbedTicks = 120000;
         public static final int kTimeoutMs = 30;
         
         public static final double kClimberVelocityUp = 200.5;
