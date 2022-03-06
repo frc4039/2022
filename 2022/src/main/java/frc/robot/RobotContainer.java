@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -122,20 +123,6 @@ public class RobotContainer {
       new PreShootCommand(preShooterSubsystem, shooterSubsystem, feederSubsystem)
     );
 
-    operatorController.getDPadButton(Direction.UPRIGHT).whenPressed(
-      new SequentialCommandGroup(
-        new ChangePreShooterRPM(preShooterSubsystem, true),
-        new ChangeShooterRPM(shooterSubsystem, true)
-      )
-    );
-
-    operatorController.getDPadButton(Direction.DOWNLEFT).whenPressed(
-      new SequentialCommandGroup(
-        new ChangePreShooterRPM(preShooterSubsystem, false),
-        new ChangeShooterRPM(shooterSubsystem, false)
-      )
-    );
-
     operatorController.getBackButton().and(operatorController.getStartButton()).whenActive(
       new SequentialCommandGroup(
         new ClimberEncoderZeroCommand(m_climberSubsystem),
@@ -159,24 +146,25 @@ public class RobotContainer {
       new ClimberUpSlowCommand(m_climberSubsystem)
     );
 
-    //D-pad up increases shooter RPM by 25
     operatorController.getDPadButton(Direction.UP).whenPressed(
-      new ChangeShooterRPM(shooterSubsystem, true)
+      new ParallelCommandGroup(
+        new ShooterHoodRetract(shooterSubsystem),
+        new ChangeShotType(shooterSubsystem, preShooterSubsystem, 2)
+      )
     );
 
-    //D-pad down decreases shooter RPM by 25
-    operatorController.getDPadButton(Direction.DOWN).whenPressed(
-      new ChangeShooterRPM(shooterSubsystem, false)
-    );
-
-    //D-pad right decreases shooter RPM by 25
-    operatorController.getDPadButton(Direction.LEFT).whenPressed(
-      new ChangePreShooterRPM(preShooterSubsystem, false)
-    );
-
-    //D-pad left increases shooter RPM by 25
     operatorController.getDPadButton(Direction.RIGHT).whenPressed(
-      new ChangePreShooterRPM(preShooterSubsystem, true)
+      new ParallelCommandGroup(
+        new ShooterHoodRetract(shooterSubsystem),
+        new ChangeShotType(shooterSubsystem, preShooterSubsystem, 0)
+      )
+    );
+
+    operatorController.getDPadButton(Direction.DOWN).whenPressed(
+      new ParallelCommandGroup(
+        new ShooterHoodRetract(shooterSubsystem),
+        new ChangeShotType(shooterSubsystem, preShooterSubsystem, 1)
+      )
     );
   }
 
