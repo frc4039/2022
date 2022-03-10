@@ -13,6 +13,8 @@ public class FeederSubsystem extends SubsystemBase {
   private final CANSparkMax m_feederMotor;
   private static DigitalInput m_BreakBeamIntake;
   private static DigitalInput m_BreakBeamPreShooter;
+  private static DigitalInput m_BreakBeamUpperBall;
+  private static DigitalInput m_BreakBeamLowerBall;
 
   public FeederSubsystem() {
     m_feederMotor = new CANSparkMax(FeederConstants.kFeederPort, MotorType.kBrushless);
@@ -21,6 +23,8 @@ public class FeederSubsystem extends SubsystemBase {
 
     m_BreakBeamIntake = new DigitalInput(FeederConstants.kBreakBeamIntakePort);
     m_BreakBeamPreShooter = new DigitalInput(FeederConstants.kBreakBeamPreShooterPort);
+    m_BreakBeamUpperBall = new DigitalInput(FeederConstants.kBreakBeamUpperBall);
+    m_BreakBeamLowerBall = new DigitalInput(FeederConstants.kBreakBeamLowerBall);
   }
 
   
@@ -48,9 +52,19 @@ public class FeederSubsystem extends SubsystemBase {
     return !m_BreakBeamIntake.get() && !m_BreakBeamPreShooter.get();
   }
 
+  public boolean getBreakBeamUpperBall(){
+    return !m_BreakBeamUpperBall.get();
+  }
+
+  public boolean getBreakBeamLowerBall(){
+    return !m_BreakBeamLowerBall.get();
+  }
+
   @Override
   public void periodic() {
     SmartDashboard.putBoolean("Intake BB", getBreakBeamIntake());
-    SmartDashboard.putBoolean("PreShooter BB", getBreakBeamPreShooter());    
+    SmartDashboard.putBoolean("PreShooter BB", getBreakBeamPreShooter());  
+    SmartDashboard.putBoolean("Upper ball BB", getBreakBeamUpperBall());
+    SmartDashboard.putBoolean("Lower ball BB", getBreakBeamLowerBall());  
   }
 }

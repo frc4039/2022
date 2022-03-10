@@ -20,7 +20,7 @@ import edu.wpi.first.wpilibj.motorcontrol.Talon;
  */
 public final class Constants {
 
-    public static final int kPCMCANID = 25;
+    public static final int kPCMCANID = 51;
 
     public static final int DRIVER_CONTROLLER_PORT = 0;
     public static final int OPERATOR_CONTROLLER_PORT = 1;
@@ -128,8 +128,11 @@ public final class Constants {
         public static final double kFeederFeedPercent = 0.25;
         public static final double kFeederShootPercent = 0.35;
 
-        public static final int kBreakBeamIntakePort = 9;
-        public static final int kBreakBeamPreShooterPort = 7;
+
+        public static final int kBreakBeamPreShooterPort = 9;
+        public static final int kBreakBeamLowerBall = 8;
+        public static final int kBreakBeamUpperBall = 7;
+        public static final int kBreakBeamIntakePort = 6;
     }
 
 
