@@ -54,7 +54,7 @@ public class ShooterSubsystem extends SubsystemBase {
     m_shooterMotor1.enableVoltageCompensation(true);
     m_shooterMotor2.enableVoltageCompensation(true);
 
-    m_shooterHood = new DoubleSolenoid(Constants.kPCMCANID, PneumaticsModuleType.CTREPCM, 2, 3);
+    m_shooterHood = new DoubleSolenoid(Constants.kPCMCANID, PneumaticsModuleType.CTREPCM, 6, 7);
 
     ShuffleboardTab tab = Shuffleboard.getTab("Driver Readout");
         
@@ -96,11 +96,11 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public void extendShooterHood() {
-    m_shooterHood.set(DoubleSolenoid.Value.kReverse);
+    m_shooterHood.set(DoubleSolenoid.Value.kForward);
   }
 
   public void retractShooterHood() {
-    m_shooterHood.set(DoubleSolenoid.Value.kForward);
+    m_shooterHood.set(DoubleSolenoid.Value.kReverse);
   }
 
   public void neutralShooterHood() {

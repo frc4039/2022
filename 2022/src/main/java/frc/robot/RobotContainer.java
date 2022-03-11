@@ -43,6 +43,7 @@ public class RobotContainer {
   private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem();
   private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
   private final ClimberSubsystem m_climberSubsystem = new ClimberSubsystem();
+  private final LimelightSubsystem limelightSubsystem = new LimelightSubsystem();
 
 
   private AutonomousTrajectories autonomousTrajectories;
@@ -72,6 +73,7 @@ public class RobotContainer {
     CommandScheduler.getInstance().registerSubsystem(drivetrainSubsystem);
     CommandScheduler.getInstance().registerSubsystem(intakeSubsystem);
     CommandScheduler.getInstance().registerSubsystem(m_climberSubsystem);
+    CommandScheduler.getInstance().registerSubsystem(limelightSubsystem);
     CommandScheduler.getInstance().setDefaultCommand(drivetrainSubsystem, new DriveCommand(drivetrainSubsystem, getDriveForwardAxis(), getDriveStrafeAxis(), getDriveRotationAxis()));
     CommandScheduler.getInstance().setDefaultCommand(feederSubsystem, new FeederManagementCommand(feederSubsystem));
 
@@ -97,12 +99,8 @@ public class RobotContainer {
         new ShootCommand(shooterSubsystem, preShooterSubsystem, feederSubsystem)
     );
 
-    driverController.getAButton().whenPressed(
-      new InstantCommand(shooterSubsystem::extendShooterHood, shooterSubsystem)
-    );
-
-    driverController.getBButton().whenPressed(
-      new InstantCommand(shooterSubsystem::retractShooterHood, shooterSubsystem)
+    driverController.getLeftBumperButton().whileHeld(
+          new DriveWithSetRotationCommand(drivetrainSubsystem, getDriveForwardAxis(), getDriveStrafeAxis(), 90.0)
     );
     
     // intakeBB.whenActive(
@@ -117,6 +115,10 @@ public class RobotContainer {
     //Operator Y buttom spools up shooter
     operatorController.getYButton().whenPressed(
       new PreShootCommand(preShooterSubsystem, shooterSubsystem, feederSubsystem)
+    );
+
+    operatorController.getXButton().whileHeld(
+      new StopPreShootCommand(preShooterSubsystem, shooterSubsystem, feederSubsystem)
     );
 
     operatorController.getBackButton().and(operatorController.getStartButton()).whenActive(
@@ -143,21 +145,14 @@ public class RobotContainer {
     );
 
     operatorController.getDPadButton(Direction.UP).whenPressed(
-      new ParallelCommandGroup(
-        new ShooterHoodRetract(shooterSubsystem),
-        new ChangeShotType(shooterSubsystem, preShooterSubsystem, "limelight")
-      )
-    );
-
-    operatorController.getDPadButton(Direction.RIGHT).whenPressed(
-      new ParallelCommandGroup(
-        new ShooterHoodRetract(shooterSubsystem),
+      new SequentialCommandGroup(
+        new ShooterHoodExtend(shooterSubsystem),
         new ChangeShotType(shooterSubsystem, preShooterSubsystem, "high")
       )
     );
 
     operatorController.getDPadButton(Direction.DOWN).whenPressed(
-      new ParallelCommandGroup(
+      new SequentialCommandGroup(
         new ShooterHoodRetract(shooterSubsystem),
         new ChangeShotType(shooterSubsystem, preShooterSubsystem, "low")
       )

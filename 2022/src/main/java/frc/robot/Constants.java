@@ -16,7 +16,7 @@ import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
  */
 public final class Constants {
 
-    public static final int kPCMCANID = 25;
+    public static final int kPCMCANID = 51;
 
     public static final int DRIVER_CONTROLLER_PORT = 0;
     public static final int OPERATOR_CONTROLLER_PORT = 1;
@@ -56,8 +56,7 @@ public final class Constants {
         public static final double kClimberSlowUp = 0.1;
         public static final double kClimberSlowDown = -0.1;
       
-        //todo: make sure fullyclimbedticks is correct
-        public static final double kFullyClimbedTicks = 120000;
+        public static final double kFullyClimbedTicks = 240000;
         public static final int kTimeoutMs = 30;
         
         public static final double kClimberVelocityUp = 200.5;
@@ -68,10 +67,10 @@ public final class Constants {
         public static final double kClimberI = 0;
         public static final double kClimberD = 0;
 
-        public static final int kRightBottomLimitSwitchPort = 2;
+        public static final int kRightBottomLimitSwitchPort = 1;
         public static final int kLeftBottomLimitSwitchPort = 3;
         public static final int kRightTopBreakBeamPort = 0;
-        public static final int kLeftTopBreakBeamPort = 1;
+        public static final int kLeftTopBreakBeamPort = 2;
 
         public static final double kLeftClimberPreClimb = 40000;
         public static final double kRightClimberPreClimb = 40000;
@@ -137,11 +136,11 @@ public final class Constants {
         public static final double kFeederFeedPercent = 0.25;
         public static final double kFeederShootPercent = 0.35;
 
-        public static final int kBreakBeamIntakePort = 9;
-        public static final int kBreakBeamPreShooterPort = 7;
-        //todo: figure out ball BB ports
-        public static final int kBreakBeamLowerBall = 0;
-        public static final int kBreakBeamUpperBall = 0;
+
+        public static final int kBreakBeamPreShooterPort = 9;
+        public static final int kBreakBeamLowerBall = 7;
+        public static final int kBreakBeamUpperBall = 8;
+        public static final int kBreakBeamIntakePort = 6;
     }
 
 
