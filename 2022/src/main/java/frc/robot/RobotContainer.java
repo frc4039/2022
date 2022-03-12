@@ -100,15 +100,32 @@ public class RobotContainer {
     );
 
     driverController.getLeftBumperButton().whileHeld(
-          new DriveWithSetRotationCommand(drivetrainSubsystem, getDriveForwardAxis(), getDriveStrafeAxis(), 90.0)
+          new DriveWithSetRotationCommand(drivetrainSubsystem, getDriveForwardAxis(), getDriveStrafeAxis(), 0)
     );
     
-    driverController.getAButton().whenHeld(
-      new RotateToLimelight(drivetrainSubsystem, getDriveForwardAxis(), getDriveStrafeAxis(), limelightSubsystem)
+    driverController.getLeftTriggerAxis().getButton(0.1).whenHeld(
+      new SequentialCommandGroup(
+        new ShooterHoodRetract(shooterSubsystem),
+        new ChangeShotType(shooterSubsystem, preShooterSubsystem, "limelight"),
+        new InstantCommand(limelightSubsystem::turnLEDOn, limelightSubsystem),
+        new RotateToLimelight(drivetrainSubsystem, getDriveForwardAxis(), getDriveStrafeAxis(), limelightSubsystem)
+      )
     );
 
     driverController.getYButton().whenHeld(
-      new DriveWithSetRotationCommand(drivetrainSubsystem, getDriveForwardAxis(), getDriveStrafeAxis(), 0)
+      new DriveWithSetRotationCommand(drivetrainSubsystem, getDriveForwardAxis(), getDriveStrafeAxis(), Math.toRadians(Constants.kRotationOfHub + 90))
+    );
+
+    driverController.getBButton().whenHeld(
+      new DriveWithSetRotationCommand(drivetrainSubsystem, getDriveForwardAxis(), getDriveStrafeAxis(), Math.toRadians(Constants.kRotationOfHub))
+    );
+
+    driverController.getAButton().whenHeld(
+      new DriveWithSetRotationCommand(drivetrainSubsystem, getDriveForwardAxis(), getDriveStrafeAxis(), Math.toRadians(Constants.kRotationOfHub - 90))
+    );
+
+    driverController.getXButton().whenHeld(
+      new DriveWithSetRotationCommand(drivetrainSubsystem, getDriveForwardAxis(), getDriveStrafeAxis(), Math.toRadians(Constants.kRotationOfHub - 180))
     );
     
     // intakeBB.whenActive(
@@ -182,11 +199,11 @@ public class RobotContainer {
     return autonomousChooser.getCommand(this);
   }
 
-  private Axis getDriveForwardAxis() {
+  public Axis getDriveForwardAxis() {
     return driverController.getLeftYAxis();
   }
 
-  private Axis getDriveStrafeAxis() {
+  public Axis getDriveStrafeAxis() {
     return driverController.getLeftXAxis();
   }
 

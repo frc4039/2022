@@ -68,16 +68,15 @@ public class AutonomousChooser {
         resetRobotPose(command, container, trajectories.getFiveRightAuto1());
         setShotTypeLimelight(command, container);
         followAndIntake(command, container, trajectories.getFiveRightAuto1());
-        follow(command, container, trajectories.getFiveRightAuto2());
-        shoot(command,container, 2.5);
+        followAndPreShoot(command, container, trajectories.getFiveRightAuto2());
+        shoot(command,container, 1);
         followIntakeAndPreShoot(command, container, trajectories.getFiveRightAuto3());
-        shoot(command, container, 2.5);
-        /*
+        shoot(command, container, 0.75);
         followAndIntake(command, container, trajectories.getFiveRightAuto4());
-        intake(command, container, 2.0);
+        intake(command, container, 1);
         followAndPreShoot(command, container, trajectories.getFiveRightAuto5());
-        shoot(command, container, 2.0);
-        */
+        aimAndShoot(command, container, 2.0);
+        
         return command;
     }
 
@@ -166,7 +165,8 @@ public class AutonomousChooser {
     private void setShotTypeLimelight(SequentialCommandGroup command, RobotContainer container) {
         command.addCommands(
             new ShooterHoodRetract(container.getShooterSubsystem()),
-            new ChangeShotType(container.getShooterSubsystem(), container.getPreShooterSubsystem(), "limelight"));
+            new ChangeShotType(container.getShooterSubsystem(), container.getPreShooterSubsystem(), "limelight"),
+            new InstantCommand(container.getLimelightSubsystem()::turnLEDOn, container.getLimelightSubsystem()));
     }
 
     private void intake(SequentialCommandGroup command, RobotContainer container, double timeout) {
@@ -174,6 +174,14 @@ public class AutonomousChooser {
                 new IntakeCommand(container.getIntakeSubsystem()),
                 new FeederCommand(container.getFeederSubsystem(), -FeederConstants.kFeederFeedPercent))
                         .withTimeout(timeout));
+    }
+
+    private void aimAndShoot(SequentialCommandGroup command, RobotContainer container, double timeout) {
+        command.addCommands(new ParallelDeadlineGroup(
+            new RotateToLimelight(container.getDrivetrainSubsystem(), container.getDriveForwardAxis(), container.getDriveStrafeAxis(), container.getLimelightSubsystem()),
+            new ShootCommand(container.getShooterSubsystem(), container.getPreShooterSubsystem(),
+                container.getFeederSubsystem(), container.getLimelightSubsystem())
+                        .withTimeout(timeout)));
     }
 
     private void resetRobotPose(SequentialCommandGroup command, RobotContainer container, Trajectory trajectory) {

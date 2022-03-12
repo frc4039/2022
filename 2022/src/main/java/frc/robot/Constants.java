@@ -24,6 +24,7 @@ public final class Constants {
 
     public static final double kDeadband = 0.075;
     public static final double kRotationScale = 0.25;
+    public static final double kRotationOfHub = 68;
 
     public static final int DRIVETRAIN_FRONT_LEFT_DRIVE_MOTOR = 1;
     public static final int DRIVETRAIN_FRONT_RIGHT_DRIVE_MOTOR = 3;
@@ -138,7 +139,9 @@ public final class Constants {
         public static final int kFeederPort = 33;
         public static final boolean kFeederInversion = false;
         public static final double kFeederFeedPercent = 0.25;
-        public static final double kFeederShootPercent = 0.35;
+        public static final double kFeederHighShotPercent = 0.35;
+        public static final double kFeederLowShotPercent = 1;
+        public static final double kFeederLimelightShotPercent = 1;
 
 
         public static final int kBreakBeamPreShooterPort = 9;

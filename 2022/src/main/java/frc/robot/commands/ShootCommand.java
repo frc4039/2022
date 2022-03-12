@@ -29,6 +29,7 @@ public class ShootCommand extends CommandBase {
   private double PreShooterRPM = 0;
   private double RPMWindow = 0;
   private double preShooterRPMWindow = 0;
+  private double feederPercent;
 
   /**
    * Creates a new Shoot Command.
@@ -56,24 +57,28 @@ public class ShootCommand extends CommandBase {
       PreShooterRPM = ShooterConstants.kpreShooterFenderHighShotRPM;
       RPMWindow = ShooterConstants.kfenderHighShotRPMWindow;
       preShooterRPMWindow = ShooterConstants.kPreShooterFenderHighShotRPMWindow;
+      feederPercent = FeederConstants.kFeederHighShotPercent;
     }
     else if (m_shooter.type == "low") {
       ShooterRPM = ShooterConstants.kfenderLowShotRPM;
       PreShooterRPM = ShooterConstants.kpreShooterFenderLowShotRPM;
       RPMWindow = ShooterConstants.kfenderLowShotRPMWindow;
       preShooterRPMWindow = ShooterConstants.kPreShooterFenderLowShotRPMWindow;
+      feederPercent = FeederConstants.kFeederLowShotPercent;
     }
     else if (m_shooter.type == "limelight") {
       ShooterRPM = 8.5218 * m_limelight.getDistanceToTarget() + 1200;
       PreShooterRPM = ShooterConstants.kpreShooterLimelightShotRPM;
       RPMWindow = ShooterConstants.klimelightShotRPMWindow;
       preShooterRPMWindow = ShooterConstants.kPreShooterlimelightShotRPMWindow;
+      feederPercent = FeederConstants.kFeederLimelightShotPercent;
     }
     else {
       ShooterRPM = ShooterConstants.kfenderHighShotRPM;
       PreShooterRPM = ShooterConstants.kpreShooterFenderHighShotRPM;
       RPMWindow = ShooterConstants.kfenderHighShotRPMWindow;
       preShooterRPMWindow = ShooterConstants.kPreShooterFenderHighShotRPMWindow;
+      feederPercent = FeederConstants.kFeederHighShotPercent;
     }
   }
 
@@ -91,7 +96,7 @@ public class ShootCommand extends CommandBase {
       && (m_preShooter.returnPreShooterCurrentRPM() > PreShooterRPM * (1 - preShooterRPMWindow))
       && (m_preShooter.returnPreShooterCurrentRPM() < PreShooterRPM * (1 + preShooterRPMWindow))
       )  {
-            m_feeder.runFeeder(FeederConstants.kFeederShootPercent);
+            m_feeder.runFeeder(feederPercent);
     }
     else {
       m_feeder.stop();
