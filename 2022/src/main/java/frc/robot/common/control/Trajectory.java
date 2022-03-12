@@ -1,9 +1,14 @@
 package frc.robot.common.control;
 
+import frc.robot.Constants;
 import frc.robot.common.math.MathUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 
 public class Trajectory {
     private final Path path;
@@ -12,6 +17,7 @@ public class Trajectory {
 
     private List<ConstrainedPathState> constrainedPathStates = new ArrayList<>();
     private double[] pathStateStartTimes;
+    private Optional<edu.wpi.first.math.trajectory.Trajectory> wpi = Optional.empty();
 
     public Trajectory(Path path, TrajectoryConstraint[] trajectoryConstraints, double sampleDistance) {
         this(path, trajectoryConstraints, sampleDistance, 0.0, 0.0);
@@ -177,6 +183,28 @@ public class Trajectory {
 
     public Path getPath() {
         return path;
+    }
+
+    public edu.wpi.first.math.trajectory.Trajectory intoWpi() {
+        if (this.wpi.isEmpty()) {
+            double startTime = 0;
+            List<edu.wpi.first.math.trajectory.Trajectory.State> states = new ArrayList<edu.wpi.first.math.trajectory.Trajectory.State>();
+
+            for (ConstrainedPathState state: constrainedPathStates) {
+                states.add(new edu.wpi.first.math.trajectory.Trajectory.State(startTime,
+                    state.startingVelocity * Constants.GLASS_SCALE,
+                    state.acceleration * Constants.GLASS_SCALE,
+                    new Pose2d(
+                        state.pathState.getPosition().x * Constants.GLASS_SCALE + Constants.GLASS_OFFSET_X,
+                        state.pathState.getPosition().y * Constants.GLASS_SCALE + Constants.GLASS_OFFSET_Y,
+                        new Rotation2d(state.pathState.getHeading().toRadians())
+                    ),
+                    state.pathState.getCurvature()));
+                startTime += state.getDuration();
+            }
+            this.wpi = Optional.of(new edu.wpi.first.math.trajectory.Trajectory(states));
+        }
+        return this.wpi.get();
     }
 
     class ConstrainedPathState {

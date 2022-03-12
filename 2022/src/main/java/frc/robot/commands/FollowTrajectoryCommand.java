@@ -17,6 +17,7 @@ public class FollowTrajectoryCommand extends CommandBase {
 
     @Override
     public void initialize() {
+        drivetrain.field.getObject("Trajectory").setTrajectory(trajectory.intoWpi());
         drivetrain.getFollower().follow(trajectory);
     }
 
