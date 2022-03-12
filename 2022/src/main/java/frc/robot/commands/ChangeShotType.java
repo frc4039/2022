@@ -1,29 +1,27 @@
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.PreShooterSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 
-public class ChangeShooterRPM extends CommandBase {
-    private final ShooterSubsystem m_shooter;
-    private final boolean m_increase;
+public class ChangeShotType extends CommandBase {
+    private final ShooterSubsystem m_shooterSubsystem;
+    private final PreShooterSubsystem m_preShooterSubsystem;
+    private final String m_type;
 
-    public ChangeShooterRPM(ShooterSubsystem shooter, boolean increase) {
-        m_shooter = shooter;
-        m_increase = increase;
+    public ChangeShotType(ShooterSubsystem shooter, PreShooterSubsystem preShooter, String type) {
+        m_shooterSubsystem = shooter;
+        m_preShooterSubsystem = preShooter;
+        m_type = type;
 
-        addRequirements(m_shooter);
+        addRequirements(m_shooterSubsystem, m_preShooterSubsystem);
     }
 
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-        if (m_increase) {
-            m_shooter.ShooterRPM += 25;
-        } else {
-            m_shooter.ShooterRPM -= 25;
-        }
-        
+        m_shooterSubsystem.type = m_type;
+        m_preShooterSubsystem.type = m_type;
     }
 
     // Called every time the scheduler runs while the command is scheduled.
@@ -33,7 +31,6 @@ public class ChangeShooterRPM extends CommandBase {
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
-        SmartDashboard.putNumber("Shooter RPM, SetPoint", m_shooter.ShooterRPM);
     }
 
     // Returns true when the command should end.

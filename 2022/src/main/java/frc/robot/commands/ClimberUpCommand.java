@@ -15,12 +15,12 @@ public class ClimberUpCommand extends CommandBase {
 
     @Override
     public void initialize() {
-       m_climberSubsystem.climberUp();
+       
     }
 
     @Override
     public void execute() {
-
+        m_climberSubsystem.climberUp();
     }
 
     @Override

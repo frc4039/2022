@@ -5,7 +5,6 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -17,7 +16,7 @@ public class PreShooterSubsystem extends SubsystemBase {
 
   private final TalonFX m_preShooterMotor;
 
-  public double PreShooterRPM = ShooterConstants.kPreShooterRPM;
+  public String type = "high";
  
   public PreShooterSubsystem() {
       
@@ -51,12 +50,35 @@ public class PreShooterSubsystem extends SubsystemBase {
     return m_preShooterMotor.getSelectedSensorVelocity() * 600 / 2048 / ShooterConstants.kPreShooterGearRatio;
   }
 
-  public void runPreShooter() {
-    m_preShooterMotor.set(ControlMode.Velocity, PreShooterRPM * ShooterConstants.kPreShooterGearRatio * 2048 / 600.0);
+  public void runPreShooter(double preShooterRPM) {
+    m_preShooterMotor.set(ControlMode.Velocity, preShooterRPM * ShooterConstants.kPreShooterGearRatio * 2048 / 600.0);
+  }
+
+  public void fenderLowPreShoot() {
+    runPreShooter(ShooterConstants.kpreShooterFenderLowShotRPM);
+  }
+
+  public void fenderHighPreShoot() {
+    runPreShooter(ShooterConstants.kpreShooterFenderHighShotRPM);
+  }
+
+  public void limelightPreShoot() {
+    runPreShooter(ShooterConstants.kpreShooterLimelightShotRPM);
+  }
+
+  public void preShotType(){
+    if(type == "high")
+      fenderHighPreShoot();
+    else if(type == "low")
+      fenderLowPreShoot();
+    else if (type == "limelight")
+      limelightPreShoot();
+    else
+      fenderHighPreShoot();
   }
 
   public void reversePreShooter() {
-    m_preShooterMotor.set(ControlMode.Velocity, -PreShooterRPM * ShooterConstants.kPreShooterGearRatio * 2048 / 600.0);
+    m_preShooterMotor.set(ControlMode.Velocity, ShooterConstants.kpreShooterReverseRPM * ShooterConstants.kPreShooterGearRatio * 2048 / 600.0);
   }
 
   @Override

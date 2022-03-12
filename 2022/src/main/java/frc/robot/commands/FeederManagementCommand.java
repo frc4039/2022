@@ -22,11 +22,17 @@ public class FeederManagementCommand extends CommandBase {
 	// Called every time the scheduler runs while the command is scheduled.
 	@Override
 	public void execute() {
-        if (m_feeder.getBreakBeamIntake()){
-            m_feeder.runFeeder(FeederConstants.kFeederFeedPercent);
-        } else {
-            m_feeder.stop();
-        }
+		if (!(m_feeder.getBothBallBreakBeams())){
+			if (m_feeder.getBreakBeamIntake()){
+				m_feeder.runFeeder(FeederConstants.kFeederFeedPercent);
+			} else {
+				m_feeder.stop();
+			}
+		} else if (m_feeder.getBothBallBreakBeams() && m_feeder.getBreakBeamPreShooter()){
+			m_feeder.runFeeder(-FeederConstants.kFeederFeedPercent);
+		} else {
+			m_feeder.stop();
+		}
 	}
 
 	// Called once the command ends or is interrupted.

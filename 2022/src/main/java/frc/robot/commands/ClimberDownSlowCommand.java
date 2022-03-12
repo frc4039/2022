@@ -15,12 +15,11 @@ public class ClimberDownSlowCommand extends CommandBase {
 
     @Override
     public void initialize() {
-       m_climberSubsystem.climberDownSlow();
     }
 
     @Override
     public void execute() {
-
+        m_climberSubsystem.climberDownSlow();
     }
 
     @Override
