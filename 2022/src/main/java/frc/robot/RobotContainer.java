@@ -144,6 +144,13 @@ public class RobotContainer {
       new ClimberUpSlowCommand(m_climberSubsystem)
     );
 
+    operatorController.getDPadButton(Direction.LEFT).whenPressed(
+      new SequentialCommandGroup(
+        new ShooterHoodRetract(shooterSubsystem),
+        new ChangeShotType(shooterSubsystem, preShooterSubsystem, "limelight")
+      )
+    );
+
     operatorController.getDPadButton(Direction.UP).whenPressed(
       new SequentialCommandGroup(
         new ShooterHoodExtend(shooterSubsystem),

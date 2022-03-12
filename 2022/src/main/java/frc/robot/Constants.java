@@ -60,7 +60,7 @@ public final class Constants {
         public static final double kClimberSlowUp = 0.1;
         public static final double kClimberSlowDown = -0.1;
       
-        public static final double kFullyClimbedTicks = 240000;
+        public static final double kFullyClimbedTicks = 300000;
         public static final int kTimeoutMs = 30;
         
         public static final double kClimberVelocityUp = 200.5;

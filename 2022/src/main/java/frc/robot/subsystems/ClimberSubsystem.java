@@ -9,6 +9,7 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ClimberConstants;
 
@@ -250,9 +251,10 @@ public class ClimberSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        /*
+        
         SmartDashboard.putNumber("Climber Right Encoder", getClimberRightEncoder());
         SmartDashboard.putNumber("Climber Left Encoder", getClimberLeftEncoder());
+        /*
         SmartDashboard.putBoolean("Climber Top Right BB", getTopRightBB());
         SmartDashboard.putBoolean("Climber Top Left BB", getTopLeftBB());
         SmartDashboard.putBoolean("Climber Bottom Right LS", getBottomRightLimit());
@@ -264,6 +266,8 @@ public class ClimberSubsystem extends SubsystemBase {
         bottomLeftLimit.setBoolean(getBottomLeftLimit());
         bottomRightLimit.setBoolean(getBottomRightLimit());
         climberEnable.setBoolean(getClimbeEnable());
+
+
     }
 
 }

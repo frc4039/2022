@@ -67,6 +67,8 @@ public class FeederSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     SmartDashboard.putBoolean("Intake BB", getBreakBeamIntake());
-    SmartDashboard.putBoolean("PreShooter BB", getBreakBeamPreShooter());    
+    SmartDashboard.putBoolean("PreShooter BB", getBreakBeamPreShooter());  
+    SmartDashboard.putBoolean("Upper ball BB", getBreakBeamUpperBall());
+    SmartDashboard.putBoolean("Lower ball BB", getBreakBeamLowerBall());  
   }
 }
