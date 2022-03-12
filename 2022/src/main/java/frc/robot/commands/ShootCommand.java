@@ -7,8 +7,10 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.FeederSubsystem;
+import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.PreShooterSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.Constants.FeederConstants;
@@ -21,6 +23,7 @@ public class ShootCommand extends CommandBase {
   private final FeederSubsystem m_feeder;
   private final ShooterSubsystem m_shooter;
   private final PreShooterSubsystem m_preShooter;
+  private final LimelightSubsystem m_limelight;
 
   private double ShooterRPM = 0;
   private double PreShooterRPM = 0;
@@ -32,10 +35,11 @@ public class ShootCommand extends CommandBase {
    *
    * @param subsystem 
    */
-  public ShootCommand(ShooterSubsystem shooter, PreShooterSubsystem preShooter, FeederSubsystem feeder) {
+  public ShootCommand(ShooterSubsystem shooter, PreShooterSubsystem preShooter, FeederSubsystem feeder, LimelightSubsystem limelight) {
     m_shooter = shooter;
     m_preShooter = preShooter;
     m_feeder = feeder;
+    m_limelight = limelight;
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_shooter, m_preShooter, m_feeder);
@@ -60,7 +64,7 @@ public class ShootCommand extends CommandBase {
       preShooterRPMWindow = ShooterConstants.kPreShooterFenderLowShotRPMWindow;
     }
     else if (m_shooter.type == "limelight") {
-      ShooterRPM = ShooterConstants.klimelightShotRPM;
+      ShooterRPM = 8.5218 * m_limelight.getDistanceToTarget() + 1200;
       PreShooterRPM = ShooterConstants.kpreShooterLimelightShotRPM;
       RPMWindow = ShooterConstants.klimelightShotRPMWindow;
       preShooterRPMWindow = ShooterConstants.kPreShooterlimelightShotRPMWindow;
@@ -76,7 +80,11 @@ public class ShootCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
+    if(m_shooter.type == "limelight") {
+      ShooterRPM = 8.5218 * m_limelight.getDistanceToTarget() + 1200;
+      SmartDashboard.putNumber("Limelight RPM", ShooterRPM);
+      m_shooter.shoot(ShooterRPM);
+    }
     
     if ((m_shooter.returnCurrentRPM() > ShooterRPM * (1 - RPMWindow))
       && (m_shooter.returnCurrentRPM() < ShooterRPM * (1 + RPMWindow))

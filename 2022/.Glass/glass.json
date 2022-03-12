@@ -8,6 +8,7 @@
     },
     "types": {
       "/FMSInfo": "FMSInfo",
+      "/LiveWindow/IntakeSubsystem": "Subsystem",
       "/LiveWindow/Ungrouped/DigitalInput[0]": "Digital Input",
       "/LiveWindow/Ungrouped/DigitalInput[1]": "Digital Input",
       "/LiveWindow/Ungrouped/DigitalInput[2]": "Digital Input",
@@ -75,6 +76,6 @@
   },
   "NetworkTables Settings": {
     "mode": "Client",
-    "serverTeam": "localhost"
+    "serverTeam": "4039"
   }
 }

@@ -85,22 +85,21 @@ public class AutonomousTrajectories {
 
         fiveRightAuto2 = new Trajectory(
             new SimplePathBuilder(new Vector2(-27.114, -133.206), Rotation2.fromDegrees(-90))
-                .lineTo(new Vector2(-127.607, -113.762), Rotation2.fromDegrees(90))
+                .lineTo(new Vector2(-164.6, -121.1), Rotation2.fromDegrees(40.7))
                 .build(),
                 normalConstraints, SAMPLE_DISTANCE
         );
 
         fiveRightAuto3 = new Trajectory(
-            new SimplePathBuilder(new Vector2(-127.607, -113.762), Rotation2.fromDegrees(90))
-                .lineTo(new Vector2(-126.853, -93.018), Rotation2.fromDegrees(42))
+            new SimplePathBuilder(new Vector2(-164.6, -121.1), Rotation2.fromDegrees(40.7))
+                .lineTo(new Vector2(-138.1, -98.1), Rotation2.fromDegrees(40.7))
                 .build(),
                 slowConstraints, SAMPLE_DISTANCE
         );
 
         fiveRightAuto4 = new Trajectory(
-            new SimplePathBuilder(new Vector2(-126.853, -93.018), Rotation2.fromDegrees(42))
-                .lineTo(new Vector2(-252.659, -100.732), Rotation2.fromDegrees(-133.75))
-                .lineTo(new Vector2(-257.659, -112.732), Rotation2.fromDegrees(-133.75))
+            new SimplePathBuilder(new Vector2(-138.1, -98.18), Rotation2.fromDegrees(40.7))
+                .lineTo(new Vector2(-264.659, -116.732), Rotation2.fromDegrees(-133.75))
                 .build(),
                 normalConstraints, SAMPLE_DISTANCE
         );

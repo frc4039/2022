@@ -42,6 +42,7 @@ public class AutonomousChooser {
         SequentialCommandGroup command = new SequentialCommandGroup();
 
         resetRobotPose(command, container, trajectories.getTwoRightAuto1());
+        setShotTypeHigh(command, container);
         followAndIntake(command, container, trajectories.getTwoRightAuto1());
         followAndPreShoot(command, container, trajectories.getTwoRightAuto2());
         shoot(command, container, 10.0);
@@ -53,6 +54,7 @@ public class AutonomousChooser {
         SequentialCommandGroup command = new SequentialCommandGroup();
 
         resetRobotPose(command, container, trajectories.getTwoLeftAuto1());
+        setShotTypeHigh(command, container);
         followAndIntake(command, container, trajectories.getTwoLeftAuto1());
         followAndPreShoot(command, container, trajectories.getTwoLeftAuto2());
         shoot(command, container, 10.0);
@@ -64,15 +66,18 @@ public class AutonomousChooser {
         SequentialCommandGroup command = new SequentialCommandGroup();
 
         resetRobotPose(command, container, trajectories.getFiveRightAuto1());
+        setShotTypeLimelight(command, container);
         followAndIntake(command, container, trajectories.getFiveRightAuto1());
-        followAndIntake(command, container, trajectories.getFiveRightAuto2());
+        follow(command, container, trajectories.getFiveRightAuto2());
+        shoot(command,container, 2.5);
         followIntakeAndPreShoot(command, container, trajectories.getFiveRightAuto3());
         shoot(command, container, 2.5);
+        /*
         followAndIntake(command, container, trajectories.getFiveRightAuto4());
         intake(command, container, 2.0);
         followAndPreShoot(command, container, trajectories.getFiveRightAuto5());
         shoot(command, container, 2.0);
-
+        */
         return command;
     }
 
@@ -80,6 +85,7 @@ public class AutonomousChooser {
         SequentialCommandGroup command = new SequentialCommandGroup();
 
         resetRobotPose(command, container, trajectories.getFourLeftAuto1());
+        setShotTypeLimelight(command, container);
         followAndIntake(command, container, trajectories.getFourLeftAuto1());
         follow(command, container, trajectories.getFourLeftAuto2());
         shoot(command, container, 2.0);
@@ -139,13 +145,31 @@ public class AutonomousChooser {
                 ));
     }
 
-    private void shoot(SequentialCommandGroup command, RobotContainer container, Double timeout) {
+    private void shoot(SequentialCommandGroup command, RobotContainer container, double timeout) {
         command.addCommands(new ShootCommand(container.getShooterSubsystem(), container.getPreShooterSubsystem(),
-                container.getFeederSubsystem())
+                container.getFeederSubsystem(), container.getLimelightSubsystem())
                         .withTimeout(timeout));
     }
 
-    private void intake(SequentialCommandGroup command, RobotContainer container, Double timeout) {
+    private void setShotTypeHigh(SequentialCommandGroup command, RobotContainer container) {
+        command.addCommands(
+            new ShooterHoodExtend(container.getShooterSubsystem()),
+            new ChangeShotType(container.getShooterSubsystem(), container.getPreShooterSubsystem(), "high"));
+    }
+            
+    private void setShotTypeLow(SequentialCommandGroup command, RobotContainer container) {
+        command.addCommands(
+            new ShooterHoodRetract(container.getShooterSubsystem()),
+            new ChangeShotType(container.getShooterSubsystem(), container.getPreShooterSubsystem(), "low"));
+    }
+            
+    private void setShotTypeLimelight(SequentialCommandGroup command, RobotContainer container) {
+        command.addCommands(
+            new ShooterHoodRetract(container.getShooterSubsystem()),
+            new ChangeShotType(container.getShooterSubsystem(), container.getPreShooterSubsystem(), "limelight"));
+    }
+
+    private void intake(SequentialCommandGroup command, RobotContainer container, double timeout) {
         command.addCommands(new ParallelDeadlineGroup(
                 new IntakeCommand(container.getIntakeSubsystem()),
                 new FeederCommand(container.getFeederSubsystem(), -FeederConstants.kFeederFeedPercent))

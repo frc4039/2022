@@ -96,11 +96,19 @@ public class RobotContainer {
 
     //Driver Right Trigger shoots
     driverController.getRightTriggerAxis().getButton(0.1).whenHeld(
-        new ShootCommand(shooterSubsystem, preShooterSubsystem, feederSubsystem)
+        new ShootCommand(shooterSubsystem, preShooterSubsystem, feederSubsystem, limelightSubsystem)
     );
 
     driverController.getLeftBumperButton().whileHeld(
           new DriveWithSetRotationCommand(drivetrainSubsystem, getDriveForwardAxis(), getDriveStrafeAxis(), 90.0)
+    );
+    
+    driverController.getAButton().whenHeld(
+      new RotateToLimelight(drivetrainSubsystem, getDriveForwardAxis(), getDriveStrafeAxis(), limelightSubsystem)
+    );
+
+    driverController.getYButton().whenHeld(
+      new DriveWithSetRotationCommand(drivetrainSubsystem, getDriveForwardAxis(), getDriveStrafeAxis(), 0)
     );
     
     // intakeBB.whenActive(
@@ -147,23 +155,27 @@ public class RobotContainer {
     operatorController.getDPadButton(Direction.LEFT).whenPressed(
       new SequentialCommandGroup(
         new ShooterHoodRetract(shooterSubsystem),
-        new ChangeShotType(shooterSubsystem, preShooterSubsystem, "limelight")
+        new ChangeShotType(shooterSubsystem, preShooterSubsystem, "limelight"),
+        new InstantCommand(limelightSubsystem::turnLEDOn, limelightSubsystem)
       )
     );
 
     operatorController.getDPadButton(Direction.UP).whenPressed(
       new SequentialCommandGroup(
         new ShooterHoodExtend(shooterSubsystem),
-        new ChangeShotType(shooterSubsystem, preShooterSubsystem, "high")
+        new ChangeShotType(shooterSubsystem, preShooterSubsystem, "high"),
+        new InstantCommand(limelightSubsystem::turnLEDOff, limelightSubsystem)
       )
     );
 
     operatorController.getDPadButton(Direction.DOWN).whenPressed(
       new SequentialCommandGroup(
         new ShooterHoodRetract(shooterSubsystem),
-        new ChangeShotType(shooterSubsystem, preShooterSubsystem, "low")
+        new ChangeShotType(shooterSubsystem, preShooterSubsystem, "low"),
+        new InstantCommand(limelightSubsystem::turnLEDOff, limelightSubsystem)
       )
     );
+
   }
 
   public Command getAutonomousCommand() {
@@ -196,6 +208,10 @@ public class RobotContainer {
 
   public PreShooterSubsystem getPreShooterSubsystem() {
     return preShooterSubsystem;
+  }
+
+  public LimelightSubsystem getLimelightSubsystem() {
+    return limelightSubsystem;
   }
 
   public FeederSubsystem getFeederSubsystem() {
