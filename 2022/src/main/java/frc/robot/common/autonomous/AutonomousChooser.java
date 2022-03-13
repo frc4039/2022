@@ -69,11 +69,11 @@ public class AutonomousChooser {
         setShotTypeLimelight(command, container);
         followAndIntake(command, container, trajectories.getFiveRightAuto1());
         followAndPreShoot(command, container, trajectories.getFiveRightAuto2());
-        shoot(command,container, 1);
+        shoot(command,container, 1.0);
         followIntakeAndPreShoot(command, container, trajectories.getFiveRightAuto3());
         shoot(command, container, 0.75);
         followAndIntake(command, container, trajectories.getFiveRightAuto4());
-        intake(command, container, 1);
+        intake(command, container, 1.0);
         followAndPreShoot(command, container, trajectories.getFiveRightAuto5());
         aimAndShoot(command, container, 2.0);
         
@@ -87,9 +87,9 @@ public class AutonomousChooser {
         setShotTypeLimelight(command, container);
         followAndIntake(command, container, trajectories.getFourLeftAuto1());
         follow(command, container, trajectories.getFourLeftAuto2());
-        shoot(command, container, 2.0);
+        shoot(command, container, 1.0);
         follow(command, container, trajectories.getFourLeftAuto3());
-        intake(command, container, 2.0);
+        intake(command, container, 1.0);
         follow(command, container, trajectories.getFourLeftAuto4());
         shoot(command, container, 2.0);
 
