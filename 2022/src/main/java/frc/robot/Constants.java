@@ -24,6 +24,7 @@ public final class Constants {
 
     public static final double kDeadband = 0.075;
     public static final double kRotationScale = 0.25;
+    public static final double kRotationOfHub = 68;
 
     public static final int DRIVETRAIN_FRONT_LEFT_DRIVE_MOTOR = 1;
     public static final int DRIVETRAIN_FRONT_RIGHT_DRIVE_MOTOR = 3;
@@ -44,6 +45,10 @@ public final class Constants {
     public static final double DRIVETRAIN_FRONT_RIGHT_ENCODER_OFFSET = -Math.toRadians(258.0);
     public static final double DRIVETRAIN_BACK_LEFT_ENCODER_OFFSET = -Math.toRadians(337.7);
     public static final double DRIVETRAIN_BACK_RIGHT_ENCODER_OFFSET = -Math.toRadians(204.4);
+
+    public static final double GLASS_OFFSET_X = 10;
+    public static final double GLASS_OFFSET_Y = 5;
+    public static final double GLASS_SCALE = 0.0254;
 
     public static final class ClimberConstants{
         public static final TalonFXInvertType kClimberMotorRightInversion = TalonFXInvertType.CounterClockwise;
@@ -113,10 +118,10 @@ public final class Constants {
 
         public static final double kfenderLowShotRPM = 1400;
         public static final double kfenderHighShotRPM = 2100;
-        public static final double klimelightShotRPM = 2600;
+        public static final double klimelightShotRPM = 2500;
         
         public static final double kpreShooterReverseRPM = 500;
-        public static final double kpreShooterLimelightShotRPM = 2600;
+        public static final double kpreShooterLimelightShotRPM = 2000;
         public static final double kpreShooterFenderLowShotRPM = 500;
         public static final double kpreShooterFenderHighShotRPM = 500;
 
@@ -134,7 +139,9 @@ public final class Constants {
         public static final int kFeederPort = 33;
         public static final boolean kFeederInversion = false;
         public static final double kFeederFeedPercent = 0.25;
-        public static final double kFeederShootPercent = 0.35;
+        public static final double kFeederHighShotPercent = 0.35;
+        public static final double kFeederLowShotPercent = 1;
+        public static final double kFeederLimelightShotPercent = 1;
 
 
         public static final int kBreakBeamPreShooterPort = 9;

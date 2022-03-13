@@ -28,7 +28,7 @@ public class FeederManagementCommand extends CommandBase {
 			} else {
 				m_feeder.stop();
 			}
-		} else if (m_feeder.getBothBallBreakBeams() && m_feeder.getBreakBeamPreShooter()){
+		} else if (/*m_feeder.getBothBallBreakBeams() &&*/ m_feeder.getBreakBeamPreShooter()){
 			m_feeder.runFeeder(-FeederConstants.kFeederFeedPercent);
 		} else {
 			m_feeder.stop();

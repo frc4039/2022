@@ -6,14 +6,19 @@ import frc.robot.common.swervelib.SwerveModule;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.Constants;
 import frc.robot.common.control.*;
+import frc.robot.common.control.Trajectory.State;
 import frc.robot.common.drivers.Gyroscope;
 import frc.robot.common.drivers.NavX;
 import frc.robot.common.kinematics.ChassisVelocity;
@@ -49,7 +54,7 @@ public class DrivetrainSubsystem implements Subsystem, UpdateManager.Updatable {
 
     private final HolonomicMotionProfiledTrajectoryFollower follower = new HolonomicMotionProfiledTrajectoryFollower(
             new PidConstants(0.4, 0.0, 0.025),
-            new PidConstants(1.0, 0.0, 0.0),
+            new PidConstants(1.0, 0.0, 0.06),
             new HolonomicFeedforward(FEEDFORWARD_CONSTANTS)
     );
 
@@ -87,6 +92,8 @@ public class DrivetrainSubsystem implements Subsystem, UpdateManager.Updatable {
     @GuardedBy("kinematicsLock")
     private double angularVelocity = 0.0;
 
+    public Field2d field = new Field2d();
+
     private final Object stateLock = new Object();
     @GuardedBy("stateLock")
     private HolonomicDriveSignal driveSignal = null;
@@ -103,7 +110,8 @@ public class DrivetrainSubsystem implements Subsystem, UpdateManager.Updatable {
         }
 
         ShuffleboardTab tab = Shuffleboard.getTab("Drivetrain");
-
+        field.setRobotPose(Constants.GLASS_OFFSET_X, Constants.GLASS_OFFSET_Y, new Rotation2d(0));
+        SmartDashboard.putData(field);
 
         SwerveModule frontLeftModule = Mk4SwerveModuleHelper.createNeo(
                 tab.getLayout("Front Left Module", BuiltInLayouts.kList)
@@ -313,6 +321,7 @@ public class DrivetrainSubsystem implements Subsystem, UpdateManager.Updatable {
     public void update(double time, double dt) {
         updateOdometry(time, dt);
 
+
         HolonomicDriveSignal driveSignal;
         Optional<HolonomicDriveSignal> trajectorySignal = follower.update(
                 getPose(),
@@ -345,6 +354,21 @@ public class DrivetrainSubsystem implements Subsystem, UpdateManager.Updatable {
         odometryAngleEntry.setDouble(getPose().rotation.toDegrees());
         //SmartDashboard.putNumber("Gyro heading", getPose().rotation.toDegrees());
         gyroHeading.setDouble(getPose().rotation.toDegrees());
+
+        field.setRobotPose(
+            pose.translation.x * Constants.GLASS_SCALE + Constants.GLASS_OFFSET_X,
+            pose.translation.y * Constants.GLASS_SCALE + Constants.GLASS_OFFSET_Y,
+            new Rotation2d(pose.rotation.toRadians())
+        );
+        Optional<Trajectory> traj = follower.getCurrentTrajectory();
+        if(traj.isPresent()) {
+            State s = traj.get().calculate(Timer.getFPGATimestamp() - follower.startTime);
+            field.getObject("Target").setPose(
+                s.getPathState().getPosition().x * Constants.GLASS_SCALE + Constants.GLASS_OFFSET_X,
+                s.getPathState().getPosition().y * Constants.GLASS_SCALE + Constants.GLASS_OFFSET_Y,
+                new Rotation2d(s.getPathState().getRotation().toRadians())
+            );
+        }
     }
 
     public HolonomicMotionProfiledTrajectoryFollower getFollower() {

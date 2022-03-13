@@ -13,7 +13,9 @@ public class LimelightSubsystem extends SubsystemBase {
     private NetworkTable table;
     private static final double TARGET_HEIGHT = 103; //8 feet 7 inches 
     // TODO: Update limelight height
-    private static final double LIMELIGHT_HEIGHT = 22.0;
+    private static final double LIMELIGHT_HEIGHT = 25.25;
+    private static final double LIMELIGHT_ANGLE = 31.6;
+
 
     public LimelightSubsystem() {
         
@@ -41,6 +43,18 @@ public class LimelightSubsystem extends SubsystemBase {
         return table.getEntry("tl").getDouble(0);
     }
 
+    public double getDistanceToTarget() {
+        return (TARGET_HEIGHT - LIMELIGHT_HEIGHT) / Math.tan((LIMELIGHT_ANGLE + getVertAngleToGoal()) * (Math.PI / 180)) + 26;
+    }
+
+    public void turnLEDOn() {
+        table.getEntry("ledMode").setDouble(0);
+    }
+
+    public void turnLEDOff() {
+        table.getEntry("ledMode").setDouble(1);
+    }
+
     public void setPipelineZero() {
         table.getEntry("pipeline").setNumber(1);
     }
@@ -64,5 +78,6 @@ public class LimelightSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         SmartDashboard.putNumber("LL Latency", getLatency());
+        SmartDashboard.putNumber("Distance To Goal", getDistanceToTarget());
     }
 }
