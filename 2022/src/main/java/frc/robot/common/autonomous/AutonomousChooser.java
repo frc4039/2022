@@ -132,22 +132,26 @@ public class AutonomousChooser {
                         new FeederManagementCommand(container.getFeederSubsystem()))));
     }
 
-    private void followIntakeAndPreShoot(SequentialCommandGroup command, RobotContainer container,
-            Trajectory trajectory) {
+    private void followIntakeAndPreShoot(SequentialCommandGroup command, RobotContainer container,Trajectory trajectory) {
         command.addCommands(new FollowTrajectoryCommand(container.getDrivetrainSubsystem(), trajectory)
-                .deadlineWith(
-                    new ParallelCommandGroup(
-                        new PreShootCommand(container.getPreShooterSubsystem(), container.getShooterSubsystem(), container.getFeederSubsystem()),
-                        new IntakeCommand(container.getIntakeSubsystem())
-                    )
-                ));
+            .deadlineWith(
+                new ParallelCommandGroup(
+                    new PreShootCommand(container.getPreShooterSubsystem(), container.getShooterSubsystem(), container.getFeederSubsystem()),
+                    new IntakeCommand(container.getIntakeSubsystem())
+                )
+            )
+        );
     }
 
     private void followAndPreShoot(SequentialCommandGroup command, RobotContainer container, Trajectory trajectory) {
         command.addCommands(new FollowTrajectoryCommand(container.getDrivetrainSubsystem(), trajectory)
-                .deadlineWith(
+            .deadlineWith(
+                new SequentialCommandGroup(
+                    new FeederManagementCommand(container.getFeederSubsystem()).withTimeout(0.5),
                     new PreShootCommand(container.getPreShooterSubsystem(), container.getShooterSubsystem(), container.getFeederSubsystem())
-                ));
+                ) 
+            )
+        );
     }
 
     private void shoot(SequentialCommandGroup command, RobotContainer container, double timeout) {

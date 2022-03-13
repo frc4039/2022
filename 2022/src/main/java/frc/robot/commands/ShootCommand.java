@@ -98,9 +98,11 @@ public class ShootCommand extends CommandBase {
       )  {
             m_feeder.runFeeder(feederPercent);
     }
+    /*
     else {
       m_feeder.stop();
     }
+    */
   }
 
   // Called once the command ends or is interrupted.
