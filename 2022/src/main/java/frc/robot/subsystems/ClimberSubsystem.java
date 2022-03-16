@@ -7,10 +7,13 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.ClimberConstants;
 
 public class ClimberSubsystem extends SubsystemBase {
@@ -18,6 +21,8 @@ public class ClimberSubsystem extends SubsystemBase {
     private final TalonFX m_climberMotorRight;
 
     private final TalonFX m_climberMotorLeft;
+
+    private final Solenoid m_climberSolenoid;
 
     private boolean enableClimb = false;
 
@@ -44,7 +49,7 @@ public class ClimberSubsystem extends SubsystemBase {
          m_climberMotorRight.setNeutralMode(NeutralMode.Brake);
         m_climberMotorLeft.setNeutralMode(NeutralMode.Brake);
 
-
+        m_climberSolenoid = new Solenoid(Constants.kPCMCANID, PneumaticsModuleType.CTREPCM, 3);
         
         m_climberMotorLeft.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
         m_climberMotorRight.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
@@ -200,6 +205,12 @@ public class ClimberSubsystem extends SubsystemBase {
             m_climberMotorLeft.set(ControlMode.PercentOutput, 0);
         } else {
             m_climberMotorLeft.set(ControlMode.PercentOutput, ClimberConstants.kClimberSlowDown);
+        }
+    }
+
+    public void climberExtend() {
+        if (enableClimb) {
+            m_climberSolenoid.set(true);
         }
     }
 
