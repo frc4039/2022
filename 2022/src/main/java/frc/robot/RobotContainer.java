@@ -99,33 +99,17 @@ public class RobotContainer {
         new ShootCommand(shooterSubsystem, preShooterSubsystem, feederSubsystem, limelightSubsystem)
     );
 
-    driverController.getLeftBumperButton().whileHeld(
-          new DriveWithSetRotationCommand(drivetrainSubsystem, getDriveForwardAxis(), getDriveStrafeAxis(), 0)
+    driverController.getYButton().whenHeld(
+      new DriveWithSetRotationCommand(drivetrainSubsystem, getDriveForwardAxis(), getDriveStrafeAxis(), 0)
     );
-    
-    driverController.getLeftTriggerAxis().getButton(0.1).whenHeld(
+
+    driverController.getAButton().whenHeld(
       new SequentialCommandGroup(
         new ShooterHoodRetract(shooterSubsystem),
         new ChangeShotType(shooterSubsystem, preShooterSubsystem, "limelight"),
         new InstantCommand(limelightSubsystem::turnLEDOn, limelightSubsystem),
         new RotateToLimelight(drivetrainSubsystem, getDriveForwardAxis(), getDriveStrafeAxis(), limelightSubsystem)
       )
-    );
-
-    driverController.getYButton().whenHeld(
-      new DriveWithSetRotationCommand(drivetrainSubsystem, getDriveForwardAxis(), getDriveStrafeAxis(), Math.toRadians(Constants.kRotationOfHub + 90))
-    );
-
-    driverController.getBButton().whenHeld(
-      new DriveWithSetRotationCommand(drivetrainSubsystem, getDriveForwardAxis(), getDriveStrafeAxis(), Math.toRadians(Constants.kRotationOfHub))
-    );
-
-    driverController.getAButton().whenHeld(
-      new DriveWithSetRotationCommand(drivetrainSubsystem, getDriveForwardAxis(), getDriveStrafeAxis(), Math.toRadians(Constants.kRotationOfHub - 90))
-    );
-
-    driverController.getXButton().whenHeld(
-      new DriveWithSetRotationCommand(drivetrainSubsystem, getDriveForwardAxis(), getDriveStrafeAxis(), Math.toRadians(Constants.kRotationOfHub - 180))
     );
     
     // intakeBB.whenActive(
@@ -138,12 +122,18 @@ public class RobotContainer {
     );
 
     //Operator Y buttom spools up shooter
+    /*
     operatorController.getYButton().whenPressed(
       new PreShootCommand(preShooterSubsystem, shooterSubsystem, feederSubsystem)
     );
+    */
 
-    operatorController.getXButton().whileHeld(
-      new StopPreShootCommand(preShooterSubsystem, shooterSubsystem, feederSubsystem)
+    operatorController.getBButton().whenHeld(
+      new EjectOutOfIntake(feederSubsystem, intakeSubsystem)
+    );
+      
+    operatorController.getXButton().whenHeld(
+      new EjectOutOfShooter(shooterSubsystem, preShooterSubsystem, feederSubsystem)
     );
 
     operatorController.getBackButton().and(operatorController.getStartButton()).whenActive(

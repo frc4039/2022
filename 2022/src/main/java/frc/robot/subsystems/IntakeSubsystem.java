@@ -29,11 +29,10 @@ public class IntakeSubsystem extends SubsystemBase {
     m_intakeMotor.set(ControlMode.PercentOutput, IntakeConstants.kIntakePercent);
   }
 
-  public void outtake() {
+  public void reverseIntake() {
     m_intakeMotor.set(ControlMode.PercentOutput, IntakeConstants.kOutakePercent);
   }
 
-  
   public void extendIntake() {
       m_intakeSolenoid.set(DoubleSolenoid.Value.kReverse);
   }
@@ -46,7 +45,6 @@ public class IntakeSubsystem extends SubsystemBase {
       m_intakeSolenoid.set(DoubleSolenoid.Value.kOff);
   }
   
-  
   public void stop() {
     m_intakeMotor.set(ControlMode.PercentOutput, 0);
   }
@@ -55,4 +53,6 @@ public class IntakeSubsystem extends SubsystemBase {
   public void periodic() {
 
   }
+
+
 }

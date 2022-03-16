@@ -69,11 +69,17 @@ public class AutonomousChooser {
         setShotTypeLimelight(command, container);
         followAndIntake(command, container, trajectories.getFiveRightAuto1());
         followAndPreShoot(command, container, trajectories.getFiveRightAuto2());
-        shoot(command,container, 1);
+        
+        followIntakeAndShoot(command, container, trajectories.getFiveRightAuto3(), -150);
+        
+        /*
+        shoot(command,container, 1.0);
         followIntakeAndPreShoot(command, container, trajectories.getFiveRightAuto3());
-        shoot(command, container, 0.75);
+        */
+
+        shoot(command, container, 0.5);
         followAndIntake(command, container, trajectories.getFiveRightAuto4());
-        intake(command, container, 1);
+        intake(command, container, 1.0);
         followAndPreShoot(command, container, trajectories.getFiveRightAuto5());
         aimAndShoot(command, container, 2.0);
         
@@ -86,11 +92,11 @@ public class AutonomousChooser {
         resetRobotPose(command, container, trajectories.getFourLeftAuto1());
         setShotTypeLimelight(command, container);
         followAndIntake(command, container, trajectories.getFourLeftAuto1());
-        follow(command, container, trajectories.getFourLeftAuto2());
-        shoot(command, container, 2.0);
-        follow(command, container, trajectories.getFourLeftAuto3());
-        intake(command, container, 2.0);
-        follow(command, container, trajectories.getFourLeftAuto4());
+        followAndPreShoot(command, container, trajectories.getFourLeftAuto2());
+        shoot(command, container, 1.0);
+        followAndIntake(command, container, trajectories.getFourLeftAuto3());
+        intake(command, container, 1.0);
+        followAndPreShoot(command, container, trajectories.getFourLeftAuto4());
         shoot(command, container, 2.0);
 
         return command;
@@ -126,22 +132,26 @@ public class AutonomousChooser {
                         new FeederManagementCommand(container.getFeederSubsystem()))));
     }
 
-    private void followIntakeAndPreShoot(SequentialCommandGroup command, RobotContainer container,
-            Trajectory trajectory) {
+    private void followIntakeAndPreShoot(SequentialCommandGroup command, RobotContainer container,Trajectory trajectory) {
         command.addCommands(new FollowTrajectoryCommand(container.getDrivetrainSubsystem(), trajectory)
-                .deadlineWith(
-                    new ParallelCommandGroup(
-                        new PreShootCommand(container.getPreShooterSubsystem(), container.getShooterSubsystem(), container.getFeederSubsystem()),
-                        new IntakeCommand(container.getIntakeSubsystem())
-                    )
-                ));
+            .deadlineWith(
+                new ParallelCommandGroup(
+                    new PreShootCommand(container.getPreShooterSubsystem(), container.getShooterSubsystem(), container.getFeederSubsystem()),
+                    new IntakeCommand(container.getIntakeSubsystem())
+                )
+            )
+        );
     }
 
     private void followAndPreShoot(SequentialCommandGroup command, RobotContainer container, Trajectory trajectory) {
         command.addCommands(new FollowTrajectoryCommand(container.getDrivetrainSubsystem(), trajectory)
-                .deadlineWith(
+            .deadlineWith(
+                new SequentialCommandGroup(
+                    new FeederManagementCommand(container.getFeederSubsystem()).withTimeout(0.5),
                     new PreShootCommand(container.getPreShooterSubsystem(), container.getShooterSubsystem(), container.getFeederSubsystem())
-                ));
+                ) 
+            )
+        );
     }
 
     private void shoot(SequentialCommandGroup command, RobotContainer container, double timeout) {
@@ -182,6 +192,14 @@ public class AutonomousChooser {
             new ShootCommand(container.getShooterSubsystem(), container.getPreShooterSubsystem(),
                 container.getFeederSubsystem(), container.getLimelightSubsystem())
                         .withTimeout(timeout)));
+    }
+
+    private void followIntakeAndShoot(SequentialCommandGroup command, RobotContainer container, Trajectory trajectory, double RPMChange) {
+        command.addCommands(new FollowTrajectoryCommand(container.getDrivetrainSubsystem(), trajectory)
+                .deadlineWith(new ParallelCommandGroup(
+                        new IntakeCommand(container.getIntakeSubsystem()),
+                        new MovingShootCommand(container.getShooterSubsystem(), container.getPreShooterSubsystem(),
+                container.getFeederSubsystem(), container.getLimelightSubsystem(), RPMChange))));
     }
 
     private void resetRobotPose(SequentialCommandGroup command, RobotContainer container, Trajectory trajectory) {

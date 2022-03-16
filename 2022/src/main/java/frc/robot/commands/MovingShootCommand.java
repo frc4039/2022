@@ -19,7 +19,7 @@ import frc.robot.Constants.ShooterConstants;
 /**
  * An example command that uses an example subsystem.
  */
-public class ShootCommand extends CommandBase {
+public class MovingShootCommand extends CommandBase {
   private final FeederSubsystem m_feeder;
   private final ShooterSubsystem m_shooter;
   private final PreShooterSubsystem m_preShooter;
@@ -30,17 +30,19 @@ public class ShootCommand extends CommandBase {
   private double RPMWindow = 0;
   private double preShooterRPMWindow = 0;
   private double feederPercent;
+  private double RPMChange;
 
   /**
    * Creates a new Shoot Command.
    *
    * @param subsystem 
    */
-  public ShootCommand(ShooterSubsystem shooter, PreShooterSubsystem preShooter, FeederSubsystem feeder, LimelightSubsystem limelight) {
+  public MovingShootCommand(ShooterSubsystem shooter, PreShooterSubsystem preShooter, FeederSubsystem feeder, LimelightSubsystem limelight, double RPMChange) {
     m_shooter = shooter;
     m_preShooter = preShooter;
     m_feeder = feeder;
     m_limelight = limelight;
+    this.RPMChange = RPMChange;
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_shooter, m_preShooter, m_feeder);
@@ -67,7 +69,7 @@ public class ShootCommand extends CommandBase {
       feederPercent = FeederConstants.kFeederLowShotPercent;
     }
     else if (m_shooter.type == "limelight") {
-      ShooterRPM = 8.5218 * m_limelight.getDistanceToTarget() + 1200;
+      ShooterRPM = 8.5218 * m_limelight.getDistanceToTarget() + 1200 + RPMChange;
       PreShooterRPM = ShooterConstants.kpreShooterLimelightShotRPM;
       RPMWindow = ShooterConstants.klimelightShotRPMWindow;
       preShooterRPMWindow = ShooterConstants.kPreShooterlimelightShotRPMWindow;
@@ -86,7 +88,7 @@ public class ShootCommand extends CommandBase {
   @Override
   public void execute() {
     if(m_shooter.type == "limelight") {
-      ShooterRPM = 8.5218 * m_limelight.getDistanceToTarget() + 1200;
+      ShooterRPM = 8.5218 * m_limelight.getDistanceToTarget() + 1200 + RPMChange;
       SmartDashboard.putNumber("Limelight RPM", ShooterRPM);
       m_shooter.shoot(ShooterRPM);
     }
@@ -98,11 +100,9 @@ public class ShootCommand extends CommandBase {
       )  {
             m_feeder.runFeeder(feederPercent);
     }
-    /*
     else {
       m_feeder.stop();
     }
-    */
   }
 
   // Called once the command ends or is interrupted.
