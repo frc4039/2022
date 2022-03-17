@@ -210,7 +210,7 @@ public class ClimberSubsystem extends SubsystemBase {
 
     public void climberExtend() {
         if (enableClimb) {
-            m_climberSolenoid.set(DoubleSolenoid.Value.kForward);
+            m_climberSolenoid.set(DoubleSolenoid.Value.kReverse);
         }
     }
 
