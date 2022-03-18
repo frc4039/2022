@@ -39,9 +39,9 @@ public class DrivetrainSubsystem implements Subsystem, UpdateManager.Updatable {
     public static final double WHEELBASE = 17.5;
 
     public static final DrivetrainFeedforwardConstants FEEDFORWARD_CONSTANTS = new DrivetrainFeedforwardConstants(
-            0.042746,
-            0.0032181,
-            0.30764
+            0.066264,
+            0.014057,
+            0.20927
     );
 
     public static final TrajectoryConstraint[] TRAJECTORY_CONSTRAINTS = {
@@ -53,8 +53,8 @@ public class DrivetrainSubsystem implements Subsystem, UpdateManager.Updatable {
     private static final int MAX_LATENCY_COMPENSATION_MAP_ENTRIES = 25;
 
     private final HolonomicMotionProfiledTrajectoryFollower follower = new HolonomicMotionProfiledTrajectoryFollower(
-            new PidConstants(0.4, 0.0, 0.025),
-            new PidConstants(1.0, 0.0, 0.06),
+            new PidConstants(0.1, 0.0, 0.025),
+            new PidConstants(0.4, 0.0, 0.06),
             new HolonomicFeedforward(FEEDFORWARD_CONSTANTS)
     );
 
