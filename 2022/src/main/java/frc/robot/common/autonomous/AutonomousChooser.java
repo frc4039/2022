@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.RobotContainer;
 import frc.robot.Constants.FeederConstants;
@@ -42,10 +43,11 @@ public class AutonomousChooser {
         SequentialCommandGroup command = new SequentialCommandGroup();
 
         resetRobotPose(command, container, trajectories.getTwoRightAuto1());
-        setShotTypeHigh(command, container);
+        setShotTypeLimelight(command, container);
         followAndIntake(command, container, trajectories.getTwoRightAuto1());
         followAndPreShoot(command, container, trajectories.getTwoRightAuto2());
-        shoot(command, container, 10.0);
+        aimAndShoot(command, container, 3.0);
+        follow(command, container, trajectories.getTwoRightAuto3());
 
         return command;
     }
@@ -54,10 +56,10 @@ public class AutonomousChooser {
         SequentialCommandGroup command = new SequentialCommandGroup();
 
         resetRobotPose(command, container, trajectories.getTwoLeftAuto1());
-        setShotTypeHigh(command, container);
+        setShotTypeLimelight(command, container);
         followAndIntake(command, container, trajectories.getTwoLeftAuto1());
         followAndPreShoot(command, container, trajectories.getTwoLeftAuto2());
-        shoot(command, container, 10.0);
+        aimAndShoot(command, container, 3.0);
 
         return command;
     }
@@ -187,7 +189,7 @@ public class AutonomousChooser {
     }
 
     private void aimAndShoot(SequentialCommandGroup command, RobotContainer container, double timeout) {
-        command.addCommands(new ParallelDeadlineGroup(
+        command.addCommands(new ParallelRaceGroup(
             new RotateToLimelight(container.getDrivetrainSubsystem(), container.getDriveForwardAxis(), container.getDriveStrafeAxis(), container.getLimelightSubsystem()),
             new ShootCommand(container.getShooterSubsystem(), container.getPreShooterSubsystem(),
                 container.getFeederSubsystem(), container.getLimelightSubsystem())

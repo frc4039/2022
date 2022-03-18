@@ -1,0 +1,14 @@
+Driver Controller, Right Trigger , ShootCommand
+Driver Controller, Y Button (Hold, interruptable), DriveWithSetRotationCommand (getDriveForwardAxis(), getDriveStrafeAxis(), 0)
+Driver Controller, A Button (Hold, interruptable), SequentialCommandGroup (newShooterHoodRetract(shooterSubsystem), "limelight"), newInstantCommand(limelightSubsystem::turnLEDOn, limelightSubsystem), getDriveForwardAxis(), getDriveStrafeAxis(), limelightSubsystem))
+Operator Controller, A Button (Hold, interruptable), IntakeCommand
+Operator Controller, B Button (Hold, interruptable), EjectOutOfIntake
+Operator Controller, X Button (Hold, interruptable), EjectOutOfShooter
+Operator Controller, BackButton and, SequentialCommandGroup (newClimberEncoderZeroCommand(m_climberSubsystem), newClimberPreClimbCommand(m_climberSubsystem))
+Operator Controller, Left Trigger , ClimberDownCommand
+Operator Controller, Right Trigger , ClimberUpCommand
+Operator Controller, Left Bumper and, ClimberDownSlowCommand
+Operator Controller, Right Bumper and, ClimberUpSlowCommand
+Operator Controller, D-Pad Left (Press), SequentialCommandGroup (newShooterHoodRetract(shooterSubsystem), "limelight"), newInstantCommand(limelightSubsystem::turnLEDOn, limelightSubsystem))
+Operator Controller, D-Pad Up (Press), SequentialCommandGroup (newShooterHoodExtend(shooterSubsystem), "high"), newInstantCommand(limelightSubsystem::turnLEDOff, limelightSubsystem))
+Operator Controller, D-Pad Down (Press), SequentialCommandGroup (newShooterHoodRetract(shooterSubsystem), "low"), newInstantCommand(limelightSubsystem::turnLEDOff, limelightSubsystem))
