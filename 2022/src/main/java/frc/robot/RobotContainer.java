@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
@@ -158,8 +159,12 @@ public class RobotContainer {
       new ClimberUpSlowCommand(m_climberSubsystem)
     );
 
-    operatorController.getLeftBumperButton().and(operatorController.getRightBumperButton()).whileActiveOnce(
-      new ClimberExtendCommand(m_climberSubsystem)
+    operatorController.getLeftBumperButton().and(operatorController.getRightBumperButton()).whenActive(
+      new SequentialCommandGroup(
+        new ClimberExtendCommand(m_climberSubsystem),
+        new WaitCommand(1),
+        new InstantCommand(m_climberSubsystem::climberSolenoidOff, m_climberSubsystem)
+      )
     );
 
     operatorController.getDPadButton(Direction.LEFT).whenPressed(
