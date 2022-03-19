@@ -8,23 +8,28 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.FeederSubsystem;
-import frc.robot.subsystems.LimelightSubsystem;
-import frc.robot.subsystems.PreShooterSubsystem;
-import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.Constants.FeederConstants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.common.util.InterpolatingDouble;
 import frc.robot.common.util.InterpolatingTreeMap;
+import frc.robot.subsystems.FeederSubsystem;
+import frc.robot.subsystems.LimelightSubsystem;
+import frc.robot.subsystems.PreShooterSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
 
 /**
  * An example command that uses an example subsystem.
  */
-public class ShootCommand extends CommandBase {
+public class EjectSecondBall extends CommandBase {
   private final FeederSubsystem m_feeder;
   private final ShooterSubsystem m_shooter;
   private final PreShooterSubsystem m_preShooter;
   private final LimelightSubsystem m_limelight;
+
+  private String shotType;
+  private String preShotType;
+  private boolean hasPassed = false;
+  private boolean ejected = false;
 
   private InterpolatingTreeMap<InterpolatingDouble, InterpolatingDouble> shotProfile = new InterpolatingTreeMap<InterpolatingDouble, InterpolatingDouble>();
 
@@ -39,7 +44,7 @@ public class ShootCommand extends CommandBase {
    *
    * @param subsystem 
    */
-  public ShootCommand(ShooterSubsystem shooter, PreShooterSubsystem preShooter, FeederSubsystem feeder, LimelightSubsystem limelight) {
+  public EjectSecondBall(ShooterSubsystem shooter, PreShooterSubsystem preShooter, FeederSubsystem feeder, LimelightSubsystem limelight) {
     m_shooter = shooter;
     m_preShooter = preShooter;
     m_feeder = feeder;
@@ -52,55 +57,35 @@ public class ShootCommand extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_shooter.shotType();
-    m_preShooter.preShotType();
 
     shotProfile.put(new InterpolatingDouble(105.0), new InterpolatingDouble(2100.0));
     shotProfile.put(new InterpolatingDouble(135.0), new InterpolatingDouble(2300.0));
     shotProfile.put(new InterpolatingDouble(185.0), new InterpolatingDouble(2700.0));
     shotProfile.put(new InterpolatingDouble(250.0), new InterpolatingDouble(3200.0));
+    ShooterRPM = (double)(shotProfile.getInterpolated(new InterpolatingDouble(m_limelight.getDistanceToTarget())).value);
     
+    PreShooterRPM = ShooterConstants.kpreShooterLimelightShotRPM;
+    RPMWindow = ShooterConstants.klimelightShotRPMWindow;
+    preShooterRPMWindow = ShooterConstants.kPreShooterlimelightShotRPMWindow;
+    feederPercent = FeederConstants.kFeederLimelightShotPercent;
 
-    if (m_shooter.type == "high") {
-      ShooterRPM = ShooterConstants.kfenderHighShotRPM;
-      PreShooterRPM = ShooterConstants.kpreShooterFenderHighShotRPM;
-      RPMWindow = ShooterConstants.kfenderHighShotRPMWindow;
-      preShooterRPMWindow = ShooterConstants.kPreShooterFenderHighShotRPMWindow;
-      feederPercent = FeederConstants.kFeederHighShotPercent;
-    }
-    else if (m_shooter.type == "low") {
-      ShooterRPM = ShooterConstants.kfenderLowShotRPM;
-      PreShooterRPM = ShooterConstants.kpreShooterFenderLowShotRPM;
-      RPMWindow = ShooterConstants.kfenderLowShotRPMWindow;
-      preShooterRPMWindow = ShooterConstants.kPreShooterFenderLowShotRPMWindow;
-      feederPercent = FeederConstants.kFeederLowShotPercent;
-    }
-    else if (m_shooter.type == "limelight") {
-      ShooterRPM = (double)(shotProfile.getInterpolated(new InterpolatingDouble(m_limelight.getDistanceToTarget())).value);
-      PreShooterRPM = ShooterConstants.kpreShooterLimelightShotRPM;
-      RPMWindow = ShooterConstants.klimelightShotRPMWindow;
-      preShooterRPMWindow = ShooterConstants.kPreShooterlimelightShotRPMWindow;
-      feederPercent = FeederConstants.kFeederLimelightShotPercent;
-    }
-    else {
-      ShooterRPM = ShooterConstants.kfenderHighShotRPM;
-      PreShooterRPM = ShooterConstants.kpreShooterFenderHighShotRPM;
-      RPMWindow = ShooterConstants.kfenderHighShotRPMWindow;
-      preShooterRPMWindow = ShooterConstants.kPreShooterFenderHighShotRPMWindow;
-      feederPercent = FeederConstants.kFeederHighShotPercent;
-    }
+    
+    shotType = m_shooter.type;
+    preShotType = m_preShooter.type;
+    m_shooter.type = "limelight";
+    m_preShooter.type = "limelight";
+    m_feeder.runFeeder(FeederConstants.kFeederFeedPercent);
+    m_shooter.shotType();
+    m_preShooter.preShotType();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    
-  
-    if(m_shooter.type == "limelight") {
-      ShooterRPM = (double)(shotProfile.getInterpolated(new InterpolatingDouble(m_limelight.getDistanceToTarget())).value);
-      // ShooterRPM = 8.5218 * m_limelight.getDistanceToTarget() + 1200;
-      m_shooter.shoot(ShooterRPM);
-    }
+
+    ShooterRPM = (double)(shotProfile.getInterpolated(new InterpolatingDouble(m_limelight.getDistanceToTarget())).value);
+    m_shooter.shoot(ShooterRPM);
+
     
     if ((m_shooter.returnCurrentRPM() > ShooterRPM * (1 - RPMWindow))
       && (m_shooter.returnCurrentRPM() < ShooterRPM * (1 + RPMWindow))
@@ -115,6 +100,14 @@ public class ShootCommand extends CommandBase {
       m_preShooter.preShotType();
       m_feeder.stop();
     }
+
+
+    if (m_feeder.getBreakBeamPreShooter()){
+        hasPassed = true;
+    }
+    if (hasPassed && !m_feeder.getBreakBeamPreShooter()){
+        ejected = true;
+    }
   }
 
   // Called once the command ends or is interrupted.
@@ -123,11 +116,16 @@ public class ShootCommand extends CommandBase {
     m_shooter.stop();
     m_preShooter.stop();
     m_feeder.stop();
+
+    m_shooter.type = shotType;
+    m_preShooter.type = preShotType;
+    hasPassed = false;
+    ejected = false;
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return ejected;
   }
 }

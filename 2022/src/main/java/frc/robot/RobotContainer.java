@@ -75,7 +75,7 @@ public class RobotContainer {
     CommandScheduler.getInstance().registerSubsystem(m_climberSubsystem);
     CommandScheduler.getInstance().registerSubsystem(limelightSubsystem);
     CommandScheduler.getInstance().setDefaultCommand(drivetrainSubsystem, new DriveCommand(drivetrainSubsystem, getDriveForwardAxis(), getDriveStrafeAxis(), getDriveRotationAxis()));
-    CommandScheduler.getInstance().setDefaultCommand(feederSubsystem, new FeederManagementCommand(feederSubsystem));
+    CommandScheduler.getInstance().setDefaultCommand(feederSubsystem, new FeederManagementCommand(feederSubsystem, this));
 
     driverReadout = new DriverReadout(this);
 
@@ -128,8 +128,11 @@ public class RobotContainer {
     );
     */
 
-    operatorController.getBButton().whenHeld(
-      new EjectOutOfIntake(feederSubsystem, intakeSubsystem)
+    operatorController.getBButton().and(driverController.getRightTriggerAxis().getButton(0.1)).whenActive(
+      new SequentialCommandGroup(
+        new EjectSecondBall(shooterSubsystem, preShooterSubsystem, feederSubsystem, limelightSubsystem),
+        new EjectOutOfShooter(shooterSubsystem, preShooterSubsystem, feederSubsystem)
+      ).withTimeout(2)
     );
       
     operatorController.getXButton().whenHeld(

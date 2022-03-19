@@ -23,6 +23,8 @@ public class AutonomousTrajectories {
     private Trajectory fiveRightAuto3;
     private Trajectory fiveRightAuto4;
     private Trajectory fiveRightAuto5;
+    private Trajectory threeRightAuto3;
+    private Trajectory threeRightAuto4;
     private Trajectory fourLeftAuto1;
     private Trajectory fourLeftAuto2;
     private Trajectory fourLeftAuto3;
@@ -99,14 +101,14 @@ public class AutonomousTrajectories {
 
         fiveRightAuto2 = new Trajectory(
             new SimplePathBuilder(new Vector2(-27.114, -133.206), Rotation2.fromDegrees(-90))
-                .lineTo(new Vector2(-164.6, -121.1), Rotation2.fromDegrees(40.7))
+                .lineTo(new Vector2(-164.6, -121.1), Rotation2.fromDegrees(40))
                 .build(),
                 normalConstraints, SAMPLE_DISTANCE
         );
 
         fiveRightAuto3 = new Trajectory(
-            new SimplePathBuilder(new Vector2(-164.6, -121.1), Rotation2.fromDegrees(40.7))
-                .lineTo(new Vector2(-138.1, -98.1), Rotation2.fromDegrees(40.7))
+            new SimplePathBuilder(new Vector2(-164.6, -121.1), Rotation2.fromDegrees(40))
+                .lineTo(new Vector2(-138.1, -98.1), Rotation2.fromDegrees(40))
                 .build(),
                 slowConstraints, SAMPLE_DISTANCE
         );
@@ -124,6 +126,20 @@ public class AutonomousTrajectories {
                 .lineTo(new Vector2(-164.6, -121.1), Rotation2.fromDegrees(40.7))
                 .build(),
                 normalConstraints, SAMPLE_DISTANCE
+        );
+
+        threeRightAuto3 = new Trajectory(
+            new SimplePathBuilder(new Vector2(-164.6, -121.1), Rotation2.fromDegrees(40))
+                .lineTo(new Vector2(-146, -105), Rotation2.fromDegrees(40))
+                .build(),
+                slowConstraints, SAMPLE_DISTANCE
+        );
+
+        threeRightAuto4 = new Trajectory(
+            new SimplePathBuilder(new Vector2(-146, -105), Rotation2.fromDegrees(40))
+                .lineTo(new Vector2(-138.1, -98.1), Rotation2.fromDegrees(40))
+                .build(),
+                slowConstraints, SAMPLE_DISTANCE
         );
 
         fourLeftAuto1 = new Trajectory(
@@ -199,6 +215,14 @@ public class AutonomousTrajectories {
 
     public Trajectory getFiveRightAuto5() {
         return fiveRightAuto5;
+    }
+
+    public Trajectory getThreeRightAuto3() {
+        return threeRightAuto3;
+    }
+
+    public Trajectory getThreeRightAuto4() {
+        return threeRightAuto4;
     }
 
     public Trajectory getFourLeftAuto1() {

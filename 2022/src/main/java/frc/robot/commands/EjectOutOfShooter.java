@@ -47,7 +47,7 @@ public class EjectOutOfShooter extends CommandBase {
       preShotType = m_preShooter.type;
       m_shooter.type = "low";
       m_preShooter.type = "low";
-      m_feeder.runFeeder(FeederConstants.kFeederFeedPercent);
+      m_feeder.runFeeder(FeederConstants.kFeederEjectPercent);
       m_shooter.shotType();
       m_preShooter.preShotType();
   }

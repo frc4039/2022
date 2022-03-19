@@ -1,15 +1,22 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.RobotContainer;
 import frc.robot.Constants.FeederConstants;
 import frc.robot.subsystems.FeederSubsystem;
+import edu.wpi.first.math.filter.Debouncer;
+import edu.wpi.first.wpilibj.GenericHID;
 
 public class FeederManagementCommand extends CommandBase {
 
 	private final FeederSubsystem m_feeder;
+	private final RobotContainer m_robotContainer;
 
-	public FeederManagementCommand(FeederSubsystem feeder) {
+	private Debouncer rumbleDebounce = new Debouncer(0.1, Debouncer.DebounceType.kBoth);
+
+	public FeederManagementCommand(FeederSubsystem feeder, RobotContainer robotContainer) {
 		this.m_feeder = feeder;
+		m_robotContainer = robotContainer;
 
 		addRequirements(m_feeder);
 	}
@@ -32,6 +39,18 @@ public class FeederManagementCommand extends CommandBase {
 			m_feeder.runFeeder(-FeederConstants.kFeederFeedPercent);
 		} else {
 			m_feeder.stop();
+		}
+
+		if(rumbleDebounce.calculate(m_feeder.getBreakBeamIntake())){
+			m_robotContainer.getDriverController().getRawJoystick().setRumble(GenericHID.RumbleType.kLeftRumble, 1.0);
+			m_robotContainer.getDriverController().getRawJoystick().setRumble(GenericHID.RumbleType.kRightRumble, 1.0);
+			m_robotContainer.getOperatorController().getRawJoystick().setRumble(GenericHID.RumbleType.kLeftRumble, 1.0);
+			m_robotContainer.getOperatorController().getRawJoystick().setRumble(GenericHID.RumbleType.kRightRumble, 1.0);
+		} else {
+			m_robotContainer.getDriverController().getRawJoystick().setRumble(GenericHID.RumbleType.kLeftRumble, 0.0);
+			m_robotContainer.getDriverController().getRawJoystick().setRumble(GenericHID.RumbleType.kRightRumble, 0.0);
+			m_robotContainer.getOperatorController().getRawJoystick().setRumble(GenericHID.RumbleType.kLeftRumble, 0.0);
+			m_robotContainer.getOperatorController().getRawJoystick().setRumble(GenericHID.RumbleType.kRightRumble, 0.0);
 		}
 	}
 

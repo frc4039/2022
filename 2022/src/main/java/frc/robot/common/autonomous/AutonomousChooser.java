@@ -27,6 +27,7 @@ public class AutonomousChooser {
         autonomousModeChooser.addOption("(LEFT) 2 Ball", AutonomousMode.TWO_LEFT);
         autonomousModeChooser.addOption("(RIGHT/HP) 5 Ball", AutonomousMode.FIVE_RIGHT);
         autonomousModeChooser.addOption("(LEFT/HP) 4 Ball", AutonomousMode.FOUR_LEFT);
+        autonomousModeChooser.addOption("(RIGHT) 3 Ball", AutonomousMode.THREE_RIGHT);
     }
 
     public SendableChooser<AutonomousMode> getAutonomousModeChooser() {
@@ -106,6 +107,26 @@ public class AutonomousChooser {
         return command;
     }
 
+    private SequentialCommandGroup getThreeRightAutoCommand(RobotContainer container) {
+        SequentialCommandGroup command = new SequentialCommandGroup();
+
+        resetRobotPose(command, container, trajectories.getFiveRightAuto1());
+        setShotTypeLimelight(command, container);
+        followAndIntake(command, container, trajectories.getFiveRightAuto1());
+        followAndPreShoot(command, container, trajectories.getFiveRightAuto2());
+        followAndPreShoot(command, container, trajectories.getThreeRightAuto3());
+        shoot(command, container, 2.0);
+        followAndIntake(command, container, trajectories.getThreeRightAuto4());
+        shoot(command, container, 2.0);
+        /*
+        shoot(command,container, 1.0);
+        followIntakeAndPreShoot(command, container, trajectories.getFiveRightAuto3());
+        */
+
+        
+        return command;
+    }
+
     public Command getCommand(RobotContainer container) {
         switch (autonomousModeChooser.getSelected()) {
             case TWO_RIGHT:
@@ -116,6 +137,8 @@ public class AutonomousChooser {
                 return getFiveRightAutoCommand(container);
             case FOUR_LEFT:
                 return getFourLeftAutoCommand(container);
+            case THREE_RIGHT:
+                return getThreeRightAutoCommand(container);
             default:
                 return getNoAutoCommand(container);
         }
@@ -124,7 +147,7 @@ public class AutonomousChooser {
     private void follow(SequentialCommandGroup command, RobotContainer container, Trajectory trajectory) {
         command.addCommands(new FollowTrajectoryCommand(container.getDrivetrainSubsystem(), trajectory)
             .deadlineWith(
-                new FeederManagementCommand(container.getFeederSubsystem())
+                new FeederManagementCommand(container.getFeederSubsystem(), container)
             )
         );
     }
@@ -133,7 +156,7 @@ public class AutonomousChooser {
         command.addCommands(new FollowTrajectoryCommand(container.getDrivetrainSubsystem(), trajectory)
                 .deadlineWith(new ParallelDeadlineGroup(
                         new IntakeCommand(container.getIntakeSubsystem()),
-                        new FeederManagementCommand(container.getFeederSubsystem()))));
+                        new FeederManagementCommand(container.getFeederSubsystem(), container))));
     }
 
     private void followIntakeAndPreShoot(SequentialCommandGroup command, RobotContainer container,Trajectory trajectory) {
@@ -151,7 +174,7 @@ public class AutonomousChooser {
         command.addCommands(new FollowTrajectoryCommand(container.getDrivetrainSubsystem(), trajectory)
             .deadlineWith(
                 new SequentialCommandGroup(
-                    new FeederManagementCommand(container.getFeederSubsystem()).withTimeout(0.5),
+                    new FeederManagementCommand(container.getFeederSubsystem(), container).withTimeout(1.0),
                     new PreShootCommand(container.getPreShooterSubsystem(), container.getShooterSubsystem(), container.getFeederSubsystem())
                 ) 
             )
@@ -207,8 +230,8 @@ public class AutonomousChooser {
     }
 
     private void resetRobotPose(SequentialCommandGroup command, RobotContainer container, Trajectory trajectory) {
-        // command.addCommands(new InstantCommand(() ->
-        // container.getDrivetrainSubsystem().resetGyroAngle(trajectory.calculate(0.0).getPathState().getRotation())));
+        command.addCommands(new InstantCommand(() ->
+          container.getDrivetrainSubsystem().resetGyroAngle(trajectory.calculate(0.0).getPathState().getRotation().inverse())));
         command.addCommands(new InstantCommand(() -> container.getDrivetrainSubsystem().resetPose(
                 new RigidTransform2(trajectory.calculate(0.0).getPathState().getPosition(),
                         trajectory.calculate(0.0).getPathState().getRotation()))));
@@ -220,5 +243,6 @@ public class AutonomousChooser {
         TWO_LEFT,
         FIVE_RIGHT,
         FOUR_LEFT,
+        THREE_RIGHT
     }
 }

@@ -139,6 +139,7 @@ public final class Constants {
         public static final int kFeederPort = 33;
         public static final boolean kFeederInversion = false;
         public static final double kFeederFeedPercent = 0.25;
+        public static final double kFeederEjectPercent = 0.8;
         public static final double kFeederHighShotPercent = 0.35;
         public static final double kFeederLowShotPercent = 1;
         public static final double kFeederLimelightShotPercent = 1;
