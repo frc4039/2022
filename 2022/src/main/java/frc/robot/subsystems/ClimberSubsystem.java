@@ -9,7 +9,6 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ClimberConstants;
 
@@ -41,7 +40,7 @@ public class ClimberSubsystem extends SubsystemBase {
         m_climberMotorLeft.configFactoryDefault();
         m_climberMotorRight.setInverted(ClimberConstants.kClimberMotorRightInversion);
         m_climberMotorLeft.setInverted(ClimberConstants.kClimberMotorLeftInversion);
-         m_climberMotorRight.setNeutralMode(NeutralMode.Brake);
+        m_climberMotorRight.setNeutralMode(NeutralMode.Brake);
         m_climberMotorLeft.setNeutralMode(NeutralMode.Brake);
 
 
@@ -79,25 +78,25 @@ public class ClimberSubsystem extends SubsystemBase {
 
         ShuffleboardTab tab = Shuffleboard.getTab("Driver Readout");
         
-        topLeftBB = tab.add("Top Left B B", false)
+        topLeftBB = tab.add("Clmb TL BB", false)
+                .withPosition(0, 1)
+                .withSize(1, 1)
+                .getEntry();
+        topRightBB = tab.add("Clmb TR BB", false)
                 .withPosition(2, 1)
                 .withSize(1, 1)
                 .getEntry();
-        topRightBB = tab.add("Top Right B B", false)
-                .withPosition(3, 1)
+        bottomLeftLimit = tab.add("Clmb BL LS", false)
+                .withPosition(0, 2)
                 .withSize(1, 1)
                 .getEntry();
-        bottomLeftLimit = tab.add("Bottom Left Limit", false)
-                .withPosition(4, 1)
-                .withSize(1, 1)
-                .getEntry();
-        bottomRightLimit = tab.add("Bottom Right Limit", false)
-                .withPosition(5, 1)
+        bottomRightLimit = tab.add("Clmb BR LS", false)
+                .withPosition(2, 2)
                 .withSize(1, 1)
                 .getEntry();
         climberEnable = tab.add("Climber Enabled", false)
-                .withPosition(6, 1)
-                .withSize(1, 1)
+                .withPosition(1, 1)
+                .withSize(1, 2)
                 .getEntry();
     }
 
@@ -251,23 +250,11 @@ public class ClimberSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        
-        SmartDashboard.putNumber("Climber Right Encoder", getClimberRightEncoder());
-        SmartDashboard.putNumber("Climber Left Encoder", getClimberLeftEncoder());
-        /*
-        SmartDashboard.putBoolean("Climber Top Right BB", getTopRightBB());
-        SmartDashboard.putBoolean("Climber Top Left BB", getTopLeftBB());
-        SmartDashboard.putBoolean("Climber Bottom Right LS", getBottomRightLimit());
-        SmartDashboard.putBoolean("Climber Bottom Left LS", getBottomLeftLimit());
-        SmartDashboard.putBoolean("Climber Enable", getClimbeEnable());
-        */
         topRightBB.setBoolean(getTopRightBB());
         topLeftBB.setBoolean(getTopLeftBB());
         bottomLeftLimit.setBoolean(getBottomLeftLimit());
         bottomRightLimit.setBoolean(getBottomRightLimit());
         climberEnable.setBoolean(getClimbeEnable());
-
-
     }
 
 }

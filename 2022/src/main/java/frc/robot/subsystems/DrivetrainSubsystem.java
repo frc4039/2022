@@ -352,7 +352,6 @@ public class DrivetrainSubsystem implements Subsystem, UpdateManager.Updatable {
         odometryXEntry.setDouble(pose.translation.x);
         odometryYEntry.setDouble(pose.translation.y);
         odometryAngleEntry.setDouble(getPose().rotation.toDegrees());
-        //SmartDashboard.putNumber("Gyro heading", getPose().rotation.toDegrees());
         gyroHeading.setDouble(getPose().rotation.toDegrees());
 
         field.setRobotPose(
