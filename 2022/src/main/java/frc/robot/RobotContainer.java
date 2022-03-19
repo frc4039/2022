@@ -262,6 +262,5 @@ public class RobotContainer {
   }
 
   public void PrintAllValues(){
-    shooterSubsystem.printShooterValues();
   }
 }
