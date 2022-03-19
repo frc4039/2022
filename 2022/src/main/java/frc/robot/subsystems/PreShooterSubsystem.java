@@ -10,8 +10,6 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ShooterConstants;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
 public class PreShooterSubsystem extends SubsystemBase {
 
   private final TalonFX m_preShooterMotor;
@@ -40,10 +38,6 @@ public class PreShooterSubsystem extends SubsystemBase {
 
   public void stop() {
     m_preShooterMotor.set(ControlMode.PercentOutput, 0);
-  }
-  
-  public void printPreShooterValues() {
-    SmartDashboard.putNumber("PreShooter RPM", returnPreShooterCurrentRPM());
   }
 
   public double returnPreShooterCurrentRPM() {
@@ -83,7 +77,6 @@ public class PreShooterSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("PreShooter RPM", returnPreShooterCurrentRPM());
     
   }
 }

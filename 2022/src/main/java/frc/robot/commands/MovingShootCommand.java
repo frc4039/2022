@@ -7,7 +7,6 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.FeederSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
@@ -89,7 +88,6 @@ public class MovingShootCommand extends CommandBase {
   public void execute() {
     if(m_shooter.type == "limelight") {
       ShooterRPM = 8.5218 * m_limelight.getDistanceToTarget() + 1200 + RPMChange;
-      SmartDashboard.putNumber("Limelight RPM", ShooterRPM);
       m_shooter.shoot(ShooterRPM);
     }
     

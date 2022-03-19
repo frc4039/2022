@@ -15,7 +15,6 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class ShooterSubsystem extends SubsystemBase {
 
@@ -58,10 +57,10 @@ public class ShooterSubsystem extends SubsystemBase {
 
     ShuffleboardTab tab = Shuffleboard.getTab("Driver Readout");
         
-        shuffleShotType = tab.add("Shot Type", "none")
-                .withPosition(1, 2)
-                .withSize(1, 1)
-                .getEntry();
+    shuffleShotType = tab.add("Shot Type", "none")
+            .withPosition(0, 0)
+            .withSize(1, 1)
+            .getEntry();
   }
 
   public void shoot(double shooterRPM) {
@@ -105,10 +104,6 @@ public class ShooterSubsystem extends SubsystemBase {
 
   public void neutralShooterHood() {
     m_shooterHood.set(DoubleSolenoid.Value.kOff);
-  }
-
-  public void printShooterValues() {
-    SmartDashboard.putNumber("Shooter RPM", returnCurrentRPM());
   }
 
   public double returnCurrentRPM() {

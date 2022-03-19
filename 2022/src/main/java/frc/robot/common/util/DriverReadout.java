@@ -14,10 +14,10 @@ public class DriverReadout {
 
         tab.add("Autonomous Mode", container.getAutonomousChooser().getAutonomousModeChooser())
                 .withSize(2, 1)
-                .withPosition(2, 0);
+                .withPosition(1, 0);
         tab.add("Zero Gyroscope", new ZeroGyroscope(container.getDrivetrainSubsystem()))
                 .withSize(1, 1)
-                .withPosition(4, 0);
+                .withPosition(7, 0);
     }
 
     private static class ZeroGyroscope extends CommandBase {
