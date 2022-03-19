@@ -13,6 +13,9 @@ public class DriveCommand extends CommandBase {
     private Axis forward;
     private Axis strafe;
     private Axis rotation;
+    private SlewRateLimiter forwardRateLimiter = new SlewRateLimiter(3);
+    private SlewRateLimiter strafeRateLimiter = new SlewRateLimiter(3);
+    private SlewRateLimiter rotationRateLimiter = new SlewRateLimiter(3);
 
     public DriveCommand(DrivetrainSubsystem drivetrain, Axis forward, Axis strafe, Axis rotation) {
         this.forward = forward;
@@ -26,7 +29,7 @@ public class DriveCommand extends CommandBase {
 
     @Override
     public void execute() {
-        drivetrainSubsystem.drive(new Vector2(forward.get(true), strafe.get(true)), rotation.get(true) * Constants.kRotationScale, true);
+        drivetrainSubsystem.drive(new Vector2(forwardRateLimiter.calculate(forward.get(true)), strafeRateLimiter.calculate(strafe.get(true))), rotationRateLimiter.calculate(rotation.get(true)) * Constants.kRotationScale, true);
     }
 
     @Override

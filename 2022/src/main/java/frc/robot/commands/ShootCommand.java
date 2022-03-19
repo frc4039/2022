@@ -14,6 +14,8 @@ import frc.robot.subsystems.PreShooterSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.Constants.FeederConstants;
 import frc.robot.Constants.ShooterConstants;
+import frc.robot.common.util.InterpolatingDouble;
+import frc.robot.common.util.InterpolatingTreeMap;
 
 /**
  * An example command that uses an example subsystem.
@@ -23,6 +25,8 @@ public class ShootCommand extends CommandBase {
   private final ShooterSubsystem m_shooter;
   private final PreShooterSubsystem m_preShooter;
   private final LimelightSubsystem m_limelight;
+
+  private InterpolatingTreeMap<InterpolatingDouble, InterpolatingDouble> shotProfile = new InterpolatingTreeMap<InterpolatingDouble, InterpolatingDouble>();
 
   private double ShooterRPM = 0;
   private double PreShooterRPM = 0;
@@ -50,6 +54,12 @@ public class ShootCommand extends CommandBase {
   public void initialize() {
     m_shooter.shotType();
     m_preShooter.preShotType();
+
+    shotProfile.put(new InterpolatingDouble(105.0), new InterpolatingDouble(2100.0));
+    shotProfile.put(new InterpolatingDouble(135.0), new InterpolatingDouble(2300.0));
+    shotProfile.put(new InterpolatingDouble(185.0), new InterpolatingDouble(2700.0));
+    shotProfile.put(new InterpolatingDouble(250.0), new InterpolatingDouble(3200.0));
+    
 
     if (m_shooter.type == "high") {
       ShooterRPM = ShooterConstants.kfenderHighShotRPM;
@@ -85,7 +95,8 @@ public class ShootCommand extends CommandBase {
   @Override
   public void execute() {
     if(m_shooter.type == "limelight") {
-      ShooterRPM = 8.5218 * m_limelight.getDistanceToTarget() + 1200;
+      ShooterRPM = (double)(shotProfile.getInterpolated(new InterpolatingDouble(m_limelight.getDistanceToTarget())).value);
+      // ShooterRPM = 8.5218 * m_limelight.getDistanceToTarget() + 1200;
       m_shooter.shoot(ShooterRPM);
     }
     
