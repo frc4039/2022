@@ -95,12 +95,13 @@ public class ShootCommand extends CommandBase {
       && (m_preShooter.returnPreShooterCurrentRPM() < PreShooterRPM * (1 + preShooterRPMWindow))
       )  {
             m_feeder.runFeeder(feederPercent);
-    }
-    /*
-    else {
+    } else if (m_feeder.getBreakBeamPreShooter()) {
+      m_preShooter.reversePreShooter();
+      m_feeder.runFeeder(-FeederConstants.kFeederFeedPercent);
+    } else {
+      m_preShooter.preShotType();
       m_feeder.stop();
     }
-    */
   }
 
   // Called once the command ends or is interrupted.
