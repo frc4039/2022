@@ -15,7 +15,7 @@ public class RotateToLimelight extends CommandBase {
     private Axis strafe;
     LimelightSubsystem limelightSubsystem;
 
-    private PidController rotationController = new PidController(new PidConstants(0.035, 0.0, 0));
+    private PidController rotationController = new PidController(new PidConstants(0.04, 0.0, 0));
 
     public RotateToLimelight(DrivetrainSubsystem drivetrain, Axis forward, Axis strafe, LimelightSubsystem limelightSubsystem) {
         this.forward = forward;
@@ -37,7 +37,39 @@ public class RotateToLimelight extends CommandBase {
 
     @Override
     public void execute() {
-        rotationController.setSetpoint(drivetrainSubsystem.getPose().rotation.toRadians() - Math.toRadians(limelightSubsystem.getHorzAngleToGoal()));
+        if (limelightSubsystem.getValidTarget()) {
+            rotationController.setSetpoint(drivetrainSubsystem.getPose().rotation.toRadians() - Math.toRadians(limelightSubsystem.getHorzAngleToGoal()));
+        }
+        else {
+            double x = drivetrainSubsystem.getPose().translation.x;
+            double y = drivetrainSubsystem.getPose().translation.y;
+
+            if (x > 0 && y >= 0) {
+                rotationController.setSetpoint(Math.atan(y / x) + Math.PI);
+            }
+            else if (x < 0 && y >= 0) {
+                rotationController.setSetpoint(Math.atan(y / x));
+            }
+            else if (x < 0 && y <= 0) {
+                rotationController.setSetpoint(Math.atan(y / x));
+            }
+            else if (x > 0 && y <= 0) {
+                rotationController.setSetpoint(Math.atan(y / x) + Math.PI);
+            }
+            else if (x == 0){
+
+                if (y > 0) {
+                    rotationController.setSetpoint(-Math.PI / 2);
+                }
+                else {
+                    rotationController.setSetpoint(Math.PI / 2);
+                }
+            }
+            else {
+                rotationController.setSetpoint(0);
+            }
+        }
+        
         double rotationOutput = rotationController.calculate(drivetrainSubsystem.getPose().rotation.toRadians(), 0.02);
         drivetrainSubsystem.drive(new Vector2(forward.get(true), strafe.get(true)), rotationOutput, true);
     }

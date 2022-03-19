@@ -14,7 +14,7 @@ public class DriveWithSetRotationCommand extends CommandBase {
     private Axis strafe;
     private double rotation;
 
-    private PidController rotationController = new PidController(new PidConstants(0.035, 0.0, 0));
+    private PidController rotationController = new PidController(new PidConstants(0.04, 0.0, 0));
 
     public DriveWithSetRotationCommand(DrivetrainSubsystem drivetrain, Axis forward, Axis strafe, double rotation) {
         this.forward = forward;
