@@ -139,15 +139,15 @@ public class AutonomousTrajectories {
 
         threeRightSlowAuto2 = new Trajectory(
             new SimplePathBuilder(new Vector2(-27.114, -133.206), Rotation2.fromDegrees(-90))
-                .lineTo(new Vector2(-100, -100), Rotation2.fromDegrees(45))
+                .lineTo(new Vector2(-50, -100), Rotation2.fromDegrees(63))
                 .build(),
                 slowConstraints, SAMPLE_DISTANCE
         );
         
         threeRightSlowAuto3 = new Trajectory(
-            new SimplePathBuilder(new Vector2(-100, -100), Rotation2.fromDegrees(45))
-                .lineTo(new Vector2(-146, -105), Rotation2.fromDegrees(150))
-                .lineTo(new Vector2(-146, -105), Rotation2.fromDegrees(40))
+            new SimplePathBuilder(new Vector2(-50, -100), Rotation2.fromDegrees(63))
+                .lineTo(new Vector2(-100, -100), Rotation2.fromDegrees(180))
+                .lineTo(new Vector2(-50, -100), Rotation2.fromDegrees(63))
                 .build(),
                 slowConstraints, SAMPLE_DISTANCE
         );
