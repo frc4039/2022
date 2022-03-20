@@ -131,6 +131,16 @@ public final class Constants {
         public static final double kPreShooterFenderLowShotRPMWindow = 0.2;
         public static final double klimelightShotRPMWindow = 0.05;
         public static final double kPreShooterlimelightShotRPMWindow = 0.05;
+
+        public static final double kClosestKey = 105.0;
+        public static final double kCloseKey = 135.0;
+        public static final double kFarKey = 185.0;
+        public static final double kFarthestKey = 250.0;
+        public static final double kClosestValue = 2100.0;
+        public static final double kCloseValue = 2300.0;
+        public static final double kFarValue = 2700.0;
+        public static final double kFarthestValue = 3200.0;
+
     }
 
 

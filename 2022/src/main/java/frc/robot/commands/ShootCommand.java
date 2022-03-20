@@ -55,10 +55,10 @@ public class ShootCommand extends CommandBase {
     m_shooter.shotType();
     m_preShooter.preShotType();
 
-    shotProfile.put(new InterpolatingDouble(105.0), new InterpolatingDouble(2100.0));
-    shotProfile.put(new InterpolatingDouble(135.0), new InterpolatingDouble(2300.0));
-    shotProfile.put(new InterpolatingDouble(185.0), new InterpolatingDouble(2700.0));
-    shotProfile.put(new InterpolatingDouble(250.0), new InterpolatingDouble(3200.0));
+    shotProfile.put(new InterpolatingDouble(ShooterConstants.kClosestKey), new InterpolatingDouble(ShooterConstants.kClosestValue));
+    shotProfile.put(new InterpolatingDouble(ShooterConstants.kCloseKey), new InterpolatingDouble(ShooterConstants.kCloseValue));
+    shotProfile.put(new InterpolatingDouble(ShooterConstants.kFarKey), new InterpolatingDouble(ShooterConstants.kFarValue));
+    shotProfile.put(new InterpolatingDouble(ShooterConstants.kFarthestKey), new InterpolatingDouble(ShooterConstants.kFarthestValue));
     
 
     if (m_shooter.type == "high") {

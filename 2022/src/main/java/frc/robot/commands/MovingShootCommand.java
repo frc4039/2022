@@ -14,6 +14,8 @@ import frc.robot.subsystems.PreShooterSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.Constants.FeederConstants;
 import frc.robot.Constants.ShooterConstants;
+import frc.robot.common.util.InterpolatingDouble;
+import frc.robot.common.util.InterpolatingTreeMap;
 
 /**
  * An example command that uses an example subsystem.
@@ -23,6 +25,8 @@ public class MovingShootCommand extends CommandBase {
   private final ShooterSubsystem m_shooter;
   private final PreShooterSubsystem m_preShooter;
   private final LimelightSubsystem m_limelight;
+
+  private InterpolatingTreeMap<InterpolatingDouble, InterpolatingDouble> shotProfile = new InterpolatingTreeMap<InterpolatingDouble, InterpolatingDouble>();
 
   private double ShooterRPM = 0;
   private double PreShooterRPM = 0;
@@ -53,6 +57,11 @@ public class MovingShootCommand extends CommandBase {
     m_shooter.shotType();
     m_preShooter.preShotType();
 
+    shotProfile.put(new InterpolatingDouble(ShooterConstants.kClosestKey), new InterpolatingDouble(ShooterConstants.kClosestValue));
+    shotProfile.put(new InterpolatingDouble(ShooterConstants.kCloseKey), new InterpolatingDouble(ShooterConstants.kCloseValue));
+    shotProfile.put(new InterpolatingDouble(ShooterConstants.kFarKey), new InterpolatingDouble(ShooterConstants.kFarValue));
+    shotProfile.put(new InterpolatingDouble(ShooterConstants.kFarthestKey), new InterpolatingDouble(ShooterConstants.kFarthestValue));
+
     if (m_shooter.type == "high") {
       ShooterRPM = ShooterConstants.kfenderHighShotRPM;
       PreShooterRPM = ShooterConstants.kpreShooterFenderHighShotRPM;
@@ -68,7 +77,7 @@ public class MovingShootCommand extends CommandBase {
       feederPercent = FeederConstants.kFeederLowShotPercent;
     }
     else if (m_shooter.type == "limelight") {
-      ShooterRPM = 8.5218 * m_limelight.getDistanceToTarget() + 1200 + RPMChange;
+      ShooterRPM = (double)(shotProfile.getInterpolated(new InterpolatingDouble(m_limelight.getDistanceToTarget())).value) + RPMChange;
       PreShooterRPM = ShooterConstants.kpreShooterLimelightShotRPM;
       RPMWindow = ShooterConstants.klimelightShotRPMWindow;
       preShooterRPMWindow = ShooterConstants.kPreShooterlimelightShotRPMWindow;
