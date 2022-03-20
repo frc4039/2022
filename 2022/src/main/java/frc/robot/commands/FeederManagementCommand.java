@@ -41,6 +41,7 @@ public class FeederManagementCommand extends CommandBase {
 			m_feeder.stop();
 		}
 
+		/*
 		if(rumbleDebounce.calculate(m_feeder.getBreakBeamIntake())){
 			m_robotContainer.getDriverController().getRawJoystick().setRumble(GenericHID.RumbleType.kLeftRumble, 1.0);
 			m_robotContainer.getDriverController().getRawJoystick().setRumble(GenericHID.RumbleType.kRightRumble, 1.0);
@@ -52,6 +53,7 @@ public class FeederManagementCommand extends CommandBase {
 			m_robotContainer.getOperatorController().getRawJoystick().setRumble(GenericHID.RumbleType.kLeftRumble, 0.0);
 			m_robotContainer.getOperatorController().getRawJoystick().setRumble(GenericHID.RumbleType.kRightRumble, 0.0);
 		}
+		*/
 	}
 
 	// Called once the command ends or is interrupted.
