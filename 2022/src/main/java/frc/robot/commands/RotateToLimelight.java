@@ -3,6 +3,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
+import frc.robot.common.math.RigidTransform2;
 import frc.robot.common.math.Vector2;
 import frc.robot.Constants;
 import frc.robot.common.control.PidConstants;
@@ -38,7 +39,11 @@ public class RotateToLimelight extends CommandBase {
     @Override
     public void execute() {
         if (limelightSubsystem.getValidTarget()) {
-            rotationController.setSetpoint(drivetrainSubsystem.getPose().rotation.toRadians() - Math.toRadians(limelightSubsystem.getHorzAngleToGoal()));
+            double angleToGoal = drivetrainSubsystem.getPose().rotation.toRadians() - Math.toRadians(limelightSubsystem.getHorzAngleToGoal());
+
+            rotationController.setSetpoint(angleToGoal);
+
+            drivetrainSubsystem.resetPose(new RigidTransform2(new Vector2(Math.cos(angleToGoal + Math.PI) * limelightSubsystem.getDistanceToTarget(), Math.sin(angleToGoal + Math.PI) * limelightSubsystem.getDistanceToTarget()), drivetrainSubsystem.getPose().rotation));
         }
         else {
             double x = drivetrainSubsystem.getPose().translation.x;
@@ -72,6 +77,8 @@ public class RotateToLimelight extends CommandBase {
         
         double rotationOutput = rotationController.calculate(drivetrainSubsystem.getPose().rotation.toRadians(), 0.02);
         drivetrainSubsystem.drive(new Vector2(forward.get(true), strafe.get(true)), rotationOutput, true);
+
+
     }
 
     @Override
