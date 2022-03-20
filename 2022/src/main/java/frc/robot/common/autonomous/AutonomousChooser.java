@@ -28,6 +28,7 @@ public class AutonomousChooser {
         autonomousModeChooser.addOption("(RIGHT/HP) 5 Ball", AutonomousMode.FIVE_RIGHT);
         autonomousModeChooser.addOption("(LEFT/HP) 4 Ball", AutonomousMode.FOUR_LEFT);
         autonomousModeChooser.addOption("(RIGHT) 3 Ball", AutonomousMode.THREE_RIGHT);
+        autonomousModeChooser.addOption("(RIGHT) 3 Ball", AutonomousMode.THREE_RIGHT_SLOW);
     }
 
     public SendableChooser<AutonomousMode> getAutonomousModeChooser() {
@@ -127,6 +128,20 @@ public class AutonomousChooser {
         return command;
     }
 
+    private SequentialCommandGroup getThreeRightSlowAutoCommand(RobotContainer container) {
+        SequentialCommandGroup command = new SequentialCommandGroup();
+
+        resetRobotPose(command, container, trajectories.getFiveRightAuto1());
+        setShotTypeLimelight(command, container);
+        followAndIntake(command, container, trajectories.getFiveRightAuto1());
+        followAndPreShoot(command, container, trajectories.getThreeRightSlowAuto2());
+        shoot(command, container, 2.0);
+        followAndIntake(command, container, trajectories.getThreeRightSlowAuto3());
+        shoot(command, container, 2.0);
+        
+        return command;
+    }
+
     public Command getCommand(RobotContainer container) {
         switch (autonomousModeChooser.getSelected()) {
             case TWO_RIGHT:
@@ -139,6 +154,8 @@ public class AutonomousChooser {
                 return getFourLeftAutoCommand(container);
             case THREE_RIGHT:
                 return getThreeRightAutoCommand(container);
+            case THREE_RIGHT_SLOW:
+                return getThreeRightSlowAutoCommand(container);
             default:
                 return getNoAutoCommand(container);
         }
@@ -243,6 +260,7 @@ public class AutonomousChooser {
         TWO_LEFT,
         FIVE_RIGHT,
         FOUR_LEFT,
-        THREE_RIGHT
+        THREE_RIGHT,
+        THREE_RIGHT_SLOW
     }
 }
