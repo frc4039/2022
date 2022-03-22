@@ -352,11 +352,11 @@ public class DrivetrainSubsystem implements Subsystem, UpdateManager.Updatable {
     }
 
     public Integer ballScheduler(){
-        int matchtime = (int)DriverStation.getMatchTime() - 30;
-        if (matchtime < 30) {
-            matchtime = 0;
+        double balls = (135 - DriverStation.getMatchTime())/5.25;
+        if (balls>20){
+            balls=20;
         }
-        return (135-matchtime)/5;
+        return (int)balls;
     }
 
     @Override
