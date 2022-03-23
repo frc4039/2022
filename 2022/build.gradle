@@ -2,7 +2,7 @@ import edu.wpi.first.gradlerio.deploy.roborio.RoboRIO
 
 plugins {
     id "java-library"
-    id "edu.wpi.first.GradleRIO" version "2022.1.1"
+    id "edu.wpi.first.GradleRIO" version "2022.4.1"
     id "net.ltgt.errorprone" version "1.1.1"
 }
 
@@ -38,6 +38,20 @@ deploy {
             }
         }
     }
+}
+
+task createButtonFile (type: JavaExec) {
+    group = "Execution"
+    description = "Create button mapping text file"
+    classpath = sourceSets.main.runtimeClasspath
+    main = "frc.robot.MakeButtonList"
+}
+
+tasks.named('build').configure {
+    dependsOn createButtonFile
+}
+tasks.named('deploy').configure {
+    dependsOn createButtonFile
 }
 
 def deployArtifact = deploy.targets.roborio.artifacts.frcJava

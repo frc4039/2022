@@ -20,7 +20,7 @@ public abstract class TrajectoryFollower<DriveSignalType> {
      * <p>
      * Protected by {@link #trajectoryLock}
      */
-    private double startTime = Double.NaN;
+    public double startTime = Double.NaN;
 
     /**
      * Calculates the drive signal required to follow the trajectory.

@@ -1,39 +1,23 @@
 package frc.robot.common.util;
 
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.common.math.Rotation2;
-import frc.robot.common.util.Side;
 
 public class DriverReadout {
-    private final SendableChooser<Side> loadingBayChooser = new SendableChooser<>();
 
     public DriverReadout(RobotContainer container) {
         ShuffleboardTab tab = Shuffleboard.getTab("Driver Readout");
 
-        loadingBayChooser.setDefaultOption("Left", Side.LEFT);
-        loadingBayChooser.addOption("Right", Side.RIGHT);
-
         tab.add("Autonomous Mode", container.getAutonomousChooser().getAutonomousModeChooser())
                 .withSize(2, 1)
-                .withPosition(2, 0);
-        tab.add("Loading Station Bay", loadingBayChooser)
-                .withSize(2, 1)
-                .withPosition(2, 1);
-
+                .withPosition(1, 0);
         tab.add("Zero Gyroscope", new ZeroGyroscope(container.getDrivetrainSubsystem()))
-                .withSize(2, 1)
-                .withPosition(4, 0);
-    }
-
-    public Side getSelectedLoadingBay() {
-        return loadingBayChooser.getSelected();
+                .withSize(1, 1)
+                .withPosition(6, 1);
     }
 
     private static class ZeroGyroscope extends CommandBase {

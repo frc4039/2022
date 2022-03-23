@@ -1,10 +1,11 @@
 package frc.robot.common.input;
 
 import edu.wpi.first.wpilibj2.command.button.Button;
+import frc.robot.Constants;
 import frc.robot.common.Utilities;
 
 public abstract class Axis {
-	public static final double DEADBAND = 0.025;
+	public static final double DEADBAND = Constants.kDeadband;
 
 	private boolean inverted = false;
 	private double scale = 1.0;

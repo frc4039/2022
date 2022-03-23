@@ -4,17 +4,24 @@ import com.google.errorprone.annotations.concurrent.GuardedBy;
 import frc.robot.common.swervelib.Mk4SwerveModuleHelper;
 import frc.robot.common.swervelib.SwerveModule;
 import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.Constants;
 import frc.robot.common.control.*;
+import frc.robot.common.control.Trajectory.State;
 import frc.robot.common.drivers.Gyroscope;
+import frc.robot.common.drivers.NavX;
 import frc.robot.common.kinematics.ChassisVelocity;
 import frc.robot.common.kinematics.SwerveKinematics;
 import frc.robot.common.kinematics.SwerveOdometry;
@@ -23,20 +30,18 @@ import frc.robot.common.math.Rotation2;
 import frc.robot.common.math.Vector2;
 import frc.robot.common.UpdateManager;
 import frc.robot.common.util.*;
-import frc.robot.common.drivers.NavX;
-
 
 import java.util.Optional;
 
-
+//TODO: 2910 had the trackwidth and wheelbase as 1.0 on their robot, but this should be the robot dimensions in inches
 public class DrivetrainSubsystem implements Subsystem, UpdateManager.Updatable {
-    public static final double TRACKWIDTH = 1.0;
-    public static final double WHEELBASE = 1.0;
+    public static final double TRACKWIDTH = 17.5;
+    public static final double WHEELBASE = 17.5;
 
     public static final DrivetrainFeedforwardConstants FEEDFORWARD_CONSTANTS = new DrivetrainFeedforwardConstants(
-            0.042746,
-            0.0032181,
-            0.30764
+            0.066264,
+            0.014057,
+            0.20927
     );
 
     public static final TrajectoryConstraint[] TRAJECTORY_CONSTRAINTS = {
@@ -48,8 +53,8 @@ public class DrivetrainSubsystem implements Subsystem, UpdateManager.Updatable {
     private static final int MAX_LATENCY_COMPENSATION_MAP_ENTRIES = 25;
 
     private final HolonomicMotionProfiledTrajectoryFollower follower = new HolonomicMotionProfiledTrajectoryFollower(
-            new PidConstants(0.4, 0.0, 0.025),
-            new PidConstants(5.0, 0.0, 0.0),
+            new PidConstants(0.1, 0.0, 0.025),
+            new PidConstants(0.4, 0.0, 0.06),
             new HolonomicFeedforward(FEEDFORWARD_CONSTANTS)
     );
 
@@ -87,6 +92,8 @@ public class DrivetrainSubsystem implements Subsystem, UpdateManager.Updatable {
     @GuardedBy("kinematicsLock")
     private double angularVelocity = 0.0;
 
+    public Field2d field = new Field2d();
+
     private final Object stateLock = new Object();
     @GuardedBy("stateLock")
     private HolonomicDriveSignal driveSignal = null;
@@ -95,20 +102,23 @@ public class DrivetrainSubsystem implements Subsystem, UpdateManager.Updatable {
     private final NetworkTableEntry odometryXEntry;
     private final NetworkTableEntry odometryYEntry;
     private final NetworkTableEntry odometryAngleEntry;
+    private final NetworkTableEntry gyroHeading;
+    private final NetworkTableEntry ballSchedule;
 
     public DrivetrainSubsystem() {
         synchronized (sensorLock) {
-            gyroscope.setInverted(false);
+            gyroscope.setInverted(true);
         }
 
         ShuffleboardTab tab = Shuffleboard.getTab("Drivetrain");
+        field.setRobotPose(Constants.GLASS_OFFSET_X, Constants.GLASS_OFFSET_Y, new Rotation2d(0));
+        SmartDashboard.putData(field);
 
-        //TODO: update gear ratio
         SwerveModule frontLeftModule = Mk4SwerveModuleHelper.createNeo(
                 tab.getLayout("Front Left Module", BuiltInLayouts.kList)
                         .withPosition(2, 0)
                         .withSize(2, 4),
-                Mk4SwerveModuleHelper.GearRatio.L4,
+                Mk4SwerveModuleHelper.GearRatio.L2,
                 Constants.DRIVETRAIN_FRONT_LEFT_DRIVE_MOTOR,
                 Constants.DRIVETRAIN_FRONT_LEFT_ANGLE_MOTOR,
                 Constants.DRIVETRAIN_FRONT_LEFT_ENCODER_PORT,
@@ -118,7 +128,7 @@ public class DrivetrainSubsystem implements Subsystem, UpdateManager.Updatable {
                 tab.getLayout("Front Right Module", BuiltInLayouts.kList)
                         .withPosition(4, 0)
                         .withSize(2, 4),
-                Mk4SwerveModuleHelper.GearRatio.L4,
+                Mk4SwerveModuleHelper.GearRatio.L2,
                 Constants.DRIVETRAIN_FRONT_RIGHT_DRIVE_MOTOR,
                 Constants.DRIVETRAIN_FRONT_RIGHT_ANGLE_MOTOR,
                 Constants.DRIVETRAIN_FRONT_RIGHT_ENCODER_PORT,
@@ -128,7 +138,7 @@ public class DrivetrainSubsystem implements Subsystem, UpdateManager.Updatable {
                 tab.getLayout("Back Left Module", BuiltInLayouts.kList)
                         .withPosition(6, 0)
                         .withSize(2, 4),
-                Mk4SwerveModuleHelper.GearRatio.L4,
+                Mk4SwerveModuleHelper.GearRatio.L2,
                 Constants.DRIVETRAIN_BACK_LEFT_DRIVE_MOTOR,
                 Constants.DRIVETRAIN_BACK_LEFT_ANGLE_MOTOR,
                 Constants.DRIVETRAIN_BACK_LEFT_ENCODER_PORT,
@@ -138,7 +148,7 @@ public class DrivetrainSubsystem implements Subsystem, UpdateManager.Updatable {
                 tab.getLayout("Back Right Module", BuiltInLayouts.kList)
                         .withPosition(8, 0)
                         .withSize(2, 4),
-                Mk4SwerveModuleHelper.GearRatio.L4,
+                Mk4SwerveModuleHelper.GearRatio.L2,
                 Constants.DRIVETRAIN_BACK_RIGHT_DRIVE_MOTOR,
                 Constants.DRIVETRAIN_BACK_RIGHT_ANGLE_MOTOR,
                 Constants.DRIVETRAIN_BACK_RIGHT_ENCODER_PORT,
@@ -190,6 +200,17 @@ public class DrivetrainSubsystem implements Subsystem, UpdateManager.Updatable {
         });
 
         tab.addNumber("Average Velocity", this::getAverageAbsoluteValueVelocity);
+
+        ShuffleboardTab DRtab = Shuffleboard.getTab("Driver Readout");
+        gyroHeading = DRtab.add("Gyro Heading", 0.0)
+            .withPosition(6,0)
+            .withSize(1,1)
+            .getEntry();
+        ballSchedule = DRtab.add("Ball Schedule", 0)
+            .withPosition(7,0)
+            .withSize(1,1)
+            .getEntry();
+        
     }
 
     public RigidTransform2 getPose() {
@@ -305,6 +326,7 @@ public class DrivetrainSubsystem implements Subsystem, UpdateManager.Updatable {
     public void update(double time, double dt) {
         updateOdometry(time, dt);
 
+
         HolonomicDriveSignal driveSignal;
         Optional<HolonomicDriveSignal> trajectorySignal = follower.update(
                 getPose(),
@@ -329,12 +351,37 @@ public class DrivetrainSubsystem implements Subsystem, UpdateManager.Updatable {
         updateModules(driveSignal, dt);
     }
 
+    public Integer ballScheduler(){
+        double balls = (135 - DriverStation.getMatchTime())/5.25;
+        if (balls>20){
+            balls=20;
+        }
+        return (int)balls;
+    }
+
     @Override
     public void periodic() {
         RigidTransform2 pose = getPose();
         odometryXEntry.setDouble(pose.translation.x);
         odometryYEntry.setDouble(pose.translation.y);
         odometryAngleEntry.setDouble(getPose().rotation.toDegrees());
+        gyroHeading.setDouble(getPose().rotation.toDegrees());
+        ballSchedule.setNumber(ballScheduler());
+
+        field.setRobotPose(
+            pose.translation.x * Constants.GLASS_SCALE + Constants.GLASS_OFFSET_X,
+            pose.translation.y * Constants.GLASS_SCALE + Constants.GLASS_OFFSET_Y,
+            new Rotation2d(pose.rotation.toRadians())
+        );
+        Optional<Trajectory> traj = follower.getCurrentTrajectory();
+        if(traj.isPresent()) {
+            State s = traj.get().calculate(Timer.getFPGATimestamp() - follower.startTime);
+            field.getObject("Target").setPose(
+                s.getPathState().getPosition().x * Constants.GLASS_SCALE + Constants.GLASS_OFFSET_X,
+                s.getPathState().getPosition().y * Constants.GLASS_SCALE + Constants.GLASS_OFFSET_Y,
+                new Rotation2d(s.getPathState().getRotation().toRadians())
+            );
+        }
     }
 
     public HolonomicMotionProfiledTrajectoryFollower getFollower() {

@@ -4,9 +4,15 @@
 
 package frc.robot;
 
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.commands.StopEverythingCommand;
+import frc.robot.common.UpdateManager;
+import frc.robot.common.math.RigidTransform2;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -15,9 +21,25 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
  * project.
  */
 public class Robot extends TimedRobot {
+  private static Robot instance = null;
+
   private Command m_autonomousCommand;
 
-  private RobotContainer m_robotContainer;
+  private RobotContainer m_robotContainer = new RobotContainer();
+
+  private Compressor pcmCompressor = new Compressor(Constants.kPCMCANID, PneumaticsModuleType.CTREPCM);
+
+  private UpdateManager updateManager = new UpdateManager(
+      m_robotContainer.getDrivetrainSubsystem()
+  );
+
+  public Robot() {
+    instance = this;
+  }
+
+  public static Robot getInstance(){
+    return instance;
+  }
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -27,7 +49,14 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
-    m_robotContainer = new RobotContainer();
+    
+    
+    
+    //TODO: removed based on 2910 code, probably have to add all subsystems to UpdateManager
+    //m_robotContainer = new RobotContainer();
+    updateManager.startLoop(5.0e-3);
+    pcmCompressor.enableDigital();
+    CameraServer.startAutomaticCapture();
   }
 
   /**
@@ -44,11 +73,15 @@ public class Robot extends TimedRobot {
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
+    m_robotContainer.PrintAllValues();
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+    m_robotContainer.disableClimber();
+    m_robotContainer.stopEverything();
+  }
 
   @Override
   public void disabledPeriodic() {}
@@ -56,7 +89,8 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
-
+    m_robotContainer.getDrivetrainSubsystem().resetPose(RigidTransform2.ZERO);
+    m_robotContainer.getAutonomousCommand().schedule();
   }
 
   /** This function is called periodically during autonomous. */
@@ -76,7 +110,9 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+    
+  }
 
   @Override
   public void testInit() {
