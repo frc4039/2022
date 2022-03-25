@@ -50,6 +50,7 @@ public class AutonomousChooser {
         setShotTypeLimelight(command, container);
         followAndIntake(command, container, trajectories.getTwoRightAuto1());
         followAndPreShoot(command, container, trajectories.getTwoRightAuto2());
+        aim(command, container, 1.0);
         aimAndShoot(command, container, 3.0);
         follow(command, container, trajectories.getTwoRightAuto3());
 
@@ -63,6 +64,7 @@ public class AutonomousChooser {
         setShotTypeLimelight(command, container);
         followAndIntake(command, container, trajectories.getTwoLeftAuto1());
         followAndPreShoot(command, container, trajectories.getTwoLeftAuto2());
+        aim(command, container, 1.0);
         aimAndShoot(command, container, 3.0);
 
         return command;
@@ -238,6 +240,11 @@ public class AutonomousChooser {
                         .withTimeout(timeout)));
     }
 
+    private void aim(SequentialCommandGroup command, RobotContainer container, double timeout) {
+        command.addCommands(
+            new RotateToLimelight(container.getDrivetrainSubsystem(), container.getDriveForwardAxis(), container.getDriveStrafeAxis(), container.getLimelightSubsystem()).withTimeout(timeout)
+        );
+    }
     private void followIntakeAndShoot(SequentialCommandGroup command, RobotContainer container, Trajectory trajectory, double RPMChange) {
         command.addCommands(new FollowTrajectoryCommand(container.getDrivetrainSubsystem(), trajectory)
                 .deadlineWith(new ParallelCommandGroup(
