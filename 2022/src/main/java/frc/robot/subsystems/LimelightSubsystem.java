@@ -1,9 +1,13 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.common.util.DriverReadout;
 
 
 
@@ -16,11 +20,19 @@ public class LimelightSubsystem extends SubsystemBase {
     private static final double LIMELIGHT_HEIGHT = 25.25;
     private static final double LIMELIGHT_ANGLE = 31.6;
 
+    private final NetworkTableEntry limeLightTableEntry;
 
     public LimelightSubsystem() {
         
         table = NetworkTableInstance.getDefault().getTable("limelight");
-        table.getEntry("pipeline").setNumber(0);    
+        table.getEntry("pipeline").setNumber(0);
+        
+        ShuffleboardTab tab = Shuffleboard.getTab("Driver Readout");
+        
+        limeLightTableEntry = tab.add("Limelight Working", false)
+                .withPosition(4, 2)
+                .withSize(1, 1)
+                .getEntry();
     }
 
     public double getHorzAngleToGoal() {
@@ -79,5 +91,7 @@ public class LimelightSubsystem extends SubsystemBase {
     public void periodic() {
         SmartDashboard.putNumber("LL Latency", getLatency());
         SmartDashboard.putNumber("Distance To Goal", getDistanceToTarget());
+        
+        limeLightTableEntry.setBoolean(getLatency() != 0);
     }
 }
