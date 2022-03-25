@@ -8,6 +8,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.FeederSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.PreShooterSubsystem;
@@ -23,6 +24,7 @@ public class MovingShootCommand extends CommandBase {
   private final ShooterSubsystem m_shooter;
   private final PreShooterSubsystem m_preShooter;
   private final LimelightSubsystem m_limelight;
+  private final DrivetrainSubsystem m_drivetrain;
 
   private double ShooterRPM = 0;
   private double PreShooterRPM = 0;
@@ -30,18 +32,20 @@ public class MovingShootCommand extends CommandBase {
   private double preShooterRPMWindow = 0;
   private double feederPercent;
   private double RPMChange;
+  private double targetDistance;
 
   /**
    * Creates a new Shoot Command.
    *
    * @param subsystem 
    */
-  public MovingShootCommand(ShooterSubsystem shooter, PreShooterSubsystem preShooter, FeederSubsystem feeder, LimelightSubsystem limelight, double RPMChange) {
+  public MovingShootCommand(ShooterSubsystem shooter, PreShooterSubsystem preShooter, FeederSubsystem feeder, LimelightSubsystem limelight, DrivetrainSubsystem drivetrain, double RPMChange) {
     m_shooter = shooter;
     m_preShooter = preShooter;
     m_feeder = feeder;
     m_limelight = limelight;
     this.RPMChange = RPMChange;
+    m_drivetrain = drivetrain;
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_shooter, m_preShooter, m_feeder);
@@ -52,6 +56,13 @@ public class MovingShootCommand extends CommandBase {
   public void initialize() {
     m_shooter.shotType();
     m_preShooter.preShotType();
+
+    if (m_limelight.getValidTarget()) {
+      targetDistance = m_limelight.getDistanceToTarget();
+    }
+    else {
+      targetDistance = Math.sqrt(Math.pow(m_drivetrain.getPose().translation.x, 2) + Math.pow(m_drivetrain.getPose().translation.y, 2));
+    }
 
     if (m_shooter.type == "high") {
       ShooterRPM = ShooterConstants.kfenderHighShotRPM;
@@ -68,7 +79,7 @@ public class MovingShootCommand extends CommandBase {
       feederPercent = FeederConstants.kFeederLowShotPercent;
     }
     else if (m_shooter.type == "limelight") {
-      ShooterRPM = 8.5218 * m_limelight.getDistanceToTarget() + 1200 + RPMChange;
+      ShooterRPM = 8.5218 * targetDistance + 1200 + RPMChange;
       PreShooterRPM = ShooterConstants.kpreShooterLimelightShotRPM;
       RPMWindow = ShooterConstants.klimelightShotRPMWindow;
       preShooterRPMWindow = ShooterConstants.kPreShooterlimelightShotRPMWindow;
@@ -86,8 +97,17 @@ public class MovingShootCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+
     if(m_shooter.type == "limelight") {
-      ShooterRPM = 8.5218 * m_limelight.getDistanceToTarget() + 1200 + RPMChange;
+
+      if (m_limelight.getValidTarget()) {
+        targetDistance = m_limelight.getDistanceToTarget();
+      }
+      else {
+        targetDistance = Math.sqrt(Math.pow(m_drivetrain.getPose().translation.x, 2) + Math.pow(m_drivetrain.getPose().translation.y, 2));
+      }
+      
+      ShooterRPM = 8.5218 * targetDistance + 1200 + RPMChange;
       m_shooter.shoot(ShooterRPM);
     }
     
