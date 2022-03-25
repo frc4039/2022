@@ -4,6 +4,7 @@ import com.google.errorprone.annotations.concurrent.GuardedBy;
 import frc.robot.common.swervelib.Mk4SwerveModuleHelper;
 import frc.robot.common.swervelib.SwerveModule;
 import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.Timer;
@@ -29,7 +30,6 @@ import frc.robot.common.math.Rotation2;
 import frc.robot.common.math.Vector2;
 import frc.robot.common.UpdateManager;
 import frc.robot.common.util.*;
-
 
 import java.util.Optional;
 
@@ -103,6 +103,7 @@ public class DrivetrainSubsystem implements Subsystem, UpdateManager.Updatable {
     private final NetworkTableEntry odometryYEntry;
     private final NetworkTableEntry odometryAngleEntry;
     private final NetworkTableEntry gyroHeading;
+    private final NetworkTableEntry ballSchedule;
 
     public DrivetrainSubsystem() {
         synchronized (sensorLock) {
@@ -203,6 +204,10 @@ public class DrivetrainSubsystem implements Subsystem, UpdateManager.Updatable {
         ShuffleboardTab DRtab = Shuffleboard.getTab("Driver Readout");
         gyroHeading = DRtab.add("Gyro Heading", 0.0)
             .withPosition(6,0)
+            .withSize(1,1)
+            .getEntry();
+        ballSchedule = DRtab.add("Ball Schedule", 0)
+            .withPosition(7,0)
             .withSize(1,1)
             .getEntry();
         
@@ -346,6 +351,14 @@ public class DrivetrainSubsystem implements Subsystem, UpdateManager.Updatable {
         updateModules(driveSignal, dt);
     }
 
+    public Integer ballScheduler(){
+        double balls = (135 - DriverStation.getMatchTime())/5.25;
+        if (balls>20){
+            balls=20;
+        }
+        return (int)balls;
+    }
+
     @Override
     public void periodic() {
         RigidTransform2 pose = getPose();
@@ -353,6 +366,7 @@ public class DrivetrainSubsystem implements Subsystem, UpdateManager.Updatable {
         odometryYEntry.setDouble(pose.translation.y);
         odometryAngleEntry.setDouble(getPose().rotation.toDegrees());
         gyroHeading.setDouble(getPose().rotation.toDegrees());
+        ballSchedule.setNumber(ballScheduler());
 
         field.setRobotPose(
             pose.translation.x * Constants.GLASS_SCALE + Constants.GLASS_OFFSET_X,

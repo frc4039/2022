@@ -17,7 +17,7 @@ public class DriverReadout {
                 .withPosition(1, 0);
         tab.add("Zero Gyroscope", new ZeroGyroscope(container.getDrivetrainSubsystem()))
                 .withSize(1, 1)
-                .withPosition(7, 0);
+                .withPosition(6, 1);
     }
 
     private static class ZeroGyroscope extends CommandBase {
