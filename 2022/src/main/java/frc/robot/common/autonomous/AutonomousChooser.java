@@ -78,18 +78,16 @@ public class AutonomousChooser {
         followAndIntake(command, container, trajectories.getFiveRightAuto1());
         followAndPreShoot(command, container, trajectories.getFiveRightAuto2());
         
-        followIntakeAndShoot(command, container, trajectories.getFiveRightAuto3(), -400);
-        
-        /*
+        //followIntakeAndShoot(command, container, trajectories.getFiveRightAuto3(), -400);
+                
         shoot(command,container, 1.0);
         followIntakeAndPreShoot(command, container, trajectories.getFiveRightAuto3());
-        */
-
+        
         shoot(command, container, 0.5);
         followAndIntake(command, container, trajectories.getFiveRightAuto4());
         intake(command, container, 1.0);
         followAndPreShoot(command, container, trajectories.getFiveRightAuto5());
-        aimAndShoot(command, container, 2.0);
+        shoot(command, container, 2.0);
         
         return command;
     }
@@ -202,7 +200,7 @@ public class AutonomousChooser {
 
     private void shoot(SequentialCommandGroup command, RobotContainer container, double timeout) {
         command.addCommands(new ShootCommand(container.getShooterSubsystem(), container.getPreShooterSubsystem(),
-                container.getFeederSubsystem(), container.getLimelightSubsystem(), container.getDrivetrainSubsystem())
+                container.getFeederSubsystem(), container.getLimelightSubsystem(), container.getDrivetrainSubsystem(), container)
                         .withTimeout(timeout));
     }
 
@@ -236,7 +234,7 @@ public class AutonomousChooser {
         command.addCommands(new ParallelRaceGroup(
             new RotateToLimelight(container.getDrivetrainSubsystem(), container.getDriveForwardAxis(), container.getDriveStrafeAxis(), container.getLimelightSubsystem(), false),
             new ShootCommand(container.getShooterSubsystem(), container.getPreShooterSubsystem(),
-                container.getFeederSubsystem(), container.getLimelightSubsystem(), container.getDrivetrainSubsystem())
+                container.getFeederSubsystem(), container.getLimelightSubsystem(), container.getDrivetrainSubsystem(), container)
                         .withTimeout(timeout)));
     }
 
