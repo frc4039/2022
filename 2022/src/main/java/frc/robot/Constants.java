@@ -50,6 +50,8 @@ public final class Constants {
     public static final double GLASS_OFFSET_Y = 5;
     public static final double GLASS_SCALE = 0.0254;
 
+    public static final double ROBOT_CYCLE_TIME = 0.02;
+
     public static final class ClimberConstants{
         public static final TalonFXInvertType kClimberMotorRightInversion = TalonFXInvertType.CounterClockwise;
         public static final TalonFXInvertType kClimberMotorLeftInversion = TalonFXInvertType.Clockwise;

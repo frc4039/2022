@@ -1,5 +1,9 @@
 package frc.robot.commands;
 
+import java.sql.Time;
+
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
@@ -17,6 +21,13 @@ public class RotateToLimelight extends CommandBase {
     LimelightSubsystem limelightSubsystem;
 
     private PidController rotationController = new PidController(new PidConstants(0.04, 0.0, 0));
+
+    private double angularVelocityToGoal;
+    private double linearVelocityToGoal;
+
+    private double lastCycleDistance;
+    private double lastCycleAngle;
+    
 
     public RotateToLimelight(DrivetrainSubsystem drivetrain, Axis forward, Axis strafe, LimelightSubsystem limelightSubsystem) {
         this.forward = forward;
@@ -38,6 +49,24 @@ public class RotateToLimelight extends CommandBase {
 
     @Override
     public void execute() {
+
+        double angle = Math.atan(drivetrainSubsystem.getPose().translation.y / drivetrainSubsystem.getPose().translation.x);
+        angularVelocityToGoal = (angle - lastCycleAngle) / Constants.ROBOT_CYCLE_TIME;
+        lastCycleAngle = angle;
+
+        if (limelightSubsystem.getValidTarget()) {
+            double distance = limelightSubsystem.getDistanceToTarget();
+            linearVelocityToGoal = (distance - lastCycleDistance) / Constants.ROBOT_CYCLE_TIME;
+            lastCycleDistance = distance;
+        }
+        else {
+            double distance = Math.sqrt(Math.pow(drivetrainSubsystem.getPose().translation.x, 2) + Math.pow(drivetrainSubsystem.getPose().translation.y, 2));
+            linearVelocityToGoal = (distance - lastCycleDistance) / Constants.ROBOT_CYCLE_TIME;
+            lastCycleDistance = distance;
+        }
+        SmartDashboard.putNumber("Velocity To Goal", linearVelocityToGoal);
+        SmartDashboard.putNumber("Angular Velocity To Goal", angularVelocityToGoal);
+
         if (limelightSubsystem.getValidTarget()) {
             double angleToGoal = drivetrainSubsystem.getPose().rotation.toRadians() - Math.toRadians(limelightSubsystem.getHorzAngleToGoal());
 
