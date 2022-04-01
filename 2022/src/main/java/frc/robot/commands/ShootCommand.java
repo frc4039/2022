@@ -8,6 +8,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.FeederSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.PreShooterSubsystem;
@@ -25,6 +26,7 @@ public class ShootCommand extends CommandBase {
   private final ShooterSubsystem m_shooter;
   private final PreShooterSubsystem m_preShooter;
   private final LimelightSubsystem m_limelight;
+  private final DrivetrainSubsystem m_drivetrain;
 
   private InterpolatingTreeMap<InterpolatingDouble, InterpolatingDouble> shotProfile = new InterpolatingTreeMap<InterpolatingDouble, InterpolatingDouble>();
 
@@ -32,18 +34,19 @@ public class ShootCommand extends CommandBase {
   private double PreShooterRPM = 0;
   private double RPMWindow = 0;
   private double preShooterRPMWindow = 0;
-  private double feederPercent;
-
+  private double feederPercent = 0;
+  private double targetDistance = 0;
   /**
    * Creates a new Shoot Command.
    *
    * @param subsystem 
    */
-  public ShootCommand(ShooterSubsystem shooter, PreShooterSubsystem preShooter, FeederSubsystem feeder, LimelightSubsystem limelight) {
+  public ShootCommand(ShooterSubsystem shooter, PreShooterSubsystem preShooter, FeederSubsystem feeder, LimelightSubsystem limelight, DrivetrainSubsystem drivetrain) {
     m_shooter = shooter;
     m_preShooter = preShooter;
     m_feeder = feeder;
     m_limelight = limelight;
+    m_drivetrain = drivetrain;
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_shooter, m_preShooter, m_feeder);
@@ -60,6 +63,12 @@ public class ShootCommand extends CommandBase {
     shotProfile.put(new InterpolatingDouble(ShooterConstants.kFarKey), new InterpolatingDouble(ShooterConstants.kFarValue));
     shotProfile.put(new InterpolatingDouble(ShooterConstants.kFarthestKey), new InterpolatingDouble(ShooterConstants.kFarthestValue));
     
+    if (m_limelight.getValidTarget()) {
+      targetDistance = m_limelight.getDistanceToTarget();
+    }
+    else {
+      targetDistance = Math.sqrt(Math.pow(m_drivetrain.getPose().translation.x, 2) + Math.pow(m_drivetrain.getPose().translation.y, 2));
+    }
 
     if (m_shooter.type == "high") {
       ShooterRPM = ShooterConstants.kfenderHighShotRPM;
@@ -76,7 +85,7 @@ public class ShootCommand extends CommandBase {
       feederPercent = FeederConstants.kFeederLowShotPercent;
     }
     else if (m_shooter.type == "limelight") {
-      ShooterRPM = (double)(shotProfile.getInterpolated(new InterpolatingDouble(m_limelight.getDistanceToTarget())).value);
+      ShooterRPM = (double)(shotProfile.getInterpolated(new InterpolatingDouble(targetDistance)).value);
       PreShooterRPM = ShooterConstants.kpreShooterLimelightShotRPM;
       RPMWindow = ShooterConstants.klimelightShotRPMWindow;
       preShooterRPMWindow = ShooterConstants.kPreShooterlimelightShotRPMWindow;
@@ -95,9 +104,16 @@ public class ShootCommand extends CommandBase {
   @Override
   public void execute() {
     
-  
     if(m_shooter.type == "limelight") {
-      ShooterRPM = (double)(shotProfile.getInterpolated(new InterpolatingDouble(m_limelight.getDistanceToTarget())).value);
+      
+      if (m_limelight.getValidTarget()) {
+        targetDistance = m_limelight.getDistanceToTarget();
+      }
+      else {
+        targetDistance = Math.sqrt(Math.pow(m_drivetrain.getPose().translation.x, 2) + Math.pow(m_drivetrain.getPose().translation.y, 2));
+      }
+
+      ShooterRPM = (double)(shotProfile.getInterpolated(new InterpolatingDouble(targetDistance)).value);
       // ShooterRPM = 8.5218 * m_limelight.getDistanceToTarget() + 1200;
       m_shooter.shoot(ShooterRPM);
     }

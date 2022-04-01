@@ -118,13 +118,13 @@ public class AutonomousTrajectories {
         fiveRightAuto4 = new Trajectory(
             new SimplePathBuilder(new Vector2(-138.1, -98.18), Rotation2.fromDegrees(40.7))
                 .lineTo(new Vector2(-246.7, -98.7), Rotation2.fromDegrees(-133.75))
-                .lineTo(new Vector2(-266.7, -116.7), Rotation2.fromDegrees(-133.75))
+                .lineTo(new Vector2(-272.7, -108.7), Rotation2.fromDegrees(-133.75))
                 .build(),
                 normalConstraints, SAMPLE_DISTANCE
         );
 
         fiveRightAuto5 = new Trajectory(
-            new SimplePathBuilder(new Vector2(-266.7, -116.7), Rotation2.fromDegrees(-133.75))
+            new SimplePathBuilder(new Vector2(-272.7, -108.7), Rotation2.fromDegrees(-133.75))
                 .lineTo(new Vector2(-164.6, -121.1), Rotation2.fromDegrees(40.7))
                 .build(),
                 normalConstraints, SAMPLE_DISTANCE

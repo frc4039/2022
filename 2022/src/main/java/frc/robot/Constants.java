@@ -116,7 +116,7 @@ public final class Constants {
         //TODO: preShooter gear ratio
         public static final double kPreShooterGearRatio = 3.0/1.0;
 
-        public static final double kfenderLowShotRPM = 1400;
+        public static final double kfenderLowShotRPM = 900;
         public static final double kfenderHighShotRPM = 2100;
         public static final double klimelightShotRPM = 2500;
         
@@ -138,8 +138,8 @@ public final class Constants {
         public static final double kFarthestKey = 250.0;
         public static final double kClosestValue = 2100.0;
         public static final double kCloseValue = 2300.0;
-        public static final double kFarValue = 2700.0;
-        public static final double kFarthestValue = 3200.0;
+        public static final double kFarValue = 2650.0;
+        public static final double kFarthestValue = 3150.0;
 
     }
 
