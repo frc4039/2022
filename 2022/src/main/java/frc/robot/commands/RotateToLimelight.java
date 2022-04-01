@@ -15,14 +15,15 @@ public class RotateToLimelight extends CommandBase {
     private Axis forward;
     private Axis strafe;
     LimelightSubsystem limelightSubsystem;
+     private boolean updateOdometry;
 
     private PidController rotationController = new PidController(new PidConstants(0.04, 0.0, 0));
 
-    public RotateToLimelight(DrivetrainSubsystem drivetrain, Axis forward, Axis strafe, LimelightSubsystem limelightSubsystem) {
+    public RotateToLimelight(DrivetrainSubsystem drivetrain, Axis forward, Axis strafe, LimelightSubsystem limelightSubsystem, boolean updateOdometry) {
         this.forward = forward;
         this.strafe = strafe;
         this.limelightSubsystem = limelightSubsystem;
-
+        this.updateOdometry = updateOdometry;
         drivetrainSubsystem = drivetrain;
 
         rotationController.setInputRange(0.0, 2*Math.PI);
@@ -40,10 +41,10 @@ public class RotateToLimelight extends CommandBase {
     public void execute() {
         if (limelightSubsystem.getValidTarget()) {
             double angleToGoal = drivetrainSubsystem.getPose().rotation.toRadians() - Math.toRadians(limelightSubsystem.getHorzAngleToGoal());
-
             rotationController.setSetpoint(angleToGoal);
-
-            drivetrainSubsystem.resetPose(new RigidTransform2(new Vector2(Math.cos(angleToGoal + Math.PI) * limelightSubsystem.getDistanceToTarget(), Math.sin(angleToGoal + Math.PI) * limelightSubsystem.getDistanceToTarget()), drivetrainSubsystem.getPose().rotation));
+            
+            if (updateOdometry)
+                drivetrainSubsystem.resetPose(new RigidTransform2(new Vector2(Math.cos(angleToGoal + Math.PI) * limelightSubsystem.getDistanceToTarget(), Math.sin(angleToGoal + Math.PI) * limelightSubsystem.getDistanceToTarget()), drivetrainSubsystem.getPose().rotation));
         }
         else {
             double x = drivetrainSubsystem.getPose().translation.x;

@@ -108,7 +108,7 @@ public class RobotContainer {
         new ShooterHoodRetract(shooterSubsystem),
         new ChangeShotType(shooterSubsystem, preShooterSubsystem, "limelight"),
         new InstantCommand(limelightSubsystem::turnLEDOn, limelightSubsystem),
-        new RotateToLimelight(drivetrainSubsystem, getDriveForwardAxis(), getDriveStrafeAxis(), limelightSubsystem)
+        new RotateToLimelight(drivetrainSubsystem, getDriveForwardAxis(), getDriveStrafeAxis(), limelightSubsystem, true)
       )
     );
     

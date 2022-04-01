@@ -21,6 +21,7 @@ public class LimelightSubsystem extends SubsystemBase {
     private static final double LIMELIGHT_ANGLE = 31.6;
 
     private final NetworkTableEntry limeLightTableEntry;
+    private final NetworkTableEntry limeLightTargetTableEntry;
 
     public LimelightSubsystem() {
         
@@ -28,9 +29,14 @@ public class LimelightSubsystem extends SubsystemBase {
         table.getEntry("pipeline").setNumber(0);
         
         ShuffleboardTab tab = Shuffleboard.getTab("Driver Readout");
-        
+
         limeLightTableEntry = tab.add("Limelight Working", false)
                 .withPosition(4, 2)
+                .withSize(1, 1)
+                .getEntry();
+        
+        limeLightTargetTableEntry = tab.add("Limelight Target", false)
+                .withPosition(3, 2)
                 .withSize(1, 1)
                 .getEntry();
     }
@@ -93,5 +99,6 @@ public class LimelightSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Distance To Goal", getDistanceToTarget());
         
         limeLightTableEntry.setBoolean(getLatency() != 0);
+        limeLightTargetTableEntry.setBoolean(getValidTarget());
     }
 }
