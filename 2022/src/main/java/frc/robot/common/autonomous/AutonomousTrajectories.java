@@ -129,6 +129,11 @@ public class AutonomousTrajectories {
                 normalConstraints, SAMPLE_DISTANCE
         );
 
+        //hp ball position from CAD
+        //-282.080, -117.725 
+        //subtract 8 inches from each dimension to have center of robot ~11" from ball
+        //-274.080, -109.725
+
         fiveRightAuto5 = new Trajectory(
             new SimplePathBuilder(new Vector2(-272.7, -108.7), Rotation2.fromDegrees(-133.75))
                 .lineTo(new Vector2(-164.6, -121.1), Rotation2.fromDegrees(40.7))
@@ -210,15 +215,15 @@ public class AutonomousTrajectories {
         );
 
         twoAndTwoLeftAuto3 = new Trajectory(
-            new SimplePathBuilder(new Vector2(-116.451, 70.019), Rotation2.fromDegrees(135))
-                .lineTo(new Vector2(-158.627, 31.792), Rotation2.fromDegrees(-11.6395))
+            new SimplePathBuilder(new Vector2(-158.627, 31.792), Rotation2.fromDegrees(-11.6395))
+                .lineTo(new Vector2(-149.769, -32.423), Rotation2.fromDegrees(-11.6395))
                 .build(),
                 slowConstraints, SAMPLE_DISTANCE
         );
 
         twoAndTwoLeftAuto4 = new Trajectory(
-            new SimplePathBuilder(new Vector2(-116.451, 70.019), Rotation2.fromDegrees(135))
-                .lineTo(new Vector2(-158.627, 31.792), Rotation2.fromDegrees(-11.6395))
+            new SimplePathBuilder(new Vector2(-149.769, -32.423), Rotation2.fromDegrees(135))
+                .lineTo(new Vector2(-88.303, 124.964), Rotation2.fromDegrees(-11.6395))
                 .build(),
                 slowConstraints, SAMPLE_DISTANCE
         );
