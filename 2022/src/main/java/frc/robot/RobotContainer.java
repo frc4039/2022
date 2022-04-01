@@ -74,7 +74,7 @@ public class RobotContainer {
     CommandScheduler.getInstance().registerSubsystem(intakeSubsystem);
     CommandScheduler.getInstance().registerSubsystem(m_climberSubsystem);
     CommandScheduler.getInstance().registerSubsystem(limelightSubsystem);
-    CommandScheduler.getInstance().setDefaultCommand(drivetrainSubsystem, new DriveCommand(drivetrainSubsystem, getDriveForwardAxis(), getDriveStrafeAxis(), getDriveRotationAxis()));
+    CommandScheduler.getInstance().setDefaultCommand(drivetrainSubsystem, new DriveCommand(drivetrainSubsystem, getDriveForwardAxis(), getDriveStrafeAxis(), getDriveRotationXAxis(), getDriveRotationYAxis()));
     CommandScheduler.getInstance().setDefaultCommand(feederSubsystem, new FeederManagementCommand(feederSubsystem, this));
 
     driverReadout = new DriverReadout(this);
@@ -208,8 +208,12 @@ public class RobotContainer {
     return driverController.getLeftXAxis();
   }
 
-  private Axis getDriveRotationAxis() {
+  private Axis getDriveRotationXAxis() {
     return driverController.getRightXAxis();
+  }
+
+  private Axis getDriveRotationYAxis() {
+    return driverController.getRightYAxis();
   }
 
   public DrivetrainSubsystem getDrivetrainSubsystem() {
