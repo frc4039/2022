@@ -29,6 +29,7 @@ public class AutonomousChooser {
         autonomousModeChooser.addOption("(LEFT/HP) 4 Ball", AutonomousMode.FOUR_LEFT);
         autonomousModeChooser.addOption("(RIGHT) 3 Ball", AutonomousMode.THREE_RIGHT);
         autonomousModeChooser.addOption("(RIGHT) 3 Ball Slow", AutonomousMode.THREE_RIGHT_SLOW);
+        autonomousModeChooser.addOption("(LEFT) 2+2 Ball)", AutonomousMode.TWO_AND_TWO_LEFT);
     }
 
     public SendableChooser<AutonomousMode> getAutonomousModeChooser() {
@@ -144,6 +145,24 @@ public class AutonomousChooser {
         return command;
     }
 
+    private SequentialCommandGroup getTwoAndTwoLeftAutoCommand(RobotContainer container) {
+        SequentialCommandGroup command = new SequentialCommandGroup();
+
+        resetRobotPose(command, container, trajectories.getTwoAndTwoLeftAuto1());
+        setShotTypeLimelight(command, container);
+        followAndIntake(command, container, trajectories.getTwoAndTwoLeftAuto1());
+        followAndPreShoot(command, container, trajectories.getTwoAndTwoLeftAuto2());
+        shoot(command, container, 1.0);
+        followAndIntake(command, container, trajectories.getTwoAndTwoLeftAuto3());
+        followAndIntake(command, container, trajectories.getTwoAndTwoLeftAuto4());
+        setShotTypeLow(command, container);
+        followAndPreShoot(command, container, trajectories.getTwoAndTwoLeftAuto5());
+        shoot(command, container, 1.5);
+        followAndIntake(command, container, trajectories.getTwoAndTwoLeftAuto6());
+
+        return command;
+    }
+
     public Command getCommand(RobotContainer container) {
         switch (autonomousModeChooser.getSelected()) {
             case TWO_RIGHT:
@@ -158,6 +177,8 @@ public class AutonomousChooser {
                 return getThreeRightAutoCommand(container);
             case THREE_RIGHT_SLOW:
                 return getThreeRightSlowAutoCommand(container);
+            case TWO_AND_TWO_LEFT:
+                return getTwoAndTwoLeftAutoCommand(container);
             default:
                 return getNoAutoCommand(container);
         }
@@ -268,6 +289,7 @@ public class AutonomousChooser {
         FIVE_RIGHT,
         FOUR_LEFT,
         THREE_RIGHT,
-        THREE_RIGHT_SLOW
+        THREE_RIGHT_SLOW,
+        TWO_AND_TWO_LEFT
     }
 }

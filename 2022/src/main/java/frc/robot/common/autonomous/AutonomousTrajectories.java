@@ -31,6 +31,12 @@ public class AutonomousTrajectories {
     private Trajectory fourLeftAuto2;
     private Trajectory fourLeftAuto3;
     private Trajectory fourLeftAuto4;
+    private Trajectory twoAndTwoLeftAuto1;
+    private Trajectory twoAndTwoLeftAuto2;
+    private Trajectory twoAndTwoLeftAuto3;
+    private Trajectory twoAndTwoLeftAuto4;
+    private Trajectory twoAndTwoLeftAuto5;
+    private Trajectory twoAndTwoLeftAuto6;
 
     public AutonomousTrajectories(TrajectoryConstraint[] trajectoryConstraints) throws IOException {
         TrajectoryConstraint[] normalConstraints = Arrays.copyOf(trajectoryConstraints, trajectoryConstraints.length + 1);
@@ -188,6 +194,49 @@ public class AutonomousTrajectories {
                 normalConstraints, SAMPLE_DISTANCE
         );
 
+
+        twoAndTwoLeftAuto1 = new Trajectory(
+            new SimplePathBuilder(new Vector2(-87.408, 42.08), Rotation2.fromDegrees(136.5))
+                .lineTo(new Vector2(-116.451, 70.019), Rotation2.fromDegrees(135))
+                .build(),
+                slowConstraints, SAMPLE_DISTANCE
+        );
+
+        twoAndTwoLeftAuto2 = new Trajectory(
+            new SimplePathBuilder(new Vector2(-116.451, 70.019), Rotation2.fromDegrees(135))
+                .lineTo(new Vector2(-158.627, 31.792), Rotation2.fromDegrees(-11.6395))
+                .build(),
+                slowConstraints, SAMPLE_DISTANCE
+        );
+
+        twoAndTwoLeftAuto3 = new Trajectory(
+            new SimplePathBuilder(new Vector2(-116.451, 70.019), Rotation2.fromDegrees(135))
+                .lineTo(new Vector2(-158.627, 31.792), Rotation2.fromDegrees(-11.6395))
+                .build(),
+                slowConstraints, SAMPLE_DISTANCE
+        );
+
+        twoAndTwoLeftAuto4 = new Trajectory(
+            new SimplePathBuilder(new Vector2(-116.451, 70.019), Rotation2.fromDegrees(135))
+                .lineTo(new Vector2(-158.627, 31.792), Rotation2.fromDegrees(-11.6395))
+                .build(),
+                slowConstraints, SAMPLE_DISTANCE
+        );
+
+        twoAndTwoLeftAuto5 = new Trajectory(
+            new SimplePathBuilder(new Vector2(-116.451, 70.019), Rotation2.fromDegrees(135))
+                .lineTo(new Vector2(-158.627, 31.792), Rotation2.fromDegrees(-11.6395))
+                .build(),
+                slowConstraints, SAMPLE_DISTANCE
+        );
+
+        twoAndTwoLeftAuto6 = new Trajectory(
+            new SimplePathBuilder(new Vector2(-116.451, 70.019), Rotation2.fromDegrees(135))
+                .lineTo(new Vector2(-158.627, 31.792), Rotation2.fromDegrees(-11.6395))
+                .build(),
+                slowConstraints, SAMPLE_DISTANCE
+        );
+
     }
 
     public Trajectory getNoAuto() {
@@ -264,5 +313,29 @@ public class AutonomousTrajectories {
 
     public Trajectory getFourLeftAuto4() {
         return fourLeftAuto4;
+    }
+
+    public Trajectory getTwoAndTwoLeftAuto1() {
+        return twoAndTwoLeftAuto1;
+    }
+
+    public Trajectory getTwoAndTwoLeftAuto2() {
+        return twoAndTwoLeftAuto2;
+    }
+
+    public Trajectory getTwoAndTwoLeftAuto3() {
+        return twoAndTwoLeftAuto3;
+    }
+
+    public Trajectory getTwoAndTwoLeftAuto4() {
+        return twoAndTwoLeftAuto4;
+    }
+
+    public Trajectory getTwoAndTwoLeftAuto5() {
+        return twoAndTwoLeftAuto5;
+    }
+
+    public Trajectory getTwoAndTwoLeftAuto6() {
+        return twoAndTwoLeftAuto6;
     }
 }
