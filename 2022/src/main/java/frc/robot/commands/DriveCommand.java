@@ -19,9 +19,8 @@ public class DriveCommand extends CommandBase {
     private Axis strafe;
     private Axis rotationXAxis;
     private Axis rotationYAxis;
-    private SlewRateLimiter forwardRateLimiter = new SlewRateLimiter(3);
-    private SlewRateLimiter strafeRateLimiter = new SlewRateLimiter(3);
-    private SlewRateLimiter rotationRateLimiter = new SlewRateLimiter(3);
+    private SlewRateLimiter forwardRateLimiter = new SlewRateLimiter(2);
+    private SlewRateLimiter strafeRateLimiter = new SlewRateLimiter(2);
     private PidController rotationController = new PidController(new PidConstants(0.04, 0.0, 0));
     private double lastSetPoint;
 
