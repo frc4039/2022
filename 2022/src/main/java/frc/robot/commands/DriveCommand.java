@@ -40,13 +40,14 @@ public class DriveCommand extends CommandBase {
     @Override
     public void initialize() {
         rotationController.reset();
+        lastSetPoint = drivetrainSubsystem.getPose().rotation.toRadians();
     }
 
     @Override
     public void execute() {
         if (Math.sqrt(Math.pow(rotationXAxis.get(false), 2) + Math.pow(rotationYAxis.get(false), 2)) > Constants.CONTROLLER_ROTATION_DEADBAND) {
-            rotationController.setSetpoint(Math.atan2(rotationYAxis.get(false), rotationXAxis.get(false)));
-            lastSetPoint = Math.atan2(rotationYAxis.get(false), rotationXAxis.get(false));
+            rotationController.setSetpoint(Math.atan2(-rotationYAxis.get(false), rotationXAxis.get(false)) + (Math.PI / 2));
+            lastSetPoint = Math.atan2(-rotationYAxis.get(false), rotationXAxis.get(false)) + (Math.PI / 2);
         }
         else {
             rotationController.setSetpoint(lastSetPoint);
