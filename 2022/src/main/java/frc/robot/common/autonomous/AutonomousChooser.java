@@ -80,7 +80,7 @@ public class AutonomousChooser {
         
         //followIntakeAndShoot(command, container, trajectories.getFiveRightAuto3(), -400);
         
-        aimAndShoot(command,container, 1.0);
+        aimAndShoot(command,container, 1.75);
         followIntakeAndPreShoot(command, container, trajectories.getFiveRightAuto3());
         aimAndShoot(command,container, 1.0);
 

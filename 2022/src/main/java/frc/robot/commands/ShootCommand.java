@@ -92,8 +92,8 @@ public class ShootCommand extends CommandBase {
       feederPercent = FeederConstants.kFeederLowShotPercent;
     }
     else if (m_shooter.type == "limelight") {
-      limelightCommand = new RotateToLimelight(m_drivetrain, m_containter.getDriveForwardAxis(), m_containter.getDriveStrafeAxis(), m_limelight, false);
-      CommandScheduler.getInstance().schedule(limelightCommand);
+      // limelightCommand = new RotateToLimelight(m_drivetrain, m_containter.getDriveForwardAxis(), m_containter.getDriveStrafeAxis(), m_limelight, false);
+      // CommandScheduler.getInstance().schedule(limelightCommand);
       ShooterRPM = (double)(shotProfile.getInterpolated(new InterpolatingDouble(targetDistance)).value);
       PreShooterRPM = ShooterConstants.kpreShooterLimelightShotRPM;
       RPMWindow = ShooterConstants.klimelightShotRPMWindow;
@@ -160,7 +160,7 @@ public class ShootCommand extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    limelightCommand.end(false);
+    // limelightCommand.end(false);
     m_shooter.stop();
     m_preShooter.stop();
     m_feeder.stop();
