@@ -50,7 +50,7 @@ public class AutonomousTrajectories {
         // Top speed
         normalConstraints[normalConstraints.length - 1] = new MaxVelocityConstraint(8.0 * 12.0);
         // Acceleration speed
-        normalConstraints[normalConstraints.length - 2] = new MaxAccelerationConstraint(6.0 * 12.0);
+        normalConstraints[normalConstraints.length - 2] = new MaxAccelerationConstraint(4.0 * 12.0);
 
         noAuto = new Trajectory(
             new SimplePathBuilder(new Vector2(0.0, 0.0), Rotation2.ZERO)
@@ -98,7 +98,7 @@ public class AutonomousTrajectories {
             new SimplePathBuilder(new Vector2(-27.114, -93.212), Rotation2.fromDegrees(-88.5))
                 .lineTo(new Vector2(-27.114, -133.206), Rotation2.fromDegrees(-90))
                 .build(),
-                slowConstraints, SAMPLE_DISTANCE
+                normalConstraints, SAMPLE_DISTANCE
         );
 
         fiveRightAuto2 = new Trajectory(
@@ -112,19 +112,19 @@ public class AutonomousTrajectories {
             new SimplePathBuilder(new Vector2(-164.6, -121.1), Rotation2.fromDegrees(40))
                 .lineTo(new Vector2(-138.1, -98.1), Rotation2.fromDegrees(40))
                 .build(),
-                slowConstraints, SAMPLE_DISTANCE
+                normalConstraints, SAMPLE_DISTANCE
         );
 
         fiveRightAuto4 = new Trajectory(
             new SimplePathBuilder(new Vector2(-138.1, -98.18), Rotation2.fromDegrees(40.7))
-                .lineTo(new Vector2(-246.7, -98.7), Rotation2.fromDegrees(-133.75))
-                .lineTo(new Vector2(-272.7, -108.7), Rotation2.fromDegrees(-133.75))
+                .lineTo(new Vector2(-228.7, -98.5), Rotation2.fromDegrees(-133.75))
+                .lineTo(new Vector2(-292, -99), Rotation2.fromDegrees(-133.75))
                 .build(),
                 normalConstraints, SAMPLE_DISTANCE
         );
 
         fiveRightAuto5 = new Trajectory(
-            new SimplePathBuilder(new Vector2(-272.7, -108.7), Rotation2.fromDegrees(-133.75))
+            new SimplePathBuilder(new Vector2(-292, -99), Rotation2.fromDegrees(-133.75))
                 .lineTo(new Vector2(-164.6, -121.1), Rotation2.fromDegrees(40.7))
                 .build(),
                 normalConstraints, SAMPLE_DISTANCE
