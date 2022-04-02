@@ -209,35 +209,37 @@ public class AutonomousTrajectories {
 
         twoAndTwoLeftAuto2 = new Trajectory(
             new SimplePathBuilder(new Vector2(-116.451, 70.019), Rotation2.fromDegrees(135))
-                .lineTo(new Vector2(-158.627, 31.792), Rotation2.fromDegrees(-11.6395))
+                .lineTo(new Vector2(-130, 31.792), Rotation2.fromDegrees(-13.74218))
                 .build(),
                 slowConstraints, SAMPLE_DISTANCE
         );
 
         twoAndTwoLeftAuto3 = new Trajectory(
-            new SimplePathBuilder(new Vector2(-158.627, 31.792), Rotation2.fromDegrees(-11.6395))
-                .lineTo(new Vector2(-149.769, -32.423), Rotation2.fromDegrees(-11.6395))
+            new SimplePathBuilder(new Vector2(-130, 31.792), Rotation2.fromDegrees(-13.74218))
+                .lineTo(new Vector2(-139.885, -0.3155), Rotation2.fromDegrees(-107.1113))
+                .lineTo(new Vector2(-149.769, -32.423), Rotation2.fromDegrees(-107.1113))
                 .build(),
                 slowConstraints, SAMPLE_DISTANCE
         );
 
         twoAndTwoLeftAuto4 = new Trajectory(
-            new SimplePathBuilder(new Vector2(-149.769, -32.423), Rotation2.fromDegrees(135))
-                .lineTo(new Vector2(-88.303, 124.964), Rotation2.fromDegrees(-11.6395))
+            new SimplePathBuilder(new Vector2(-149.769, -32.423), Rotation2.fromDegrees(-107.1113))
+                .lineTo(new Vector2(-119.036, 46.2705), Rotation2.fromDegrees(68.66734))
+                .lineTo(new Vector2(-88.303, 124.964), Rotation2.fromDegrees(68.66734))
                 .build(),
                 slowConstraints, SAMPLE_DISTANCE
         );
 
         twoAndTwoLeftAuto5 = new Trajectory(
-            new SimplePathBuilder(new Vector2(-116.451, 70.019), Rotation2.fromDegrees(135))
-                .lineTo(new Vector2(-158.627, 31.792), Rotation2.fromDegrees(-11.6395))
+            new SimplePathBuilder(new Vector2(-88.303, 124.964), Rotation2.fromDegrees(68.66734))
+                .lineTo(new Vector2(-110, 125), Rotation2.fromDegrees(-180))
                 .build(),
                 slowConstraints, SAMPLE_DISTANCE
         );
 
         twoAndTwoLeftAuto6 = new Trajectory(
-            new SimplePathBuilder(new Vector2(-116.451, 70.019), Rotation2.fromDegrees(135))
-                .lineTo(new Vector2(-158.627, 31.792), Rotation2.fromDegrees(-11.6395))
+            new SimplePathBuilder(new Vector2(-110, 125), Rotation2.fromDegrees(-180))
+                .lineTo(new Vector2(-60, 125), Rotation2.ZERO)
                 .build(),
                 slowConstraints, SAMPLE_DISTANCE
         );
