@@ -53,7 +53,7 @@ public class RotateToLimelight extends CommandBase {
             double x = drivetrainSubsystem.getPose().translation.x;
             double y = drivetrainSubsystem.getPose().translation.y;
 
-            rotationController.setSetpoint(Math.atan2(y, x));
+            rotationController.setSetpoint(Math.atan2(y, x) + Math.PI);
         }
         
         double rotationOutput = rotationController.calculate(drivetrainSubsystem.getPose().rotation.toRadians(), 0.02);

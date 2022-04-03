@@ -6,6 +6,7 @@ package frc.robot;
 
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -54,6 +55,9 @@ public class Robot extends TimedRobot {
     
     //TODO: removed based on 2910 code, probably have to add all subsystems to UpdateManager
     //m_robotContainer = new RobotContainer();
+
+    DataLogManager.start();
+    
     updateManager.startLoop(5.0e-3);
     pcmCompressor.enableDigital();
     CameraServer.startAutomaticCapture();
