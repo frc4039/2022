@@ -31,6 +31,12 @@ public class AutonomousTrajectories {
     private Trajectory fourLeftAuto2;
     private Trajectory fourLeftAuto3;
     private Trajectory fourLeftAuto4;
+    private Trajectory twoAndTwoLeftAuto1;
+    private Trajectory twoAndTwoLeftAuto2;
+    private Trajectory twoAndTwoLeftAuto3;
+    private Trajectory twoAndTwoLeftAuto4;
+    private Trajectory twoAndTwoLeftAuto5;
+    private Trajectory twoAndTwoLeftAuto6;
 
     public AutonomousTrajectories(TrajectoryConstraint[] trajectoryConstraints) throws IOException {
         TrajectoryConstraint[] normalConstraints = Arrays.copyOf(trajectoryConstraints, trajectoryConstraints.length + 1);
@@ -50,7 +56,7 @@ public class AutonomousTrajectories {
         // Top speed
         normalConstraints[normalConstraints.length - 1] = new MaxVelocityConstraint(8.0 * 12.0);
         // Acceleration speed
-        normalConstraints[normalConstraints.length - 2] = new MaxAccelerationConstraint(6.0 * 12.0);
+        normalConstraints[normalConstraints.length - 2] = new MaxAccelerationConstraint(4.0 * 12.0);
 
         noAuto = new Trajectory(
             new SimplePathBuilder(new Vector2(0.0, 0.0), Rotation2.ZERO)
@@ -98,7 +104,7 @@ public class AutonomousTrajectories {
             new SimplePathBuilder(new Vector2(-27.114, -93.212), Rotation2.fromDegrees(-88.5))
                 .lineTo(new Vector2(-27.114, -133.206), Rotation2.fromDegrees(-90))
                 .build(),
-                slowConstraints, SAMPLE_DISTANCE
+                normalConstraints, SAMPLE_DISTANCE
         );
 
         fiveRightAuto2 = new Trajectory(
@@ -112,19 +118,24 @@ public class AutonomousTrajectories {
             new SimplePathBuilder(new Vector2(-164.6, -121.1), Rotation2.fromDegrees(40))
                 .lineTo(new Vector2(-138.1, -98.1), Rotation2.fromDegrees(40))
                 .build(),
-                slowConstraints, SAMPLE_DISTANCE
+                normalConstraints, SAMPLE_DISTANCE
         );
 
         fiveRightAuto4 = new Trajectory(
             new SimplePathBuilder(new Vector2(-138.1, -98.18), Rotation2.fromDegrees(40.7))
-                .lineTo(new Vector2(-246.7, -98.7), Rotation2.fromDegrees(-133.75))
-                .lineTo(new Vector2(-272.7, -108.7), Rotation2.fromDegrees(-133.75))
+                .lineTo(new Vector2(-228.7, -98.5), Rotation2.fromDegrees(-133.75))
+                .lineTo(new Vector2(-292, -99), Rotation2.fromDegrees(-133.75))
                 .build(),
                 normalConstraints, SAMPLE_DISTANCE
         );
 
+        //hp ball position from CAD
+        //-282.080, -117.725 
+        //subtract 8 inches from each dimension to have center of robot ~11" from ball
+        //-274.080, -109.725
+
         fiveRightAuto5 = new Trajectory(
-            new SimplePathBuilder(new Vector2(-272.7, -108.7), Rotation2.fromDegrees(-133.75))
+            new SimplePathBuilder(new Vector2(-292, -99), Rotation2.fromDegrees(-133.75))
                 .lineTo(new Vector2(-164.6, -121.1), Rotation2.fromDegrees(40.7))
                 .build(),
                 normalConstraints, SAMPLE_DISTANCE
@@ -186,6 +197,51 @@ public class AutonomousTrajectories {
                 .lineTo(new Vector2(-158.627, 31.792), Rotation2.fromDegrees(-11.6395))
                 .build(),
                 normalConstraints, SAMPLE_DISTANCE
+        );
+
+
+        twoAndTwoLeftAuto1 = new Trajectory(
+            new SimplePathBuilder(new Vector2(-87.408, 42.08), Rotation2.fromDegrees(136.5))
+                .lineTo(new Vector2(-116.451, 70.019), Rotation2.fromDegrees(135))
+                .build(),
+                slowConstraints, SAMPLE_DISTANCE
+        );
+
+        twoAndTwoLeftAuto2 = new Trajectory(
+            new SimplePathBuilder(new Vector2(-116.451, 70.019), Rotation2.fromDegrees(135))
+                .lineTo(new Vector2(-130, 31.792), Rotation2.fromDegrees(-13.74218))
+                .build(),
+                slowConstraints, SAMPLE_DISTANCE
+        );
+
+        twoAndTwoLeftAuto3 = new Trajectory(
+            new SimplePathBuilder(new Vector2(-130, 31.792), Rotation2.fromDegrees(-13.74218))
+                .lineTo(new Vector2(-134.885, -0.3155), Rotation2.fromDegrees(-107.1113))
+                .lineTo(new Vector2(-139.769, -32.423), Rotation2.fromDegrees(-107.1113))
+                .build(),
+                slowConstraints, SAMPLE_DISTANCE
+        );
+
+        twoAndTwoLeftAuto4 = new Trajectory(
+            new SimplePathBuilder(new Vector2(-139.769, -32.423), Rotation2.fromDegrees(-107.1113))
+                .lineTo(new Vector2(-119.036, 46.2705), Rotation2.fromDegrees(68.66734))
+                .lineTo(new Vector2(-88.303, 124.964), Rotation2.fromDegrees(68.66734))
+                .build(),
+                slowConstraints, SAMPLE_DISTANCE
+        );
+
+        twoAndTwoLeftAuto5 = new Trajectory(
+            new SimplePathBuilder(new Vector2(-88.303, 124.964), Rotation2.fromDegrees(68.66734))
+                .lineTo(new Vector2(-110, 125), Rotation2.fromDegrees(-180))
+                .build(),
+                slowConstraints, SAMPLE_DISTANCE
+        );
+
+        twoAndTwoLeftAuto6 = new Trajectory(
+            new SimplePathBuilder(new Vector2(-110, 125), Rotation2.fromDegrees(-180))
+                .lineTo(new Vector2(-60, 125), Rotation2.ZERO)
+                .build(),
+                slowConstraints, SAMPLE_DISTANCE
         );
 
     }
@@ -264,5 +320,29 @@ public class AutonomousTrajectories {
 
     public Trajectory getFourLeftAuto4() {
         return fourLeftAuto4;
+    }
+
+    public Trajectory getTwoAndTwoLeftAuto1() {
+        return twoAndTwoLeftAuto1;
+    }
+
+    public Trajectory getTwoAndTwoLeftAuto2() {
+        return twoAndTwoLeftAuto2;
+    }
+
+    public Trajectory getTwoAndTwoLeftAuto3() {
+        return twoAndTwoLeftAuto3;
+    }
+
+    public Trajectory getTwoAndTwoLeftAuto4() {
+        return twoAndTwoLeftAuto4;
+    }
+
+    public Trajectory getTwoAndTwoLeftAuto5() {
+        return twoAndTwoLeftAuto5;
+    }
+
+    public Trajectory getTwoAndTwoLeftAuto6() {
+        return twoAndTwoLeftAuto6;
     }
 }
