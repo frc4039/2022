@@ -134,7 +134,7 @@ public class RobotContainer {
 
     operatorController.getBButton().and(driverController.getRightTriggerAxis().getButton(0.1)).whenActive(
       new SequentialCommandGroup(
-        new EjectSecondBallCommand(shooterSubsystem, preShooterSubsystem, feederSubsystem, limelightSubsystem),
+        new AimAndEjectSecondBallCommand(drivetrainSubsystem, getDriveForwardAxis(), getDriveStrafeAxis(), limelightSubsystem, true, shooterSubsystem, preShooterSubsystem, feederSubsystem),
         new EjectOutOfShooterCommand(shooterSubsystem, preShooterSubsystem, feederSubsystem)
       ).withTimeout(2)
     );
