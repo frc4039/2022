@@ -51,6 +51,7 @@ public final class Constants {
     public static final double GLASS_SCALE = 0.0254;
 
     public static final double CONTROLLER_ROTATION_DEADBAND = 0.98;
+    public static final double LIMELIGHT_ROTATION_FEEDFORWARD = 0.00125;
 
     public static final class ClimberConstants{
         public static final TalonFXInvertType kClimberMotorRightInversion = TalonFXInvertType.CounterClockwise;
@@ -142,6 +143,8 @@ public final class Constants {
         public static final double kCloseValue = 2300.0;
         public static final double kFarValue = 2650.0;
         public static final double kFarthestValue = 3150.0;
+        public static final double kAngleWindow = 10;
+        public static final double kShotAngularVelocityLimit = 5;
 
     }
 
