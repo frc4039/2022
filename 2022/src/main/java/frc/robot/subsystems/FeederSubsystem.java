@@ -86,7 +86,7 @@ public class FeederSubsystem extends SubsystemBase {
   }
 
   public boolean getBothBallBreakBeams(){
-    return !m_BreakBeamLowerBall.get() && !m_BreakBeamUpperBall.get();
+    return (!m_BreakBeamLowerBall.get() || !m_BreakBeamIntake.get()) && !m_BreakBeamUpperBall.get();
   }
 
   @Override

@@ -62,8 +62,10 @@ public class ShootCommand extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    if (!m_feeder.getBreakBeamPreShooter()) {
+      m_preShooter.preShotType();
+    }
     m_shooter.shotType();
-    m_preShooter.preShotType();
 
     shotProfile.put(new InterpolatingDouble(ShooterConstants.kClosestKey), new InterpolatingDouble(ShooterConstants.kClosestValue));
     shotProfile.put(new InterpolatingDouble(ShooterConstants.kCloseKey), new InterpolatingDouble(ShooterConstants.kCloseValue));
