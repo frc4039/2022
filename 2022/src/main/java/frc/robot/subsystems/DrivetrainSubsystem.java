@@ -250,6 +250,8 @@ public class DrivetrainSubsystem implements Subsystem, UpdateManager.Updatable {
                     gyroscope.getUnadjustedAngle().rotateBy(angle.inverse())
             );
         }
+        resetPose(new RigidTransform2(getPose().translation, angle));
+        getDefaultCommand().initialize();
     }
 
     public double getAverageAbsoluteValueVelocity() {
