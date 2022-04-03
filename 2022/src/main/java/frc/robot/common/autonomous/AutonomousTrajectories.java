@@ -42,6 +42,7 @@ public class AutonomousTrajectories {
         TrajectoryConstraint[] normalConstraints = Arrays.copyOf(trajectoryConstraints, trajectoryConstraints.length + 1);
         TrajectoryConstraint[] slowConstraints = Arrays.copyOf(trajectoryConstraints, trajectoryConstraints.length + 1);
         TrajectoryConstraint[] superSlowConstraints = Arrays.copyOf(trajectoryConstraints, trajectoryConstraints.length + 1);
+        TrajectoryConstraint[] fastConstraints = Arrays.copyOf(trajectoryConstraints, trajectoryConstraints.length + 1);
         
         // Top speed
         superSlowConstraints[slowConstraints.length - 1] = new MaxVelocityConstraint(1.5 * 12.0);
@@ -57,6 +58,11 @@ public class AutonomousTrajectories {
         normalConstraints[normalConstraints.length - 1] = new MaxVelocityConstraint(8.0 * 12.0);
         // Acceleration speed
         normalConstraints[normalConstraints.length - 2] = new MaxAccelerationConstraint(4.0 * 12.0);
+        
+        // Top speed
+        fastConstraints[normalConstraints.length - 1] = new MaxVelocityConstraint(10.0 * 12.0);
+        // Acceleration speed
+        fastConstraints[normalConstraints.length - 2] = new MaxAccelerationConstraint(8.0 * 12.0);
 
         noAuto = new Trajectory(
             new SimplePathBuilder(new Vector2(0.0, 0.0), Rotation2.ZERO)
@@ -137,10 +143,10 @@ public class AutonomousTrajectories {
         //-274.080, -109.725
 
         fiveRightAuto5 = new Trajectory(
-            new SimplePathBuilder(new Vector2(-292, -99), Rotation2.fromDegrees(-133.75))
+            new SimplePathBuilder(new Vector2(-274.08, -109.73), Rotation2.fromDegrees(-133.75))
                 .lineTo(new Vector2(-164.6, -121.1), Rotation2.fromDegrees(40.7))
                 .build(),
-                normalConstraints, SAMPLE_DISTANCE
+                fastConstraints, SAMPLE_DISTANCE
         );
 
         threeRightAuto3 = new Trajectory(

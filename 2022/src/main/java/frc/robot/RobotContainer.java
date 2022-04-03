@@ -100,7 +100,8 @@ public class RobotContainer {
       new ConditionalCommand(
         new AimAndShootCommand(drivetrainSubsystem, getDriveForwardAxis(), getDriveStrafeAxis(), limelightSubsystem, true, shooterSubsystem, preShooterSubsystem, feederSubsystem), 
         new ShootCommand(shooterSubsystem, preShooterSubsystem, feederSubsystem, limelightSubsystem, drivetrainSubsystem), 
-        () -> shooterSubsystem.type == "limelight"));
+        () -> shooterSubsystem.type == "limelight"
+        ));
 
     driverController.getYButton().whenHeld(
       new DriveWithSetRotationCommand(drivetrainSubsystem, getDriveForwardAxis(), getDriveStrafeAxis(), 0)
