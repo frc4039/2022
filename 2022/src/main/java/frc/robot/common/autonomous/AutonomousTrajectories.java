@@ -124,10 +124,12 @@ public class AutonomousTrajectories {
         fiveRightAuto4 = new Trajectory(
             new SimplePathBuilder(new Vector2(-138.1, -98.18), Rotation2.fromDegrees(40.7))
                 .lineTo(new Vector2(-228.7, -98.5), Rotation2.fromDegrees(-133.75))
-                .lineTo(new Vector2(-292, -99), Rotation2.fromDegrees(-133.75))
+                .lineTo(new Vector2(-274.08, -109.73), Rotation2.fromDegrees(-133.75))
                 .build(),
                 normalConstraints, SAMPLE_DISTANCE
         );
+
+        //human player station auto point from 1114's field: -292, -99
 
         //hp ball position from CAD
         //-282.080, -117.725 
