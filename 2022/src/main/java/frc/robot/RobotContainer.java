@@ -97,8 +97,10 @@ public class RobotContainer {
 
     //Driver Right Trigger shoots
     driverController.getRightTriggerAxis().getButton(0.1).whenHeld(
-        new AimAndShootCommand(drivetrainSubsystem, getDriveForwardAxis(), getDriveStrafeAxis(), limelightSubsystem, true, shooterSubsystem, preShooterSubsystem, feederSubsystem)
-    );
+      new ConditionalCommand(
+        new AimAndShootCommand(drivetrainSubsystem, getDriveForwardAxis(), getDriveStrafeAxis(), limelightSubsystem, true, shooterSubsystem, preShooterSubsystem, feederSubsystem), 
+        new ShootCommand(shooterSubsystem, preShooterSubsystem, feederSubsystem, limelightSubsystem, drivetrainSubsystem), 
+        () -> shooterSubsystem.type == "limelight"));
 
     driverController.getYButton().whenHeld(
       new DriveWithSetRotationCommand(drivetrainSubsystem, getDriveForwardAxis(), getDriveStrafeAxis(), 0)
