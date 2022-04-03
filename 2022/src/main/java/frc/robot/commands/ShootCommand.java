@@ -7,6 +7,8 @@
 
 package frc.robot.commands;
 
+import org.opencv.core.Mat;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -15,9 +17,11 @@ import frc.robot.subsystems.FeederSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.PreShooterSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.Constants.FeederConstants;
 import frc.robot.Constants.ShooterConstants;
+import frc.robot.common.math.Rotation2;
 import frc.robot.common.util.InterpolatingDouble;
 import frc.robot.common.util.InterpolatingTreeMap;
 
@@ -30,7 +34,6 @@ public class ShootCommand extends CommandBase {
   private final PreShooterSubsystem m_preShooter;
   private final LimelightSubsystem m_limelight;
   private final DrivetrainSubsystem m_drivetrain;
-  private final RobotContainer m_containter;
 
   private InterpolatingTreeMap<InterpolatingDouble, InterpolatingDouble> shotProfile = new InterpolatingTreeMap<InterpolatingDouble, InterpolatingDouble>();
 
@@ -40,20 +43,17 @@ public class ShootCommand extends CommandBase {
   private double preShooterRPMWindow = 0;
   private double feederPercent = 0;
   private double targetDistance = 0;
-
-  private Command limelightCommand;
   /**
    * Creates a new Shoot Command.
    *
    * @param subsystem 
    */
-  public ShootCommand(ShooterSubsystem shooter, PreShooterSubsystem preShooter, FeederSubsystem feeder, LimelightSubsystem limelight, DrivetrainSubsystem drivetrain, RobotContainer container) {
+  public ShootCommand(ShooterSubsystem shooter, PreShooterSubsystem preShooter, FeederSubsystem feeder, LimelightSubsystem limelight, DrivetrainSubsystem drivetrain) {
     m_shooter = shooter;
     m_preShooter = preShooter;
     m_feeder = feeder;
     m_limelight = limelight;
     m_drivetrain = drivetrain;
-    m_containter = container;
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_shooter, m_preShooter, m_feeder);
@@ -130,6 +130,8 @@ public class ShootCommand extends CommandBase {
         && (m_shooter.returnCurrentRPM() < ShooterRPM * (1 + RPMWindow))
         && (m_preShooter.returnPreShooterCurrentRPM() > PreShooterRPM * (1 - preShooterRPMWindow))
         && (m_preShooter.returnPreShooterCurrentRPM() < PreShooterRPM * (1 + preShooterRPMWindow))
+        && aimedAtTarget()
+        && Math.abs(m_drivetrain.getAngularVelocity()) < ShooterConstants.kShotAngularVelocityLimit
         )  {
               m_feeder.runFeeder(feederPercent);
       } else if (m_feeder.getBreakBeamPreShooter()) {
@@ -170,5 +172,22 @@ public class ShootCommand extends CommandBase {
   @Override
   public boolean isFinished() {
     return false;
+  }
+
+  private boolean aimedAtTarget() {
+    if (m_limelight.getValidTarget()) {
+      return true;
+    }
+    else {
+      double rotation = m_drivetrain.getPose().rotation.toDegrees();
+      double toTarget = Math.toDegrees(Math.atan2(m_drivetrain.getPose().translation.y, m_drivetrain.getPose().translation.x));
+
+      double angleDifference = Math.abs(rotation - toTarget);
+      if (angleDifference > 180) {
+        angleDifference -= 360;
+      }
+
+      return angleDifference < ShooterConstants.kAngleWindow;
+    }
   }
 }

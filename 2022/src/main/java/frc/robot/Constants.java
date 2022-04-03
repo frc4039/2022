@@ -143,6 +143,8 @@ public final class Constants {
         public static final double kCloseValue = 2300.0;
         public static final double kFarValue = 2650.0;
         public static final double kFarthestValue = 3150.0;
+        public static final double kAngleWindow = 15;
+        public static final double kShotAngularVelocityLimit = 10;
 
     }
 
