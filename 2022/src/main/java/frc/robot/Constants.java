@@ -50,6 +50,9 @@ public final class Constants {
     public static final double GLASS_OFFSET_Y = 5;
     public static final double GLASS_SCALE = 0.0254;
 
+    public static final double CONTROLLER_ROTATION_DEADBAND = 0.98;
+    public static final double LIMELIGHT_ROTATION_FEEDFORWARD = 0.0015;
+
     public static final class ClimberConstants{
         public static final TalonFXInvertType kClimberMotorRightInversion = TalonFXInvertType.CounterClockwise;
         public static final TalonFXInvertType kClimberMotorLeftInversion = TalonFXInvertType.Clockwise;
@@ -116,7 +119,7 @@ public final class Constants {
         //TODO: preShooter gear ratio
         public static final double kPreShooterGearRatio = 3.0/1.0;
 
-        public static final double kfenderLowShotRPM = 900;
+        public static final double kfenderLowShotRPM = 1150;
         public static final double kfenderHighShotRPM = 2100;
         public static final double klimelightShotRPM = 2500;
         

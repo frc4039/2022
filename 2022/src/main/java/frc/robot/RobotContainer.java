@@ -7,6 +7,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -74,7 +75,7 @@ public class RobotContainer {
     CommandScheduler.getInstance().registerSubsystem(intakeSubsystem);
     CommandScheduler.getInstance().registerSubsystem(m_climberSubsystem);
     CommandScheduler.getInstance().registerSubsystem(limelightSubsystem);
-    CommandScheduler.getInstance().setDefaultCommand(drivetrainSubsystem, new DriveCommand(drivetrainSubsystem, getDriveForwardAxis(), getDriveStrafeAxis(), getDriveRotationAxis()));
+    CommandScheduler.getInstance().setDefaultCommand(drivetrainSubsystem, new DriveCommand(drivetrainSubsystem, getDriveForwardAxis(), getDriveStrafeAxis(), getDriveRotationXAxis(), getDriveRotationYAxis()));
     CommandScheduler.getInstance().setDefaultCommand(feederSubsystem, new FeederManagementCommand(feederSubsystem, this));
 
     driverReadout = new DriverReadout(this);
@@ -104,13 +105,16 @@ public class RobotContainer {
     );
 
     driverController.getAButton().whenHeld(
-      new SequentialCommandGroup(
+      new ConditionalCommand(
+        new SequentialCommandGroup(
         new ShooterHoodRetract(shooterSubsystem),
         new ChangeShotType(shooterSubsystem, preShooterSubsystem, "limelight"),
         new InstantCommand(limelightSubsystem::turnLEDOn, limelightSubsystem),
         new RotateToLimelight(drivetrainSubsystem, getDriveForwardAxis(), getDriveStrafeAxis(), limelightSubsystem, true)
-      )
-    );
+      ), 
+      new InstantCommand(), 
+      () -> shooterSubsystem.type == "limelight"
+      ));
     
     // intakeBB.whenActive(
     //   new RumbleBothCommand(this).withTimeout(2.0)
@@ -208,8 +212,12 @@ public class RobotContainer {
     return driverController.getLeftXAxis();
   }
 
-  private Axis getDriveRotationAxis() {
+  private Axis getDriveRotationXAxis() {
     return driverController.getRightXAxis();
+  }
+
+  private Axis getDriveRotationYAxis() {
+    return driverController.getRightYAxis();
   }
 
   public DrivetrainSubsystem getDrivetrainSubsystem() {
