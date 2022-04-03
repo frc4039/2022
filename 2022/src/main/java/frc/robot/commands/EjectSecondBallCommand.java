@@ -20,7 +20,7 @@ import frc.robot.subsystems.ShooterSubsystem;
 /**
  * An example command that uses an example subsystem.
  */
-public class EjectSecondBall extends CommandBase {
+public class EjectSecondBallCommand extends CommandBase {
   private final FeederSubsystem m_feeder;
   private final ShooterSubsystem m_shooter;
   private final PreShooterSubsystem m_preShooter;
@@ -44,7 +44,7 @@ public class EjectSecondBall extends CommandBase {
    *
    * @param subsystem 
    */
-  public EjectSecondBall(ShooterSubsystem shooter, PreShooterSubsystem preShooter, FeederSubsystem feeder, LimelightSubsystem limelight) {
+  public EjectSecondBallCommand(ShooterSubsystem shooter, PreShooterSubsystem preShooter, FeederSubsystem feeder, LimelightSubsystem limelight) {
     m_shooter = shooter;
     m_preShooter = preShooter;
     m_feeder = feeder;

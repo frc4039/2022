@@ -3,11 +3,11 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ShooterSubsystem;
 
-public class ShooterHoodRetract extends CommandBase {
+public class ShooterHoodExtendCommand extends CommandBase {
     private final ShooterSubsystem m_shooterSubsystem;
     
 
-    public ShooterHoodRetract(ShooterSubsystem shooterSubsystem) {
+    public ShooterHoodExtendCommand(ShooterSubsystem shooterSubsystem) {
         m_shooterSubsystem = shooterSubsystem;
 
         addRequirements(m_shooterSubsystem);
@@ -15,7 +15,7 @@ public class ShooterHoodRetract extends CommandBase {
 
     @Override
     public void initialize() {
-        m_shooterSubsystem.retractShooterHood();
+        m_shooterSubsystem.extendShooterHood();
     }
 
     @Override

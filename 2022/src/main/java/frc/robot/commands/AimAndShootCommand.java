@@ -12,7 +12,7 @@ public class AimAndShootCommand extends ParallelCommandGroup{
 
     public AimAndShootCommand(DrivetrainSubsystem drivetrain, Axis forward, Axis strafe, LimelightSubsystem limelightSubsystem, boolean updateOdometry, ShooterSubsystem shooter, PreShooterSubsystem preShooter, FeederSubsystem feeder) {
         addCommands(
-            new RotateToLimelight(drivetrain, forward, strafe, limelightSubsystem, updateOdometry),
+            new RotateToLimelightCommand(drivetrain, forward, strafe, limelightSubsystem, updateOdometry),
             new ShootCommand(shooter, preShooter, feeder, limelightSubsystem, drivetrain)
         );
     }
