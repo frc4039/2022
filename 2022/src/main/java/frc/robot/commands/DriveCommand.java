@@ -21,6 +21,7 @@ public class DriveCommand extends CommandBase {
     private Axis rotationYAxis;
     private SlewRateLimiter forwardRateLimiter = new SlewRateLimiter(2);
     private SlewRateLimiter strafeRateLimiter = new SlewRateLimiter(2);
+    private SlewRateLimiter rotationLimiter = new SlewRateLimiter(2);
     private PidController rotationController = new PidController(new PidConstants(0.04, 0.0, 0));
     private double lastSetPoint;
 
@@ -53,7 +54,7 @@ public class DriveCommand extends CommandBase {
             rotationController.setSetpoint(lastSetPoint);
         }
         double rotationOutput = rotationController.calculate(drivetrainSubsystem.getPose().rotation.toRadians(), 0.02);
-        drivetrainSubsystem.drive(new Vector2(forwardRateLimiter.calculate(forward.get(true)), strafeRateLimiter.calculate(strafe.get(true))), rotationOutput, true);
+        drivetrainSubsystem.drive(new Vector2(forwardRateLimiter.calculate(forward.get(true)), strafeRateLimiter.calculate(strafe.get(true))), rotationLimiter.calculate(rotationOutput), true);
     }
 
     @Override

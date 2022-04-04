@@ -28,7 +28,7 @@ public class AutonomousChooser {
         autonomousModeChooser.addOption("(RIGHT/HP) 5 Ball", AutonomousMode.FIVE_RIGHT);
         autonomousModeChooser.addOption("(LEFT/HP) 4 Ball", AutonomousMode.FOUR_LEFT);
         autonomousModeChooser.addOption("(RIGHT) 3 Ball", AutonomousMode.THREE_RIGHT);
-        autonomousModeChooser.addOption("(RIGHT) 3 Ball Slow", AutonomousMode.THREE_RIGHT_SLOW);
+        //autonomousModeChooser.addOption("(RIGHT) 3 Ball Slow", AutonomousMode.THREE_RIGHT_SLOW);
         autonomousModeChooser.addOption("(LEFT) 2+2 Ball)", AutonomousMode.TWO_AND_TWO_LEFT);
     }
 
@@ -77,15 +77,15 @@ public class AutonomousChooser {
         resetRobotPose(command, container, trajectories.getFiveRightAuto1());
         setShotTypeLimelight(command, container);
         followAndIntake(command, container, trajectories.getFiveRightAuto1());
-        followAndPreShoot(command, container, trajectories.getFiveRightAuto2());
+        followIntakeAndPreShoot(command, container, trajectories.getFiveRightAuto2());
         //followIntakeAndShoot(command, container, trajectories.getFiveRightAuto3(), -400);
-        // aimAndShoot(command,container, 1.75);
+        //aimAndShoot(command,container, 1.75);
         followIntakeAndPreShoot(command, container, trajectories.getFiveRightAuto3());
-        intakeAimAndShoot(command,container, 1.0);
-        shoot(command, container, 1.0);
+        intakeAimAndShoot(command,container, 0.5);
+        aimAndShoot(command, container, 1.25);
         followAndIntake(command, container, trajectories.getFiveRightAuto4());
-        intake(command, container, 1.0);
-        followAndPreShoot(command, container, trajectories.getFiveRightAuto5());
+        intake(command, container, 0.5);
+        followIntakeAndPreShoot(command, container, trajectories.getFiveRightAuto5());
         aimAndShoot(command, container, 2.0);
         
         return command;
@@ -98,11 +98,11 @@ public class AutonomousChooser {
         setShotTypeLimelight(command, container);
         followAndIntake(command, container, trajectories.getFourLeftAuto1());
         followAndPreShoot(command, container, trajectories.getFourLeftAuto2());
-        shoot(command, container, 1.0);
+        aimAndShoot(command, container, 1.0);
         followAndIntake(command, container, trajectories.getFourLeftAuto3());
         intake(command, container, 1.0);
         followAndPreShoot(command, container, trajectories.getFourLeftAuto4());
-        shoot(command, container, 2.0);
+        aimAndShoot(command, container, 2.0);
 
         return command;
     }
@@ -110,19 +110,13 @@ public class AutonomousChooser {
     private SequentialCommandGroup getThreeRightAutoCommand(RobotContainer container) {
         SequentialCommandGroup command = new SequentialCommandGroup();
 
-        resetRobotPose(command, container, trajectories.getFiveRightAuto1());
+        resetRobotPose(command, container, trajectories.getThreeRightAuto1());
         setShotTypeLimelight(command, container);
-        followAndIntake(command, container, trajectories.getFiveRightAuto1());
-        followAndPreShoot(command, container, trajectories.getFiveRightAuto2());
-        followAndPreShoot(command, container, trajectories.getThreeRightAuto3());
-        shoot(command, container, 2.0);
-        followAndIntake(command, container, trajectories.getThreeRightAuto4());
-        shoot(command, container, 2.0);
-        /*
-        shoot(command,container, 1.0);
-        followIntakeAndPreShoot(command, container, trajectories.getFiveRightAuto3());
-        */
-
+        followAndIntake(command, container, trajectories.getThreeRightAuto1());
+        followAndPreShoot(command, container, trajectories.getThreeRightAuto2());
+        followIntakeAndPreShoot(command, container, trajectories.getThreeRightAuto3());
+        intakeAimAndShoot(command,container, 1.0);
+        aimAndShoot(command, container, 3.0);
         
         return command;
     }
@@ -134,9 +128,9 @@ public class AutonomousChooser {
         setShotTypeLimelight(command, container);
         followAndIntake(command, container, trajectories.getFiveRightAuto1());
         followAndPreShoot(command, container, trajectories.getThreeRightSlowAuto2());
-        shoot(command, container, 2.0);
+        aimAndShoot(command, container, 2.0);
         followAndIntake(command, container, trajectories.getThreeRightSlowAuto3());
-        shoot(command, container, 2.0);
+        aimAndShoot(command, container, 2.0);
         
         return command;
     }
