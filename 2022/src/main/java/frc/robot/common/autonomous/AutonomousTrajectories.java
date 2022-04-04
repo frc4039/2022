@@ -39,6 +39,10 @@ public class AutonomousTrajectories {
     private Trajectory twoAndTwoLeftAuto4;
     private Trajectory twoAndTwoLeftAuto5;
     private Trajectory twoAndTwoLeftAuto6;
+    private Trajectory taxiAuto1;
+    private Trajectory taxiAuto2;
+    private Trajectory taxiAuto3;
+    private Trajectory taxiAuto4;
 
     public AutonomousTrajectories(TrajectoryConstraint[] trajectoryConstraints) throws IOException {
         TrajectoryConstraint[] normalConstraints = Arrays.copyOf(trajectoryConstraints, trajectoryConstraints.length + 1);
@@ -268,6 +272,33 @@ public class AutonomousTrajectories {
                 slowConstraints, SAMPLE_DISTANCE
         );
 
+        taxiAuto1 = new Trajectory(
+            new SimplePathBuilder(new Vector2(-62.2, 76.6), Rotation2.fromDegrees(315.3))
+            .lineTo(new Vector2(-81.8, 96.2), Rotation2.fromDegrees(315.3))
+            .build(),
+            normalConstraints, SAMPLE_DISTANCE
+        );
+
+        taxiAuto2 = new Trajectory(
+            new SimplePathBuilder(new Vector2(-98, 0), Rotation2.fromDegrees(0))
+            .lineTo(new Vector2(-126, 0), Rotation2.fromDegrees(0))
+            .build(),
+            normalConstraints, SAMPLE_DISTANCE
+        );
+
+        taxiAuto3 = new Trajectory(
+            new SimplePathBuilder(new Vector2(-56, -82), Rotation2.fromDegrees(47.2))
+            .lineTo(new Vector2(-75.4, 103.3), Rotation2.fromDegrees(47.2))
+            .build(),
+            normalConstraints, SAMPLE_DISTANCE
+        );
+
+        taxiAuto4 = new Trajectory(
+            new SimplePathBuilder(new Vector2(0, -98), Rotation2.fromDegrees(91.6))
+            .lineTo(new Vector2(0, -126), Rotation2.fromDegrees(91.6))
+            .build(),
+            normalConstraints, SAMPLE_DISTANCE
+        );
     }
 
     public Trajectory getNoAuto() {
@@ -376,5 +407,21 @@ public class AutonomousTrajectories {
 
     public Trajectory getTwoAndTwoLeftAuto6() {
         return twoAndTwoLeftAuto6;
+    }
+
+    public Trajectory getTaxiAuto1(){
+        return taxiAuto1;
+    }
+
+    public Trajectory getTaxiAuto2(){
+        return taxiAuto2;
+    }
+
+    public Trajectory getTaxiAuto3(){
+        return taxiAuto3;
+    }
+
+    public Trajectory getTaxiAuto4(){
+        return taxiAuto4;
     }
 }
