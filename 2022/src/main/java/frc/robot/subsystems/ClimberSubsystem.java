@@ -24,6 +24,7 @@ public class ClimberSubsystem extends SubsystemBase {
     private final DoubleSolenoid m_climberSolenoid;
 
     private boolean enableClimb = false;
+    private boolean climberExtended = false;
 
     private final DigitalInput leftBottomLimitSwitch;
     private final DigitalInput rightBottomLimitSwitch;
@@ -153,6 +154,10 @@ public class ClimberSubsystem extends SubsystemBase {
     //TODO tune PID for velocity instaid of percent output in climber up/down
     public void climberUp() {
         if (enableClimb) {
+            if (climberExtended) {
+                m_climberMotorLeft.setNeutralMode(NeutralMode.Coast);
+                m_climberMotorRight.setNeutralMode(NeutralMode.Coast);
+            }
             if (getTopRightBB()) {
                 m_climberMotorRight.set(ControlMode.PercentOutput, 0);
             } else {
@@ -168,6 +173,10 @@ public class ClimberSubsystem extends SubsystemBase {
 
     public void climberDown() {
         if (enableClimb) {
+            if (climberExtended) {
+                m_climberMotorLeft.setNeutralMode(NeutralMode.Brake);
+                m_climberMotorRight.setNeutralMode(NeutralMode.Brake);
+            }
             if (getBottomRightLimit()) {
                 m_climberMotorRight.set(ControlMode.PercentOutput, 0);
             } else {
@@ -210,6 +219,7 @@ public class ClimberSubsystem extends SubsystemBase {
     public void climberExtend() {
         if (enableClimb) {
             m_climberSolenoid.set(DoubleSolenoid.Value.kForward);
+            climberExtended = true;
         }
     }
 

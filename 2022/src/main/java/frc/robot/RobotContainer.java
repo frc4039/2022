@@ -110,10 +110,10 @@ public class RobotContainer {
     driverController.getAButton().whenHeld(
       new ConditionalCommand(
         new SequentialCommandGroup(
-        new ShooterHoodRetract(shooterSubsystem),
-        new ChangeShotType(shooterSubsystem, preShooterSubsystem, "limelight"),
+        new ShooterHoodRetractCommand(shooterSubsystem),
+        new ChangeShotTypeCommand(shooterSubsystem, preShooterSubsystem, "limelight"),
         new InstantCommand(limelightSubsystem::turnLEDOn, limelightSubsystem),
-        new RotateToLimelight(drivetrainSubsystem, getDriveForwardAxis(), getDriveStrafeAxis(), limelightSubsystem, true)
+        new RotateToLimelightCommand(drivetrainSubsystem, getDriveForwardAxis(), getDriveStrafeAxis(), limelightSubsystem, true)
       ), 
       new InstantCommand(), 
       () -> shooterSubsystem.type == "limelight"
@@ -137,13 +137,13 @@ public class RobotContainer {
 
     operatorController.getBButton().and(driverController.getRightTriggerAxis().getButton(0.1)).whenActive(
       new SequentialCommandGroup(
-        new EjectSecondBall(shooterSubsystem, preShooterSubsystem, feederSubsystem, limelightSubsystem),
-        new EjectOutOfShooter(shooterSubsystem, preShooterSubsystem, feederSubsystem)
+        new AimAndEjectSecondBallCommand(drivetrainSubsystem, getDriveForwardAxis(), getDriveStrafeAxis(), limelightSubsystem, true, shooterSubsystem, preShooterSubsystem, feederSubsystem),
+        new EjectOutOfShooterCommand(shooterSubsystem, preShooterSubsystem, feederSubsystem)
       ).withTimeout(2)
     );
       
     operatorController.getXButton().whenHeld(
-      new EjectOutOfShooter(shooterSubsystem, preShooterSubsystem, feederSubsystem)
+      new EjectOutOfShooterCommand(shooterSubsystem, preShooterSubsystem, feederSubsystem)
     );
 
     operatorController.getBackButton().and(operatorController.getStartButton()).whenActive(
@@ -179,24 +179,24 @@ public class RobotContainer {
 
     operatorController.getDPadButton(Direction.LEFT).whenPressed(
       new SequentialCommandGroup(
-        new ShooterHoodRetract(shooterSubsystem),
-        new ChangeShotType(shooterSubsystem, preShooterSubsystem, "limelight"),
+        new ShooterHoodRetractCommand(shooterSubsystem),
+        new ChangeShotTypeCommand(shooterSubsystem, preShooterSubsystem, "limelight"),
         new InstantCommand(limelightSubsystem::turnLEDOn, limelightSubsystem)
       )
     );
 
     operatorController.getDPadButton(Direction.UP).whenPressed(
       new SequentialCommandGroup(
-        new ShooterHoodExtend(shooterSubsystem),
-        new ChangeShotType(shooterSubsystem, preShooterSubsystem, "high"),
+        new ShooterHoodExtendCommand(shooterSubsystem),
+        new ChangeShotTypeCommand(shooterSubsystem, preShooterSubsystem, "high"),
         new InstantCommand(limelightSubsystem::turnLEDOff, limelightSubsystem)
       )
     );
 
     operatorController.getDPadButton(Direction.DOWN).whenPressed(
       new SequentialCommandGroup(
-        new ShooterHoodRetract(shooterSubsystem),
-        new ChangeShotType(shooterSubsystem, preShooterSubsystem, "low"),
+        new ShooterHoodRetractCommand(shooterSubsystem),
+        new ChangeShotTypeCommand(shooterSubsystem, preShooterSubsystem, "low"),
         new InstantCommand(limelightSubsystem::turnLEDOff, limelightSubsystem)
       )
     );

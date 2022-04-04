@@ -219,20 +219,20 @@ public class AutonomousChooser {
 
     private void setShotTypeHigh(SequentialCommandGroup command, RobotContainer container) {
         command.addCommands(
-            new ShooterHoodExtend(container.getShooterSubsystem()),
-            new ChangeShotType(container.getShooterSubsystem(), container.getPreShooterSubsystem(), "high"));
+            new ShooterHoodExtendCommand(container.getShooterSubsystem()),
+            new ChangeShotTypeCommand(container.getShooterSubsystem(), container.getPreShooterSubsystem(), "high"));
     }
             
     private void setShotTypeLow(SequentialCommandGroup command, RobotContainer container) {
         command.addCommands(
-            new ShooterHoodRetract(container.getShooterSubsystem()),
-            new ChangeShotType(container.getShooterSubsystem(), container.getPreShooterSubsystem(), "low"));
+            new ShooterHoodRetractCommand(container.getShooterSubsystem()),
+            new ChangeShotTypeCommand(container.getShooterSubsystem(), container.getPreShooterSubsystem(), "low"));
     }
             
     private void setShotTypeLimelight(SequentialCommandGroup command, RobotContainer container) {
         command.addCommands(
-            new ShooterHoodRetract(container.getShooterSubsystem()),
-            new ChangeShotType(container.getShooterSubsystem(), container.getPreShooterSubsystem(), "limelight"),
+            new ShooterHoodRetractCommand(container.getShooterSubsystem()),
+            new ChangeShotTypeCommand(container.getShooterSubsystem(), container.getPreShooterSubsystem(), "limelight"),
             new InstantCommand(container.getLimelightSubsystem()::turnLEDOn, container.getLimelightSubsystem()));
     }
 
@@ -245,7 +245,7 @@ public class AutonomousChooser {
 
     private void aimAndShoot(SequentialCommandGroup command, RobotContainer container, double timeout) {
         command.addCommands(new ParallelRaceGroup(
-            new RotateToLimelight(container.getDrivetrainSubsystem(), container.getDriveForwardAxis(), container.getDriveStrafeAxis(), container.getLimelightSubsystem(), false),
+            new RotateToLimelightCommand(container.getDrivetrainSubsystem(), container.getDriveForwardAxis(), container.getDriveStrafeAxis(), container.getLimelightSubsystem(), false),
             new ShootCommand(container.getShooterSubsystem(), container.getPreShooterSubsystem(),
                 container.getFeederSubsystem(), container.getLimelightSubsystem(), container.getDrivetrainSubsystem())
                         .withTimeout(timeout)));
@@ -253,13 +253,13 @@ public class AutonomousChooser {
 
     private void aim(SequentialCommandGroup command, RobotContainer container, double timeout) {
         command.addCommands(
-            new RotateToLimelight(container.getDrivetrainSubsystem(), container.getDriveForwardAxis(), container.getDriveStrafeAxis(), container.getLimelightSubsystem(), false).withTimeout(timeout)
+            new RotateToLimelightCommand(container.getDrivetrainSubsystem(), container.getDriveForwardAxis(), container.getDriveStrafeAxis(), container.getLimelightSubsystem(), false).withTimeout(timeout)
         );
     }
 
     private void intakeAimAndShoot(SequentialCommandGroup command, RobotContainer container, double timeout) {
         command.addCommands(new ParallelRaceGroup(
-            new RotateToLimelight(container.getDrivetrainSubsystem(), container.getDriveForwardAxis(), container.getDriveStrafeAxis(), container.getLimelightSubsystem(), false),
+            new RotateToLimelightCommand(container.getDrivetrainSubsystem(), container.getDriveForwardAxis(), container.getDriveStrafeAxis(), container.getLimelightSubsystem(), false),
             new ShootCommand(container.getShooterSubsystem(), container.getPreShooterSubsystem(),
                 container.getFeederSubsystem(), container.getLimelightSubsystem(), container.getDrivetrainSubsystem())
                         .withTimeout(timeout),

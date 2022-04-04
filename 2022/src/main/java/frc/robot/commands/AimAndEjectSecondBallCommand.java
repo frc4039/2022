@@ -8,14 +8,13 @@ import frc.robot.subsystems.PreShooterSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.common.input.Axis;
 
-public class AimAndShootCommand extends ParallelCommandGroup{
+public class AimAndEjectSecondBallCommand extends ParallelCommandGroup{
 
-    public AimAndShootCommand(DrivetrainSubsystem drivetrain, Axis forward, Axis strafe, LimelightSubsystem limelightSubsystem, boolean updateOdometry, ShooterSubsystem shooter, PreShooterSubsystem preShooter, FeederSubsystem feeder) {
+    public AimAndEjectSecondBallCommand(DrivetrainSubsystem drivetrain, Axis forward, Axis strafe, LimelightSubsystem limelightSubsystem, boolean updateOdometry, ShooterSubsystem shooter, PreShooterSubsystem preShooter, FeederSubsystem feeder) {
         addCommands(
             new RotateToLimelightCommand(drivetrain, forward, strafe, limelightSubsystem, updateOdometry),
-            new ShootCommand(shooter, preShooter, feeder, limelightSubsystem, drivetrain)
+            new EjectSecondBallCommand(shooter, preShooter, feeder, limelightSubsystem, drivetrain)
         );
     }
-    
     
 }

@@ -16,7 +16,7 @@ import frc.robot.subsystems.ShooterSubsystem;
 /**
  * An example command that uses an example subsystem.
  */
-public class EjectOutOfShooter extends CommandBase {
+public class EjectOutOfShooterCommand extends CommandBase {
   private final FeederSubsystem m_feeder;
   private final ShooterSubsystem m_shooter;
   private final PreShooterSubsystem m_preShooter;
@@ -31,7 +31,7 @@ public class EjectOutOfShooter extends CommandBase {
    *
    * @param subsystem 
    */
-  public EjectOutOfShooter(ShooterSubsystem shooter, PreShooterSubsystem preShooter, FeederSubsystem feeder) {
+  public EjectOutOfShooterCommand(ShooterSubsystem shooter, PreShooterSubsystem preShooter, FeederSubsystem feeder) {
     m_shooter = shooter;
     m_preShooter = preShooter;
     m_feeder = feeder;

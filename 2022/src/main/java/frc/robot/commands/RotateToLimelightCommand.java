@@ -11,7 +11,7 @@ import frc.robot.common.control.PidConstants;
 import frc.robot.common.control.PidController;
 import frc.robot.common.input.Axis;
 
-public class RotateToLimelight extends CommandBase {
+public class RotateToLimelightCommand extends CommandBase {
     private DrivetrainSubsystem drivetrainSubsystem;
     private Axis forward;
     private Axis strafe;
@@ -20,7 +20,7 @@ public class RotateToLimelight extends CommandBase {
 
     private PidController rotationController = new PidController(new PidConstants(0.04, 0.0, 0));
 
-    public RotateToLimelight(DrivetrainSubsystem drivetrain, Axis forward, Axis strafe, LimelightSubsystem limelightSubsystem, boolean updateOdometry) {
+    public RotateToLimelightCommand(DrivetrainSubsystem drivetrain, Axis forward, Axis strafe, LimelightSubsystem limelightSubsystem, boolean updateOdometry) {
         this.forward = forward;
         this.strafe = strafe;
         this.limelightSubsystem = limelightSubsystem;
