@@ -161,6 +161,7 @@ public class AutonomousChooser {
         SequentialCommandGroup command = new SequentialCommandGroup();
 
         resetRobotPose(command, container, trajectories.getTaxiAuto1());
+        setShotTypeLimelight(command, container);
         followAndPreShoot(command, container, trajectories.getTaxiAuto1());
         aim(command, container, 1.0);
         aimAndShoot(command, container, 3.0);
@@ -172,6 +173,7 @@ public class AutonomousChooser {
         SequentialCommandGroup command = new SequentialCommandGroup();
 
         resetRobotPose(command, container, trajectories.getTaxiAuto2());
+        setShotTypeLimelight(command, container);
         followAndPreShoot(command, container, trajectories.getTaxiAuto2());
         aim(command, container, 1.0);
         aimAndShoot(command, container, 3.0);
@@ -183,6 +185,7 @@ public class AutonomousChooser {
         SequentialCommandGroup command = new SequentialCommandGroup();
 
         resetRobotPose(command, container, trajectories.getTaxiAuto3());
+        setShotTypeLimelight(command, container);
         followAndPreShoot(command, container, trajectories.getTaxiAuto3());
         aim(command, container, 1.0);
         aimAndShoot(command, container, 3.0);
@@ -194,6 +197,7 @@ public class AutonomousChooser {
         SequentialCommandGroup command = new SequentialCommandGroup();
 
         resetRobotPose(command, container, trajectories.getTaxiAuto4());
+        setShotTypeLimelight(command, container);
         followAndPreShoot(command, container, trajectories.getTaxiAuto4());
         aim(command, container, 1.0);
         aimAndShoot(command, container, 3.0);
