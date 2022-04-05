@@ -274,28 +274,28 @@ public class AutonomousTrajectories {
 
         taxiAuto1 = new Trajectory(
             new SimplePathBuilder(new Vector2(-62.2, 76.6), Rotation2.fromDegrees(315.3))
-            .lineTo(new Vector2(-81.8, 96.2), Rotation2.fromDegrees(315.3))
+            .lineTo(new Vector2(-89.4, 103.9), Rotation2.fromDegrees(315.3))
             .build(),
             normalConstraints, SAMPLE_DISTANCE
         );
 
         taxiAuto2 = new Trajectory(
             new SimplePathBuilder(new Vector2(-98, 0), Rotation2.fromDegrees(0))
-            .lineTo(new Vector2(-126, 0), Rotation2.fromDegrees(0))
+            .lineTo(new Vector2(-132, 0), Rotation2.fromDegrees(0))
             .build(),
             normalConstraints, SAMPLE_DISTANCE
         );
 
         taxiAuto3 = new Trajectory(
             new SimplePathBuilder(new Vector2(-56, -82), Rotation2.fromDegrees(47.2))
-            .lineTo(new Vector2(-75.4, 103.3), Rotation2.fromDegrees(47.2))
+            .lineTo(new Vector2(-80.4, -108.3), Rotation2.fromDegrees(47.2))
             .build(),
             normalConstraints, SAMPLE_DISTANCE
         );
 
         taxiAuto4 = new Trajectory(
             new SimplePathBuilder(new Vector2(0, -98), Rotation2.fromDegrees(91.6))
-            .lineTo(new Vector2(0, -126), Rotation2.fromDegrees(91.6))
+            .lineTo(new Vector2(0, -132), Rotation2.fromDegrees(91.6))
             .build(),
             normalConstraints, SAMPLE_DISTANCE
         );
