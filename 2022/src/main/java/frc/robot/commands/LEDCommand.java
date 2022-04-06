@@ -51,7 +51,7 @@ public class LEDCommand extends CommandBase{
             int hueOffset = 0;
             for (int i = 0; i < LEDConstants.LED_STRIP_LENGTH; i++) {
                 int hue = i + hueOffset;
-                if (hue > 180) {
+                while (hue > 180) {
                     hue -= 180;
                 }
                 m_ledSubsystem.setHSV(i, hue, LEDConstants.BRIGHTNESS, LEDConstants.BRIGHTNESS);
