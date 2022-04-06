@@ -8,7 +8,7 @@ public class LEDCommand extends CommandBase{
     
     private AddressableLEDSubsystem m_ledSubsystem;
     private String m_mode;
-    
+
     private int hue;
     private double hue2;
 
@@ -23,6 +23,7 @@ public class LEDCommand extends CommandBase{
     public void initialize() {
         if (m_mode != "rainbow"
         && m_mode != "rainbow2"
+        && m_mode != "rainbow3"
         && m_mode != "off"
         && m_mode != "red"
         && m_mode != "green"
@@ -38,13 +39,23 @@ public class LEDCommand extends CommandBase{
             m_ledSubsystem.setHSVAll(hue, LEDConstants.BRIGHTNESS, LEDConstants.BRIGHTNESS);
             hue += 1;
             if (hue > 180) {
-                hue = 0;
+                hue -= 180;
             }
         } else if (m_mode == "rainbow2") {
             m_ledSubsystem.setHSVAll((int)Math.round(hue2), LEDConstants.BRIGHTNESS, LEDConstants.BRIGHTNESS);
             hue2 += LEDConstants.RAINBOW2_HUE_SPEED;
             if (hue2 > 180) {
-                hue2 = LEDConstants.RAINBOW2_HUE_SPEED;
+                hue2 -= 180;
+            }
+        } else if (m_mode == "rainbow3") {
+            int hueOffset = 0;
+            for (int i = 0; i < LEDConstants.LED_STRIP_LENGTH; i++) {
+                int hue = i + hueOffset;
+                if (hue > 180) {
+                    hue -= 180;
+                }
+                m_ledSubsystem.setHSV(i, hue, LEDConstants.BRIGHTNESS, LEDConstants.BRIGHTNESS);
+                hueOffset++;
             }
         } else if (m_mode == "off") {
             m_ledSubsystem.setRGBAll(0, 0, 0);
