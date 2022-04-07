@@ -40,13 +40,13 @@ public class LEDCommand extends CommandBase{
     @Override
     public void execute() {
         if (m_mode == "rainbow") {
-            m_ledSubsystem.setHSVAll(hue, LEDConstants.BRIGHTNESS, LEDConstants.BRIGHTNESS);
-            hue += 1;
+            m_ledSubsystem.setHSVAll(hue, LEDConstants.SATURATION, LEDConstants.BRIGHTNESS);
+            hue ++;
             if (hue > 180) {
                 hue -= 180;
             }
         } else if (m_mode == "rainbow2") {
-            m_ledSubsystem.setHSVAll((int)Math.round(hue2), LEDConstants.BRIGHTNESS, LEDConstants.BRIGHTNESS);
+            m_ledSubsystem.setHSVAll((int)Math.round(hue2), LEDConstants.SATURATION, LEDConstants.BRIGHTNESS);
             hue2 += LEDConstants.RAINBOW2_HUE_SPEED;
             if (hue2 > 180) {
                 hue2 -= 180;
@@ -58,10 +58,13 @@ public class LEDCommand extends CommandBase{
                 while (hue > 180) {
                     hue -= 180;
                 }
-                m_ledSubsystem.setHSV(i, hue, LEDConstants.BRIGHTNESS, LEDConstants.BRIGHTNESS);
+                m_ledSubsystem.setHSV(i, hue, LEDConstants.SATURATION, LEDConstants.BRIGHTNESS);
                 hueOffset++;
             }
-            hue++;
+            hue ++;
+            if (hue > 180) {
+                hue -= 180;
+            }
         } else if (m_mode == "off") {
             m_ledSubsystem.setAllOff();
         } else if (m_mode == "red") {

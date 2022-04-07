@@ -79,7 +79,7 @@ public class RobotContainer {
     CommandScheduler.getInstance().registerSubsystem(ledSubsystem);
     CommandScheduler.getInstance().setDefaultCommand(drivetrainSubsystem, new DriveCommand(drivetrainSubsystem, getDriveForwardAxis(), getDriveStrafeAxis(), getDriveRotationXAxis(), getDriveRotationYAxis()));
     CommandScheduler.getInstance().setDefaultCommand(feederSubsystem, new FeederManagementCommand(feederSubsystem, this));
-    CommandScheduler.getInstance().setDefaultCommand(ledSubsystem, new LEDCommand(ledSubsystem, feederSubsystem, "cargo"));
+    CommandScheduler.getInstance().setDefaultCommand(ledSubsystem, new LEDCommand(ledSubsystem, feederSubsystem, "rainbow3"));
 
     driverReadout = new DriverReadout(this);
 
@@ -248,6 +248,10 @@ public class RobotContainer {
 
   public FeederSubsystem getFeederSubsystem() {
     return feederSubsystem;
+  }
+
+  public AddressableLEDSubsystem getAddressableLEDSubsystem() {
+    return ledSubsystem;
   }
 
   public XboxController2 getDriverController() {
