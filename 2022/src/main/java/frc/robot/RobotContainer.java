@@ -76,9 +76,10 @@ public class RobotContainer {
     CommandScheduler.getInstance().registerSubsystem(intakeSubsystem);
     CommandScheduler.getInstance().registerSubsystem(m_climberSubsystem);
     CommandScheduler.getInstance().registerSubsystem(limelightSubsystem);
+    CommandScheduler.getInstance().registerSubsystem(ledSubsystem);
     CommandScheduler.getInstance().setDefaultCommand(drivetrainSubsystem, new DriveCommand(drivetrainSubsystem, getDriveForwardAxis(), getDriveStrafeAxis(), getDriveRotationXAxis(), getDriveRotationYAxis()));
     CommandScheduler.getInstance().setDefaultCommand(feederSubsystem, new FeederManagementCommand(feederSubsystem, this));
-    CommandScheduler.getInstance().setDefaultCommand(ledSubsystem, new LEDCommand(ledSubsystem, "rainbow2"));
+    CommandScheduler.getInstance().setDefaultCommand(ledSubsystem, new LEDCommand(ledSubsystem, feederSubsystem, "cargo"));
 
     driverReadout = new DriverReadout(this);
 

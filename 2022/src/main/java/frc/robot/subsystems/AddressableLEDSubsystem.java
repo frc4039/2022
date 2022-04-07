@@ -38,4 +38,39 @@ public class AddressableLEDSubsystem extends SubsystemBase {
         }
         m_led.setData(m_ledBuffer);
     }
+
+    public void setRedAll() {
+        for (int i = 0; i < LEDConstants.LED_STRIP_LENGTH; i++) {
+            m_ledBuffer.setRGB(i, LEDConstants.BRIGHTNESS, 0, 0);
+        }
+        m_led.setData(m_ledBuffer);
+    }
+
+    public void setGreenAll() {
+        for (int i = 0; i < LEDConstants.LED_STRIP_LENGTH; i++) {
+            m_ledBuffer.setRGB(i, 0, LEDConstants.BRIGHTNESS, 0);
+        }
+        m_led.setData(m_ledBuffer);
+    }
+
+    public void setBlueAll() {
+        for (int i = 0; i < LEDConstants.LED_STRIP_LENGTH; i++) {
+            m_ledBuffer.setRGB(i, 0, 0, LEDConstants.BRIGHTNESS);
+        }
+        m_led.setData(m_ledBuffer);
+    }
+
+    public void setAllOff() {
+        for (int i = 0; i < LEDConstants.LED_STRIP_LENGTH; i++) {
+            m_ledBuffer.setRGB(i, 0, 0, 0);
+        }
+        m_led.setData(m_ledBuffer);
+    }
+
+    public void setWhiteAll() {
+        for (int i = 0; i < LEDConstants.LED_STRIP_LENGTH; i++) {
+            m_ledBuffer.setRGB(i, 0, 0, 0);
+        }
+        m_led.setData(m_ledBuffer);
+    }
 }
