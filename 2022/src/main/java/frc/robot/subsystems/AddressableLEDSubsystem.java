@@ -77,7 +77,7 @@ public class AddressableLEDSubsystem extends SubsystemBase {
             setHSV(i, (int)Math.round(varHue), LEDConstants.SATURATION, LEDConstants.BRIGHTNESS);
         }
 
-        hue += 0.5;
+        hue += LEDConstants.RAINBOW_HUE_SPEED;
         hue %= 180;
     }
 
