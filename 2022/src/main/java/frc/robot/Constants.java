@@ -178,8 +178,8 @@ public final class Constants {
 
     public static final class LEDConstants {
         public static final int LED_STRIP_PORT = 0;
-        public static final int LED_STRIP_LENGTH = 144;
-        public static final int BRIGHTNESS = 255;
+        public static final int LED_STRIP_LENGTH = 150;
+        public static final int BRIGHTNESS = 100;
         public static final int SATURATION = 255;
         public static final double RAINBOW2_HUE_SPEED = 0.1;
     }

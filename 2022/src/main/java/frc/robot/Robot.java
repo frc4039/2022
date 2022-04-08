@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.commands.LEDCommand;
 import frc.robot.commands.StopEverythingCommand;
 import frc.robot.common.UpdateManager;
 import frc.robot.common.math.RigidTransform2;
@@ -62,8 +61,6 @@ public class Robot extends TimedRobot {
     updateManager.startLoop(5.0e-3);
     pcmCompressor.enableDigital();
     CameraServer.startAutomaticCapture();
-    
-    CommandScheduler.getInstance().schedule(new LEDCommand(m_robotContainer.getAddressableLEDSubsystem(), m_robotContainer.getFeederSubsystem(), "cargo"));
   }
 
   /**
@@ -89,8 +86,7 @@ public class Robot extends TimedRobot {
     m_robotContainer.disableClimber();
     m_robotContainer.stopEverything();
 
-    CommandScheduler.getInstance().schedule(CommandScheduler.getInstance().getDefaultCommand(m_robotContainer.getAddressableLEDSubsystem()));
-  }
+    }
 
   @Override
   public void disabledPeriodic() {}
