@@ -185,7 +185,9 @@ public final class Constants {
         //rainbow hue speed is the speed for the slowest rainbow
         public static final double RAINBOW_HUE_SPEED = 0.5;
         //Hue is 0-360
-        
+        public static final double FLASHING_SPEED = 2;
+        //the rate in seconds that flashing hue flashes at
+
         public static final int HUE_RED = 0;
         public static final int HUE_ORANGE = 30;
         public static final int HUE_YELLOW = 60;
