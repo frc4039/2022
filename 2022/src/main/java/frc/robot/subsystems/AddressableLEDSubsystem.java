@@ -11,7 +11,7 @@ public class AddressableLEDSubsystem extends SubsystemBase {
     private AddressableLED m_led;
     private AddressableLEDBuffer m_ledBuffer;
     private double hue;
-    private FeederSubsystem feeder;
+    private double toggle = 0;
     
     public AddressableLEDSubsystem() {
         m_led = new AddressableLED(LEDConstants.LED_STRIP_PORT);
@@ -71,7 +71,7 @@ public class AddressableLEDSubsystem extends SubsystemBase {
         }
     }
 
-    public void rainbow() {
+    public void slowRainbow() {
         for (var i = 0; i < LEDConstants.LED_STRIP_LENGTH; i++) {
             final var varHue = (hue + (i * 180 / LEDConstants.LED_STRIP_LENGTH)) % 180;
             setHSV(i, (int)Math.round(varHue), LEDConstants.SATURATION, LEDConstants.BRIGHTNESS);
@@ -81,25 +81,44 @@ public class AddressableLEDSubsystem extends SubsystemBase {
         hue %= 180;
     }
 
-    public void cargo() {
-        if (feeder.getBothBallBreakBeams()) {
-            setGreenAll();
+    public void rainbow() {
+        for (var i = 0; i < LEDConstants.LED_STRIP_LENGTH; i++) {
+            final var varHue = (hue + (i * 180 / LEDConstants.LED_STRIP_LENGTH)) % 180;
+            setHSV(i, (int)Math.round(varHue), LEDConstants.SATURATION, LEDConstants.BRIGHTNESS);
         }
-        else if (feeder.getBreakBeamUpperBall()) {
-            setBlueAll();
+
+        hue += LEDConstants.RAINBOW_HUE_SPEED*5;
+        hue %= 180;
+    }
+
+    public void fastRainbow() {
+        for (var i = 0; i < LEDConstants.LED_STRIP_LENGTH; i++) {
+            final var varHue = (hue + (i * 180 / LEDConstants.LED_STRIP_LENGTH)) % 180;
+            setHSV(i, (int)Math.round(varHue), LEDConstants.SATURATION, LEDConstants.BRIGHTNESS);
         }
-        else {
-            setRedAll();
+
+        hue += LEDConstants.RAINBOW_HUE_SPEED*15;
+        hue %= 180;
+    }
+
+        public void flashingHue(int hue) {
+        for (var i = 0; i < LEDConstants.LED_STRIP_LENGTH; i++) {
+            //HSV Hue is normally 0-360, WPILib Hue is 0-180
+            //therefore <hue> below is divided by two, allowing Constants to be representative of traditional Hue values
+            setHSV(i, hue/2, LEDConstants.SATURATION*(int)Math.round(toggle), LEDConstants.BRIGHTNESS);
         }
+
+        toggle += 0.05;
+        toggle %= 2;
     }
 
     @Override
     public void periodic(){
-        if (DriverStation.isEnabled()) {
-            cargo();
-        } else {
-            rainbow();
+
+        if (DriverStation.isDisabled()) {
+            slowRainbow();
         }
+
         m_led.setData(m_ledBuffer);
     }
 }
