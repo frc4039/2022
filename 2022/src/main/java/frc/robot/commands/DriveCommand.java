@@ -22,7 +22,7 @@ public class DriveCommand extends CommandBase {
     private SlewRateLimiter forwardRateLimiter = new SlewRateLimiter(2);
     private SlewRateLimiter strafeRateLimiter = new SlewRateLimiter(2);
     private SlewRateLimiter rotationLimiter = new SlewRateLimiter(2);
-    private PidController rotationController = new PidController(new PidConstants(0.04, 0.0, 0));
+    private PidController rotationController = new PidController(new PidConstants(0.035, 0.0, 0));
     private double lastSetPoint;
 
     public DriveCommand(DrivetrainSubsystem drivetrain, Axis forward, Axis strafe, Axis rotationXAxis, Axis rotationYAxis) {
