@@ -48,7 +48,7 @@ public class LEDCommand extends CommandBase{
             if (m_feederSubsystem.getBothBallBreakBeams()) {
                 m_ledSubsystem.setGreenAll();
             }
-            else if (m_feederSubsystem.getBreakBeamUpperBall()) {
+            else if (m_feederSubsystem.getBreakBeamIntake() || m_feederSubsystem.getBreakBeamUpperBall()) {
                 m_ledSubsystem.setBlueAll();
             }
             else {
