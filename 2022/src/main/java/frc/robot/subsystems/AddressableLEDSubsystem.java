@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.LEDConstants;
 
 public class AddressableLEDSubsystem extends SubsystemBase {
@@ -109,8 +110,8 @@ public class AddressableLEDSubsystem extends SubsystemBase {
             setHSV(i, hue/2, LEDConstants.SATURATION*(int)Math.round(toggle), LEDConstants.BRIGHTNESS);
         }
 
-        toggle += 0.02;
-        toggle %= LEDConstants.FLASHING_SPEED / 2;
+        toggle += 0.04 / LEDConstants.FLASHING_SPEED;
+        toggle %= 2;
     }
 
     @Override
