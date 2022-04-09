@@ -85,7 +85,8 @@ public class Robot extends TimedRobot {
   public void disabledInit() {
     m_robotContainer.disableClimber();
     m_robotContainer.stopEverything();
-  }
+
+    }
 
   @Override
   public void disabledPeriodic() {}
