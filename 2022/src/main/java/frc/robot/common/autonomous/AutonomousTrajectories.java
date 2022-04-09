@@ -248,14 +248,14 @@ public class AutonomousTrajectories {
 
         twoAndTwoLeftAuto3 = new Trajectory(
             new SimplePathBuilder(new Vector2(-130, 31.792), Rotation2.fromDegrees(-13.74218))
-                .lineTo(new Vector2(-134.885, -0.3155), Rotation2.fromDegrees(-107.1113))
-                .lineTo(new Vector2(-139.769, -32.423), Rotation2.fromDegrees(-107.1113))
+                .lineTo(new Vector2(-144, 10), Rotation2.fromDegrees(-100))
+                .lineTo(new Vector2(-147, -32.423), Rotation2.fromDegrees(-90))
                 .build(),
                 slowConstraints, SAMPLE_DISTANCE
         );
 
         twoAndTwoLeftAuto4 = new Trajectory(
-            new SimplePathBuilder(new Vector2(-139.769, -32.423), Rotation2.fromDegrees(-107.1113))
+            new SimplePathBuilder(new Vector2(-139.769, -32.423), Rotation2.fromDegrees(-90))
                 .lineTo(new Vector2(-119.036, 46.2705), Rotation2.fromDegrees(68.66734))
                 .lineTo(new Vector2(-88.303, 124.964), Rotation2.fromDegrees(68.66734))
                 .build(),
