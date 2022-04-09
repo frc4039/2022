@@ -107,11 +107,11 @@ public class AddressableLEDSubsystem extends SubsystemBase {
         for (var i = 0; i < LEDConstants.LED_STRIP_LENGTH; i++) {
             //HSV Hue is normally 0-360, WPILib Hue is 0-180
             //therefore <hue> below is divided by two, allowing Constants to be representative of traditional Hue values
-            setHSV(i, hue/2, LEDConstants.SATURATION*(int)Math.round(toggle), LEDConstants.BRIGHTNESS);
+            setHSV(i, hue/2, LEDConstants.SATURATION*(int)Math.round(toggle), LEDConstants.BRIGHTNESS*(int)Math.round(toggle));
         }
 
-        toggle += 0.04 / LEDConstants.FLASHING_SPEED;
-        toggle %= 2;
+        toggle += 0.02 / LEDConstants.FLASHING_SPEED;
+        toggle %= 1;
     }
 
     @Override
