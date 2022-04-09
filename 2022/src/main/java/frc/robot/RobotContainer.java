@@ -7,6 +7,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -74,7 +75,7 @@ public class RobotContainer {
     CommandScheduler.getInstance().registerSubsystem(intakeSubsystem);
     CommandScheduler.getInstance().registerSubsystem(m_climberSubsystem);
     CommandScheduler.getInstance().registerSubsystem(limelightSubsystem);
-    CommandScheduler.getInstance().setDefaultCommand(drivetrainSubsystem, new DriveCommand(drivetrainSubsystem, getDriveForwardAxis(), getDriveStrafeAxis(), getDriveRotationAxis()));
+    CommandScheduler.getInstance().setDefaultCommand(drivetrainSubsystem, new DriveCommand(drivetrainSubsystem, getDriveForwardAxis(), getDriveStrafeAxis(), getDriveRotationXAxis(), getDriveRotationYAxis()));
     CommandScheduler.getInstance().setDefaultCommand(feederSubsystem, new FeederManagementCommand(feederSubsystem, this));
 
     driverReadout = new DriverReadout(this);
@@ -96,21 +97,27 @@ public class RobotContainer {
 
     //Driver Right Trigger shoots
     driverController.getRightTriggerAxis().getButton(0.1).whenHeld(
-        new ShootCommand(shooterSubsystem, preShooterSubsystem, feederSubsystem, limelightSubsystem, drivetrainSubsystem)
-    );
+      new ConditionalCommand(
+        new AimAndShootCommand(drivetrainSubsystem, getDriveForwardAxis(), getDriveStrafeAxis(), limelightSubsystem, true, shooterSubsystem, preShooterSubsystem, feederSubsystem), 
+        new ShootCommand(shooterSubsystem, preShooterSubsystem, feederSubsystem, limelightSubsystem, drivetrainSubsystem), 
+        () -> shooterSubsystem.type == "limelight"
+        ));
 
     driverController.getYButton().whenHeld(
       new DriveWithSetRotationCommand(drivetrainSubsystem, getDriveForwardAxis(), getDriveStrafeAxis(), 0)
     );
 
     driverController.getAButton().whenHeld(
-      new SequentialCommandGroup(
-        new ShooterHoodRetract(shooterSubsystem),
-        new ChangeShotType(shooterSubsystem, preShooterSubsystem, "limelight"),
+      new ConditionalCommand(
+        new SequentialCommandGroup(
+        new ShooterHoodRetractCommand(shooterSubsystem),
+        new ChangeShotTypeCommand(shooterSubsystem, preShooterSubsystem, "limelight"),
         new InstantCommand(limelightSubsystem::turnLEDOn, limelightSubsystem),
-        new RotateToLimelight(drivetrainSubsystem, getDriveForwardAxis(), getDriveStrafeAxis(), limelightSubsystem, true)
-      )
-    );
+        new RotateToLimelightCommand(drivetrainSubsystem, getDriveForwardAxis(), getDriveStrafeAxis(), limelightSubsystem, true)
+      ), 
+      new InstantCommand(), 
+      () -> shooterSubsystem.type == "limelight"
+      ));
     
     // intakeBB.whenActive(
     //   new RumbleBothCommand(this).withTimeout(2.0)
@@ -130,13 +137,13 @@ public class RobotContainer {
 
     operatorController.getBButton().and(driverController.getRightTriggerAxis().getButton(0.1)).whenActive(
       new SequentialCommandGroup(
-        new EjectSecondBall(shooterSubsystem, preShooterSubsystem, feederSubsystem, limelightSubsystem),
-        new EjectOutOfShooter(shooterSubsystem, preShooterSubsystem, feederSubsystem)
+        new AimAndEjectSecondBallCommand(drivetrainSubsystem, getDriveForwardAxis(), getDriveStrafeAxis(), limelightSubsystem, true, shooterSubsystem, preShooterSubsystem, feederSubsystem),
+        new EjectOutOfShooterCommand(shooterSubsystem, preShooterSubsystem, feederSubsystem)
       ).withTimeout(2)
     );
       
     operatorController.getXButton().whenHeld(
-      new EjectOutOfShooter(shooterSubsystem, preShooterSubsystem, feederSubsystem)
+      new EjectOutOfShooterCommand(shooterSubsystem, preShooterSubsystem, feederSubsystem)
     );
 
     operatorController.getBackButton().and(operatorController.getStartButton()).whenActive(
@@ -172,24 +179,24 @@ public class RobotContainer {
 
     operatorController.getDPadButton(Direction.LEFT).whenPressed(
       new SequentialCommandGroup(
-        new ShooterHoodRetract(shooterSubsystem),
-        new ChangeShotType(shooterSubsystem, preShooterSubsystem, "limelight"),
+        new ShooterHoodRetractCommand(shooterSubsystem),
+        new ChangeShotTypeCommand(shooterSubsystem, preShooterSubsystem, "limelight"),
         new InstantCommand(limelightSubsystem::turnLEDOn, limelightSubsystem)
       )
     );
 
     operatorController.getDPadButton(Direction.UP).whenPressed(
       new SequentialCommandGroup(
-        new ShooterHoodExtend(shooterSubsystem),
-        new ChangeShotType(shooterSubsystem, preShooterSubsystem, "high"),
+        new ShooterHoodExtendCommand(shooterSubsystem),
+        new ChangeShotTypeCommand(shooterSubsystem, preShooterSubsystem, "high"),
         new InstantCommand(limelightSubsystem::turnLEDOff, limelightSubsystem)
       )
     );
 
     operatorController.getDPadButton(Direction.DOWN).whenPressed(
       new SequentialCommandGroup(
-        new ShooterHoodRetract(shooterSubsystem),
-        new ChangeShotType(shooterSubsystem, preShooterSubsystem, "low"),
+        new ShooterHoodRetractCommand(shooterSubsystem),
+        new ChangeShotTypeCommand(shooterSubsystem, preShooterSubsystem, "low"),
         new InstantCommand(limelightSubsystem::turnLEDOff, limelightSubsystem)
       )
     );
@@ -208,8 +215,12 @@ public class RobotContainer {
     return driverController.getLeftXAxis();
   }
 
-  private Axis getDriveRotationAxis() {
+  private Axis getDriveRotationXAxis() {
     return driverController.getRightXAxis();
+  }
+
+  private Axis getDriveRotationYAxis() {
+    return driverController.getRightYAxis();
   }
 
   public DrivetrainSubsystem getDrivetrainSubsystem() {

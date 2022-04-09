@@ -54,7 +54,7 @@ public class DrivetrainSubsystem implements Subsystem, UpdateManager.Updatable {
 
     private final HolonomicMotionProfiledTrajectoryFollower follower = new HolonomicMotionProfiledTrajectoryFollower(
             new PidConstants(0.1, 0.0, 0.025),
-            new PidConstants(0.4, 0.0, 0.06),
+            new PidConstants(0.35, 0.0, 0.03),
             new HolonomicFeedforward(FEEDFORWARD_CONSTANTS)
     );
 
@@ -250,6 +250,8 @@ public class DrivetrainSubsystem implements Subsystem, UpdateManager.Updatable {
                     gyroscope.getUnadjustedAngle().rotateBy(angle.inverse())
             );
         }
+        resetPose(new RigidTransform2(getPose().translation, angle));
+        getDefaultCommand().initialize();
     }
 
     public double getAverageAbsoluteValueVelocity() {

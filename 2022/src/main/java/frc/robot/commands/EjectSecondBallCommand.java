@@ -12,6 +12,7 @@ import frc.robot.Constants.FeederConstants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.common.util.InterpolatingDouble;
 import frc.robot.common.util.InterpolatingTreeMap;
+import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.FeederSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.PreShooterSubsystem;
@@ -20,11 +21,12 @@ import frc.robot.subsystems.ShooterSubsystem;
 /**
  * An example command that uses an example subsystem.
  */
-public class EjectSecondBall extends CommandBase {
+public class EjectSecondBallCommand extends CommandBase {
   private final FeederSubsystem m_feeder;
   private final ShooterSubsystem m_shooter;
   private final PreShooterSubsystem m_preShooter;
   private final LimelightSubsystem m_limelight;
+  private final DrivetrainSubsystem m_drivetrain;
 
   private String shotType;
   private String preShotType;
@@ -44,11 +46,12 @@ public class EjectSecondBall extends CommandBase {
    *
    * @param subsystem 
    */
-  public EjectSecondBall(ShooterSubsystem shooter, PreShooterSubsystem preShooter, FeederSubsystem feeder, LimelightSubsystem limelight) {
+  public EjectSecondBallCommand(ShooterSubsystem shooter, PreShooterSubsystem preShooter, FeederSubsystem feeder, LimelightSubsystem limelight, DrivetrainSubsystem drivetrain) {
     m_shooter = shooter;
     m_preShooter = preShooter;
     m_feeder = feeder;
     m_limelight = limelight;
+    m_drivetrain = drivetrain;
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_shooter, m_preShooter, m_feeder);
@@ -58,10 +61,10 @@ public class EjectSecondBall extends CommandBase {
   @Override
   public void initialize() {
 
-    shotProfile.put(new InterpolatingDouble(105.0), new InterpolatingDouble(2100.0));
-    shotProfile.put(new InterpolatingDouble(135.0), new InterpolatingDouble(2300.0));
-    shotProfile.put(new InterpolatingDouble(185.0), new InterpolatingDouble(2700.0));
-    shotProfile.put(new InterpolatingDouble(250.0), new InterpolatingDouble(3200.0));
+    shotProfile.put(new InterpolatingDouble(ShooterConstants.kClosestKey), new InterpolatingDouble(ShooterConstants.kClosestValue));
+    shotProfile.put(new InterpolatingDouble(ShooterConstants.kCloseKey), new InterpolatingDouble(ShooterConstants.kCloseValue));
+    shotProfile.put(new InterpolatingDouble(ShooterConstants.kFarKey), new InterpolatingDouble(ShooterConstants.kFarValue));
+    shotProfile.put(new InterpolatingDouble(ShooterConstants.kFarthestKey), new InterpolatingDouble(ShooterConstants.kFarthestValue));
     ShooterRPM = (double)(shotProfile.getInterpolated(new InterpolatingDouble(m_limelight.getDistanceToTarget())).value);
     
     PreShooterRPM = ShooterConstants.kpreShooterLimelightShotRPM;
@@ -127,5 +130,22 @@ public class EjectSecondBall extends CommandBase {
   @Override
   public boolean isFinished() {
     return ejected;
+  }
+
+  private boolean aimedAtTarget() {
+    if (m_limelight.getValidTarget()) {
+      return true;
+    }
+    else {
+      double rotation = m_drivetrain.getPose().rotation.toDegrees();
+      double toTarget = Math.toDegrees(Math.atan2(m_drivetrain.getPose().translation.y, m_drivetrain.getPose().translation.x));
+
+      double angleDifference = Math.abs(rotation - toTarget);
+      if (angleDifference > 180) {
+        angleDifference -= 360;
+      }
+
+      return angleDifference < ShooterConstants.kAngleWindow;
+    }
   }
 }

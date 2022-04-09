@@ -1,5 +1,6 @@
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
@@ -10,7 +11,7 @@ import frc.robot.common.control.PidConstants;
 import frc.robot.common.control.PidController;
 import frc.robot.common.input.Axis;
 
-public class RotateToLimelight extends CommandBase {
+public class RotateToLimelightCommand extends CommandBase {
     private DrivetrainSubsystem drivetrainSubsystem;
     private Axis forward;
     private Axis strafe;
@@ -19,7 +20,7 @@ public class RotateToLimelight extends CommandBase {
 
     private PidController rotationController = new PidController(new PidConstants(0.04, 0.0, 0));
 
-    public RotateToLimelight(DrivetrainSubsystem drivetrain, Axis forward, Axis strafe, LimelightSubsystem limelightSubsystem, boolean updateOdometry) {
+    public RotateToLimelightCommand(DrivetrainSubsystem drivetrain, Axis forward, Axis strafe, LimelightSubsystem limelightSubsystem, boolean updateOdometry) {
         this.forward = forward;
         this.strafe = strafe;
         this.limelightSubsystem = limelightSubsystem;
@@ -44,42 +45,29 @@ public class RotateToLimelight extends CommandBase {
             rotationController.setSetpoint(angleToGoal);
             
             if (updateOdometry)
-                drivetrainSubsystem.resetPose(new RigidTransform2(new Vector2(Math.cos(angleToGoal + Math.PI) * limelightSubsystem.getDistanceToTarget(), Math.sin(angleToGoal + Math.PI) * limelightSubsystem.getDistanceToTarget()), drivetrainSubsystem.getPose().rotation));
+                drivetrainSubsystem.resetPose(new RigidTransform2(new Vector2(Math.cos(angleToGoal + Math.PI) * limelightSubsystem.getDistanceToTarget(),
+                Math.sin(angleToGoal + Math.PI) * limelightSubsystem.getDistanceToTarget()),
+                drivetrainSubsystem.getPose().rotation));
         }
         else {
             double x = drivetrainSubsystem.getPose().translation.x;
             double y = drivetrainSubsystem.getPose().translation.y;
 
-            if (x > 0 && y >= 0) {
-                rotationController.setSetpoint(Math.atan(y / x) + Math.PI);
-            }
-            else if (x < 0 && y >= 0) {
-                rotationController.setSetpoint(Math.atan(y / x));
-            }
-            else if (x < 0 && y <= 0) {
-                rotationController.setSetpoint(Math.atan(y / x));
-            }
-            else if (x > 0 && y <= 0) {
-                rotationController.setSetpoint(Math.atan(y / x) + Math.PI);
-            }
-            else if (x == 0){
-
-                if (y > 0) {
-                    rotationController.setSetpoint(-Math.PI / 2);
-                }
-                else {
-                    rotationController.setSetpoint(Math.PI / 2);
-                }
-            }
-            else {
-                rotationController.setSetpoint(0);
-            }
+            rotationController.setSetpoint(Math.atan2(y, x) + Math.PI);
         }
         
         double rotationOutput = rotationController.calculate(drivetrainSubsystem.getPose().rotation.toRadians(), 0.02);
-        drivetrainSubsystem.drive(new Vector2(forward.get(true), strafe.get(true)), rotationOutput, true);
+        double feedForward = 0;
 
+        if (rotationOutput > 0) {
+            feedForward = Constants.LIMELIGHT_ROTATION_FEEDFORWARD;
+        }
+        else if (rotationOutput < 0) {
+            feedForward = -Constants.LIMELIGHT_ROTATION_FEEDFORWARD;
+        }
 
+        SmartDashboard.putNumber("rotation output", rotationOutput + feedForward);
+        drivetrainSubsystem.drive(new Vector2(forward.get(true), strafe.get(true)), rotationOutput + feedForward, true);
     }
 
     @Override
