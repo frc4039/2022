@@ -180,7 +180,7 @@ public final class Constants {
         public static final int LED_STRIP_PORT = 0;
         public static final int LED_STRIP_LENGTH = 123;
         //Brightness and Saturation are a 0-255 scale
-        public static final int BRIGHTNESS = 100;
+        public static final int BRIGHTNESS = 80;
         public static final int SATURATION = 255;
         //rainbow hue speed is the speed for the slowest rainbow
         public static final double RAINBOW_HUE_SPEED = 0.5;
