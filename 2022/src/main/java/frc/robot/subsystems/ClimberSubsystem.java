@@ -155,8 +155,7 @@ public class ClimberSubsystem extends SubsystemBase {
     public void climberUp() {
         if (enableClimb) {
             if (climberExtended) {
-                m_climberMotorLeft.setNeutralMode(NeutralMode.Coast);
-                m_climberMotorRight.setNeutralMode(NeutralMode.Coast);
+                coastClimber();
             }
             if (getTopRightBB()) {
                 m_climberMotorRight.set(ControlMode.PercentOutput, 0);
@@ -188,6 +187,11 @@ public class ClimberSubsystem extends SubsystemBase {
                 m_climberMotorLeft.set(ControlMode.PercentOutput, ClimberConstants.kClimberPowerDown);
             }
         }
+    }
+
+    public void coastClimber() {
+        m_climberMotorLeft.setNeutralMode(NeutralMode.Coast);
+        m_climberMotorRight.setNeutralMode(NeutralMode.Coast);
     }
 
     public void climberUpSlow() {
