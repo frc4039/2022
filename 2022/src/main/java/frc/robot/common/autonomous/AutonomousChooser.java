@@ -12,6 +12,7 @@ import frc.robot.Constants.FeederConstants;
 import frc.robot.commands.*;
 import frc.robot.common.control.Trajectory;
 import frc.robot.common.math.RigidTransform2;
+import frc.robot.subsystems.ShooterSubsystem;
 
 public class AutonomousChooser {
     
@@ -152,7 +153,7 @@ public class AutonomousChooser {
         followAndIntake(command, container, trajectories.getTwoAndTwoLeftAuto4());
         setShotTypeLow(command, container);
         followAndPreShoot(command, container, trajectories.getTwoAndTwoLeftAuto5());
-        shoot(command, container, 1.5);
+        instantShoot(command, container, "low", 1500, 1.5);
         //followAndIntake(command, container, trajectories.getTwoAndTwoLeftAuto6());
 
         return command;
@@ -296,6 +297,13 @@ public class AutonomousChooser {
         command.addCommands(new ShootCommand(container.getShooterSubsystem(), container.getPreShooterSubsystem(),
                 container.getFeederSubsystem(), container.getLimelightSubsystem(), container.getDrivetrainSubsystem())
                         .withTimeout(timeout));
+    }
+
+    private void instantShoot(SequentialCommandGroup command, RobotContainer container, String hoodType, double RPM, double timeout) {
+        command.addCommands(
+            new ChangeShotTypeCommand(container.getShooterSubsystem(), container.getPreShooterSubsystem(), hoodType),
+            new RPMShootCommand(container.getShooterSubsystem(), container.getPreShooterSubsystem(), container.getFeederSubsystem(), RPM).withTimeout(timeout)
+        );
     }
 
     private void setShotTypeHigh(SequentialCommandGroup command, RobotContainer container) {
