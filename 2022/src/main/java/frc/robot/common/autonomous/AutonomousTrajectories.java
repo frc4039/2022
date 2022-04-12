@@ -43,6 +43,10 @@ public class AutonomousTrajectories {
     private Trajectory taxiAuto2;
     private Trajectory taxiAuto3;
     private Trajectory taxiAuto4;
+    private Trajectory assistAuto1;
+    private Trajectory assistAuto2;
+    private Trajectory assistAuto3;
+    private Trajectory assistAuto4;
 
     public AutonomousTrajectories(TrajectoryConstraint[] trajectoryConstraints) throws IOException {
         TrajectoryConstraint[] normalConstraints = Arrays.copyOf(trajectoryConstraints, trajectoryConstraints.length + 1);
@@ -244,14 +248,14 @@ public class AutonomousTrajectories {
 
         twoAndTwoLeftAuto3 = new Trajectory(
             new SimplePathBuilder(new Vector2(-130, 31.792), Rotation2.fromDegrees(-13.74218))
-                .lineTo(new Vector2(-134.885, -0.3155), Rotation2.fromDegrees(-107.1113))
-                .lineTo(new Vector2(-139.769, -32.423), Rotation2.fromDegrees(-107.1113))
+                .lineTo(new Vector2(-144, 10), Rotation2.fromDegrees(-100))
+                .lineTo(new Vector2(-147, -32.423), Rotation2.fromDegrees(-90))
                 .build(),
                 slowConstraints, SAMPLE_DISTANCE
         );
 
         twoAndTwoLeftAuto4 = new Trajectory(
-            new SimplePathBuilder(new Vector2(-139.769, -32.423), Rotation2.fromDegrees(-107.1113))
+            new SimplePathBuilder(new Vector2(-139.769, -32.423), Rotation2.fromDegrees(-90))
                 .lineTo(new Vector2(-119.036, 46.2705), Rotation2.fromDegrees(68.66734))
                 .lineTo(new Vector2(-88.303, 124.964), Rotation2.fromDegrees(68.66734))
                 .build(),
@@ -296,6 +300,39 @@ public class AutonomousTrajectories {
         taxiAuto4 = new Trajectory(
             new SimplePathBuilder(new Vector2(0, -98), Rotation2.fromDegrees(91.6))
             .lineTo(new Vector2(0, -132), Rotation2.fromDegrees(91.6))
+            .build(),
+            normalConstraints, SAMPLE_DISTANCE
+        );
+
+        assistAuto1 = new Trajectory(
+            //15.25 offset from bumper to center of robot
+            //estimate of 45" to midline/fender intersection by eyeballing CAD
+            new SimplePathBuilder(new Vector2(-53.25, 15.25), Rotation2.fromDegrees(180))
+            .lineTo(new Vector2(-116.451, 15.25), Rotation2.fromDegrees(180))
+            .lineTo(new Vector2(-116.451, 35), Rotation2.fromDegrees(-16.73))
+            .build(),
+            normalConstraints, SAMPLE_DISTANCE
+        );
+
+        assistAuto2 = new Trajectory(
+            new SimplePathBuilder(new Vector2(-116.451, 35), Rotation2.fromDegrees(-16.73))
+            .lineTo(new Vector2(-116.451, 52), Rotation2.fromDegrees(90))
+            .lineTo(new Vector2(-116.451, 70.019), Rotation2.fromDegrees(90))
+            .build(),
+            normalConstraints, SAMPLE_DISTANCE
+        );
+
+        assistAuto3 = new Trajectory(
+            new SimplePathBuilder(new Vector2(-116.451, 70.019), Rotation2.fromDegrees(-31.01))
+            .lineTo(new Vector2(-102.377, 97.4915), Rotation2.fromDegrees(62.87))
+            .lineTo(new Vector2(-88.303, 124.964), Rotation2.fromDegrees(62.87))
+            .build(),
+            normalConstraints, SAMPLE_DISTANCE
+        );
+
+        assistAuto4 = new Trajectory(
+            new SimplePathBuilder(new Vector2(-88.303, 124.964), Rotation2.fromDegrees(62.87))
+            .lineTo(new Vector2(-110, 125), Rotation2.fromDegrees(175))
             .build(),
             normalConstraints, SAMPLE_DISTANCE
         );
@@ -423,5 +460,21 @@ public class AutonomousTrajectories {
 
     public Trajectory getTaxiAuto4(){
         return taxiAuto4;
+    }
+
+    public Trajectory getAssistAuto1(){
+        return assistAuto1;
+    }
+
+    public Trajectory getAssistAuto2(){
+        return assistAuto1;
+    }
+
+    public Trajectory getAssistAuto3(){
+        return assistAuto1;
+    }
+
+    public Trajectory getAssistAuto4(){
+        return assistAuto1;
     }
 }

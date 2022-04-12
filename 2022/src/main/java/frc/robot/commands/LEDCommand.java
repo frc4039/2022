@@ -38,7 +38,7 @@ public class LEDCommand extends CommandBase{
             if (m_feederSubsystem.getBothBallBreakBeams()) {
                 m_ledSubsystem.flashingHue(LEDConstants.HUE_GREEN);
             }
-            else if (m_feederSubsystem.getBreakBeamUpperBall()) {
+            else if (m_feederSubsystem.getBreakBeamUpperBall() || m_feederSubsystem.getBreakBeamIntake() || m_feederSubsystem.getBreakBeamLowerBall()) {
                 m_ledSubsystem.flashingHue(LEDConstants.HUE_BLUE);
             }
             else {
@@ -48,7 +48,7 @@ public class LEDCommand extends CommandBase{
             if (m_feederSubsystem.getBothBallBreakBeams()) {
                 m_ledSubsystem.setGreenAll();
             }
-            else if (m_feederSubsystem.getBreakBeamUpperBall()) {
+            else if (m_feederSubsystem.getBreakBeamUpperBall() || m_feederSubsystem.getBreakBeamIntake() || m_feederSubsystem.getBreakBeamLowerBall()) {
                 m_ledSubsystem.setBlueAll();
             }
             else {
