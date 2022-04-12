@@ -45,6 +45,7 @@ public class RobotContainer {
   private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
   private final ClimberSubsystem m_climberSubsystem = new ClimberSubsystem();
   private final LimelightSubsystem limelightSubsystem = new LimelightSubsystem();
+  private final AddressableLEDSubsystem addressableLEDSubsystem = new AddressableLEDSubsystem();
 
 
   private AutonomousTrajectories autonomousTrajectories;
@@ -75,8 +76,10 @@ public class RobotContainer {
     CommandScheduler.getInstance().registerSubsystem(intakeSubsystem);
     CommandScheduler.getInstance().registerSubsystem(m_climberSubsystem);
     CommandScheduler.getInstance().registerSubsystem(limelightSubsystem);
+    CommandScheduler.getInstance().registerSubsystem(addressableLEDSubsystem);
     CommandScheduler.getInstance().setDefaultCommand(drivetrainSubsystem, new DriveCommand(drivetrainSubsystem, getDriveForwardAxis(), getDriveStrafeAxis(), getDriveRotationXAxis(), getDriveRotationYAxis()));
     CommandScheduler.getInstance().setDefaultCommand(feederSubsystem, new FeederManagementCommand(feederSubsystem, this));
+    CommandScheduler.getInstance().setDefaultCommand(addressableLEDSubsystem, new LEDCommand(addressableLEDSubsystem, feederSubsystem, m_climberSubsystem));
 
     driverReadout = new DriverReadout(this);
 

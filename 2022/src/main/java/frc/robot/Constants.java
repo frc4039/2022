@@ -53,6 +53,7 @@ public final class Constants {
     public static final double CONTROLLER_ROTATION_DEADBAND = 0.98;
     public static final double LIMELIGHT_ROTATION_FEEDFORWARD = 0.00125;
 
+
     public static final class ClimberConstants{
         public static final TalonFXInvertType kClimberMotorRightInversion = TalonFXInvertType.CounterClockwise;
         public static final TalonFXInvertType kClimberMotorLeftInversion = TalonFXInvertType.Clockwise;
@@ -167,7 +168,6 @@ public final class Constants {
     }
 
 
-  
     public static final class IntakeConstants {
         public static final int kIntakeMotorPort = 20;
         public static final TalonFXInvertType kIntakeInversion = TalonFXInvertType.Clockwise;
@@ -175,4 +175,24 @@ public final class Constants {
         public static final double kOutakePercent = 0.50;
     }
 
+
+    public static final class LEDConstants {
+        public static final int LED_STRIP_PORT = 0;
+        public static final int LED_STRIP_LENGTH = 123;
+        //Brightness and Saturation are a 0-255 scale
+        public static final int BRIGHTNESS = 100;
+        public static final int SATURATION = 255;
+        //rainbow hue speed is the speed for the slowest rainbow
+        public static final double RAINBOW_HUE_SPEED = 0.5;
+        //Hue is 0-360
+        
+        public static final int HUE_RED = 0;
+        public static final int HUE_ORANGE = 30;
+        public static final int HUE_YELLOW = 60;
+        public static final int HUE_GREEN = 120;
+        public static final int HUE_CYAN = 180;
+        public static final int HUE_BLUE = 240;
+        public static final int HUE_VIOLET = 270;
+        public static final int HUE_MAGENTA = 300;
+    }
 }
