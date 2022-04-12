@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
+import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.common.math.Rotation2;
 
@@ -18,6 +19,9 @@ public class DriverReadout {
         tab.add("Zero Gyroscope", new ZeroGyroscope(container.getDrivetrainSubsystem()))
                 .withSize(1, 1)
                 .withPosition(6, 1);
+        tab.add("Coast Climber", new CoastClimber(container.getClimberSubsystem()))
+                .withSize(1, 1)
+                .withPosition(7, 1);
     }
 
     private static class ZeroGyroscope extends CommandBase {
@@ -32,6 +36,31 @@ public class DriverReadout {
         @Override
         public void initialize() {
             drivetrain.resetGyroAngle(Rotation2.ZERO);
+        }
+
+        @Override
+        public boolean runsWhenDisabled() {
+            return true;
+        }
+
+        @Override
+        public boolean isFinished() {
+            return true;
+        }
+    }
+
+    private static class CoastClimber extends CommandBase {
+        private final ClimberSubsystem climber;
+
+        public CoastClimber(ClimberSubsystem climber) {
+            this.climber = climber;
+
+            setName("Coast Climber");
+        }
+
+        @Override
+        public void initialize() {
+            climber.coastClimber();
         }
 
         @Override
