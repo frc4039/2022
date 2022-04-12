@@ -467,14 +467,14 @@ public class AutonomousTrajectories {
     }
 
     public Trajectory getAssistAuto2(){
-        return assistAuto1;
+        return assistAuto2;
     }
 
     public Trajectory getAssistAuto3(){
-        return assistAuto1;
+        return assistAuto3;
     }
 
     public Trajectory getAssistAuto4(){
-        return assistAuto1;
+        return assistAuto4;
     }
 }
