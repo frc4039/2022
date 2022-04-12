@@ -21,6 +21,10 @@ public class IntakeSubsystem extends SubsystemBase {
     m_intakeMotor = new TalonFX(IntakeConstants.kIntakeMotorPort);
     m_intakeMotor.configFactoryDefault(); 
     m_intakeMotor.setInverted(IntakeConstants.kIntakeInversion);
+    //unique prime status frame periods to avoid concurrent calls
+    //this is based on anecdotal evidence that unique primes lower CAN utilization more than all devices at max interval
+    m_intakeMotor.setStatusFramePeriod(1, 239);
+    m_intakeMotor.setStatusFramePeriod(2, 233);
 
     m_intakeSolenoid = new DoubleSolenoid(Constants.kPCMCANID, PneumaticsModuleType.CTREPCM, 4, 5);
   }

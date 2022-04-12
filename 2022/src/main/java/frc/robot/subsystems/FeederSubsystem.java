@@ -26,6 +26,9 @@ public class FeederSubsystem extends SubsystemBase {
     m_feederMotor = new CANSparkMax(FeederConstants.kFeederPort, MotorType.kBrushless);
     m_feederMotor.restoreFactoryDefaults();
     m_feederMotor.setInverted(FeederConstants.kFeederInversion);
+    //unique prime number frame period to avoid concurrent calls
+    //this is based on anecdotal evidence that unique primes lower CAN utilization more than all devices at max interval
+    m_feederMotor.setControlFramePeriodMs(97);
 
     m_BreakBeamIntake = new DigitalInput(FeederConstants.kBreakBeamIntakePort);
     m_BreakBeamPreShooter = new DigitalInput(FeederConstants.kBreakBeamPreShooterPort);
