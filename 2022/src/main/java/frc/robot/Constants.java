@@ -53,6 +53,8 @@ public final class Constants {
     public static final double CONTROLLER_ROTATION_DEADBAND = 0.98;
     public static final double LIMELIGHT_ROTATION_FEEDFORWARD = 0.00125;
 
+    public static final double DRIVETRAIN_DRIVE_CURRENT_LIMIT = 80;
+
 
     public static final class ClimberConstants{
         public static final TalonFXInvertType kClimberMotorRightInversion = TalonFXInvertType.CounterClockwise;
