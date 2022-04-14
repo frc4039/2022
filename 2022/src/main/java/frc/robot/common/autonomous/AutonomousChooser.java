@@ -34,6 +34,7 @@ public class AutonomousChooser {
         autonomousModeChooser.addOption("(LEFT/FRONT) TAXI+1 Ball", AutonomousMode.ONE_LEFT_FRONT);
         autonomousModeChooser.addOption("(RIGHT/FRONT) TAXI+1 Ball", AutonomousMode.ONE_RIGHT_FRONT);
         autonomousModeChooser.addOption("(RIGHT) TAXI+1 Ball", AutonomousMode.ONE_RIGHT);
+        autonomousModeChooser.addOption("(LEFT) ASSIST 3 BALL", AutonomousMode.ASSIST);
     }
 
     public SendableChooser<AutonomousMode> getAutonomousModeChooser() {
@@ -205,6 +206,24 @@ public class AutonomousChooser {
         return command;
     }
 
+    private SequentialCommandGroup getAssistAutoCommand(RobotContainer container) {
+        SequentialCommandGroup command = new SequentialCommandGroup();
+
+        resetRobotPose(command, container, trajectories.getAssistAuto1());
+        setShotTypeLimelight(command, container);
+        followAndIntake(command, container, trajectories.getAssistAuto1());
+        aimAndShoot(command, container, 1.75);
+        followAndIntake(command, container, trajectories.getAssistAuto2());
+        aim(command, container, 0.75);
+        aimAndShoot(command, container, 1.25);
+        followAndIntake(command, container, trajectories.getAssistAuto3());
+        setShotTypeLow(command, container);
+        followAndPreShoot(command, container, trajectories.getAssistAuto4());
+        shoot(command, container, 1.5);
+
+        return command;
+    }
+
     public Command getCommand(RobotContainer container) {
         switch (autonomousModeChooser.getSelected()) {
             case TWO_RIGHT:
@@ -229,6 +248,8 @@ public class AutonomousChooser {
                 return getTaxiAutoRightFrontCommand(container);
             case ONE_RIGHT:
                 return getTaxiAutoRightCommand(container);
+            case ASSIST:
+                return getAssistAutoCommand(container);
             default:
                 return getNoAutoCommand(container);
         }
@@ -354,6 +375,7 @@ public class AutonomousChooser {
         ONE_LEFT,
         ONE_LEFT_FRONT,
         ONE_RIGHT_FRONT,
-        ONE_RIGHT
+        ONE_RIGHT,
+        ASSIST
     }
 }

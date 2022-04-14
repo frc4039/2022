@@ -41,6 +41,10 @@ public class ShooterSubsystem extends SubsystemBase {
     m_shooterMotor1.setSensorPhase(ShooterConstants.kSensorInversion);
 
     m_shooterMotor2.follow(m_shooterMotor1);
+    //unique prime number StatusFramePeriods to avoid concurrent calls
+    //this is based on anecdotal evidence that unique primes lower CAN utilization more than all devices at max interval
+    m_shooterMotor2.setStatusFramePeriod(1, 241);
+    m_shooterMotor2.setStatusFramePeriod(2, 251);
 
     m_shooterMotor1.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 30);
     m_shooterMotor1.config_kF(0, ShooterConstants.kShooterF, 30);

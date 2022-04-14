@@ -3,7 +3,9 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.LEDConstants;
 
 public class AddressableLEDSubsystem extends SubsystemBase {
@@ -67,7 +69,7 @@ public class AddressableLEDSubsystem extends SubsystemBase {
 
     public void setWhiteAll() {
         for (int i = 0; i < LEDConstants.LED_STRIP_LENGTH; i++) {
-            m_ledBuffer.setRGB(i, 0, 0, 0);
+            m_ledBuffer.setLED(i, Color.kWhite);
         }
     }
 
@@ -105,11 +107,11 @@ public class AddressableLEDSubsystem extends SubsystemBase {
         for (var i = 0; i < LEDConstants.LED_STRIP_LENGTH; i++) {
             //HSV Hue is normally 0-360, WPILib Hue is 0-180
             //therefore <hue> below is divided by two, allowing Constants to be representative of traditional Hue values
-            setHSV(i, hue/2, LEDConstants.SATURATION*(int)Math.round(toggle), LEDConstants.BRIGHTNESS);
+            setHSV(i, hue/2, LEDConstants.SATURATION*(int)Math.round(toggle), LEDConstants.BRIGHTNESS*(int)Math.round(toggle));
         }
 
-        toggle += 0.05;
-        toggle %= 2;
+        toggle += 0.02 / LEDConstants.FLASHING_SPEED;
+        toggle %= 1;
     }
 
     @Override

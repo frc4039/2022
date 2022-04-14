@@ -43,7 +43,7 @@ public class RobotContainer {
   private final FeederSubsystem feederSubsystem = new FeederSubsystem();
   private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem();
   private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
-  private final ClimberSubsystem m_climberSubsystem = new ClimberSubsystem();
+  private final ClimberSubsystem climberSubsystem = new ClimberSubsystem();
   private final LimelightSubsystem limelightSubsystem = new LimelightSubsystem();
   private final AddressableLEDSubsystem addressableLEDSubsystem = new AddressableLEDSubsystem();
 
@@ -74,12 +74,12 @@ public class RobotContainer {
     CommandScheduler.getInstance().registerSubsystem(feederSubsystem);
     CommandScheduler.getInstance().registerSubsystem(drivetrainSubsystem);
     CommandScheduler.getInstance().registerSubsystem(intakeSubsystem);
-    CommandScheduler.getInstance().registerSubsystem(m_climberSubsystem);
+    CommandScheduler.getInstance().registerSubsystem(climberSubsystem);
     CommandScheduler.getInstance().registerSubsystem(limelightSubsystem);
     CommandScheduler.getInstance().registerSubsystem(addressableLEDSubsystem);
     CommandScheduler.getInstance().setDefaultCommand(drivetrainSubsystem, new DriveCommand(drivetrainSubsystem, getDriveForwardAxis(), getDriveStrafeAxis(), getDriveRotationXAxis(), getDriveRotationYAxis()));
     CommandScheduler.getInstance().setDefaultCommand(feederSubsystem, new FeederManagementCommand(feederSubsystem, this));
-    CommandScheduler.getInstance().setDefaultCommand(addressableLEDSubsystem, new LEDCommand(addressableLEDSubsystem, feederSubsystem, m_climberSubsystem));
+    CommandScheduler.getInstance().setDefaultCommand(addressableLEDSubsystem, new LEDCommand(addressableLEDSubsystem, feederSubsystem, climberSubsystem));
 
     driverReadout = new DriverReadout(this);
 
@@ -151,32 +151,32 @@ public class RobotContainer {
 
     operatorController.getBackButton().and(operatorController.getStartButton()).whenActive(
       new SequentialCommandGroup(
-        new ClimberEncoderZeroCommand(m_climberSubsystem),
-        new ClimberPreClimbCommand(m_climberSubsystem)
+        new ClimberEncoderZeroCommand(climberSubsystem),
+        new ClimberPreClimbCommand(climberSubsystem)
       )
     );
 
     operatorController.getLeftTriggerAxis().getButton(0.5).whenHeld(
-      new ClimberDownCommand(m_climberSubsystem)
+      new ClimberDownCommand(climberSubsystem)
     );
     
     operatorController.getRightTriggerAxis().getButton(0.5).whenHeld(
-      new ClimberUpCommand(m_climberSubsystem)
+      new ClimberUpCommand(climberSubsystem)
     );
 
     operatorController.getLeftBumperButton().and(operatorController.getBackButton()).whileActiveOnce(
-      new ClimberDownSlowCommand(m_climberSubsystem)
+      new ClimberDownSlowCommand(climberSubsystem)
     );
 
     operatorController.getRightBumperButton().and(operatorController.getBackButton()).whileActiveOnce(
-      new ClimberUpSlowCommand(m_climberSubsystem)
+      new ClimberUpSlowCommand(climberSubsystem)
     );
 
     operatorController.getLeftBumperButton().and(operatorController.getRightBumperButton()).whenActive(
       new SequentialCommandGroup(
-        new ClimberExtendCommand(m_climberSubsystem),
+        new ClimberExtendCommand(climberSubsystem),
         new WaitCommand(1),
-        new InstantCommand(m_climberSubsystem::climberSolenoidOff, m_climberSubsystem)
+        new InstantCommand(climberSubsystem::climberSolenoidOff, climberSubsystem)
       )
     );
 
@@ -250,6 +250,10 @@ public class RobotContainer {
     return feederSubsystem;
   }
 
+  public ClimberSubsystem getClimberSubsystem() {
+    return climberSubsystem;
+  }
+
   public XboxController2 getDriverController() {
     return driverController;
   }
@@ -271,11 +275,11 @@ public class RobotContainer {
   }
 
   public void disableClimber(){
-    m_climberSubsystem.disableClimb();
+    climberSubsystem.disableClimb();
   }
 
   public void stopEverything(){
-    new StopEverythingCommand(m_climberSubsystem, drivetrainSubsystem, feederSubsystem, intakeSubsystem, preShooterSubsystem, shooterSubsystem);
+    new StopEverythingCommand(climberSubsystem, drivetrainSubsystem, feederSubsystem, intakeSubsystem, preShooterSubsystem, shooterSubsystem);
   }
 
   public void PrintAllValues(){

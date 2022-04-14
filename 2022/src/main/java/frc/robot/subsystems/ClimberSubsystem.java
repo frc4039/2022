@@ -77,6 +77,15 @@ public class ClimberSubsystem extends SubsystemBase {
         m_climberMotorLeft.config_kI(0, ClimberConstants.kClimberI, 30);
         m_climberMotorLeft.config_kD(0, ClimberConstants.kClimberD, 30);
 
+        //unique prime CAN status frame periods to avoid concurrent calls
+        //this is based on anecdotal evidence that unique primes lower CAN utilization more than all devices at max interval
+        //set climber motor status frames high at robot initialization, these are reset to 
+        //default once the climb is initiated
+        m_climberMotorLeft.setStatusFramePeriod(1, 229);
+        m_climberMotorLeft.setStatusFramePeriod(2, 227);
+        m_climberMotorRight.setStatusFramePeriod(1, 223);
+        m_climberMotorRight.setStatusFramePeriod(2, 211);
+
         leftBottomLimitSwitch = new DigitalInput(ClimberConstants.kLeftBottomLimitSwitchPort);
         rightBottomLimitSwitch = new DigitalInput(ClimberConstants.kRightBottomLimitSwitchPort);
         leftTopBreakBeam = new DigitalInput(ClimberConstants.kLeftTopBreakBeamPort);
@@ -155,8 +164,7 @@ public class ClimberSubsystem extends SubsystemBase {
     public void climberUp() {
         if (enableClimb) {
             if (climberExtended) {
-                m_climberMotorLeft.setNeutralMode(NeutralMode.Coast);
-                m_climberMotorRight.setNeutralMode(NeutralMode.Coast);
+                coastClimber();
             }
             if (getTopRightBB()) {
                 m_climberMotorRight.set(ControlMode.PercentOutput, 0);
@@ -188,6 +196,11 @@ public class ClimberSubsystem extends SubsystemBase {
                 m_climberMotorLeft.set(ControlMode.PercentOutput, ClimberConstants.kClimberPowerDown);
             }
         }
+    }
+
+    public void coastClimber() {
+        m_climberMotorLeft.setNeutralMode(NeutralMode.Coast);
+        m_climberMotorRight.setNeutralMode(NeutralMode.Coast);
     }
 
     public void climberUpSlow() {
@@ -238,6 +251,11 @@ public class ClimberSubsystem extends SubsystemBase {
 
     public void initiateClimb(){
         enableClimb = true;
+        //reset CAN Status Frame Periods to default values when we want to climb
+        m_climberMotorRight.setStatusFramePeriod(1, 10);
+        m_climberMotorRight.setStatusFramePeriod(2, 20);
+        m_climberMotorLeft.setStatusFramePeriod(1, 10);
+        m_climberMotorLeft.setStatusFramePeriod(2, 20);
     }
 
     public void disableClimb(){

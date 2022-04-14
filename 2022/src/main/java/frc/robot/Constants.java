@@ -41,10 +41,10 @@ public final class Constants {
     public static final int DRIVETRAIN_BACK_LEFT_ENCODER_PORT = 13;
     public static final int DRIVETRAIN_BACK_RIGHT_ENCODER_PORT = 14;
 
-    public static final double DRIVETRAIN_FRONT_LEFT_ENCODER_OFFSET = -Math.toRadians(200.5);
-    public static final double DRIVETRAIN_FRONT_RIGHT_ENCODER_OFFSET = -Math.toRadians(258.0);
-    public static final double DRIVETRAIN_BACK_LEFT_ENCODER_OFFSET = -Math.toRadians(337.7);
-    public static final double DRIVETRAIN_BACK_RIGHT_ENCODER_OFFSET = -Math.toRadians(204.4);
+    public static final double DRIVETRAIN_FRONT_LEFT_ENCODER_OFFSET = -Math.toRadians(200.3);
+    public static final double DRIVETRAIN_FRONT_RIGHT_ENCODER_OFFSET = -Math.toRadians(256.8);
+    public static final double DRIVETRAIN_BACK_LEFT_ENCODER_OFFSET = -Math.toRadians(337.1);
+    public static final double DRIVETRAIN_BACK_RIGHT_ENCODER_OFFSET = -Math.toRadians(205.4);
 
     public static final double GLASS_OFFSET_X = 10;
     public static final double GLASS_OFFSET_Y = 5;
@@ -52,6 +52,8 @@ public final class Constants {
 
     public static final double CONTROLLER_ROTATION_DEADBAND = 0.98;
     public static final double LIMELIGHT_ROTATION_FEEDFORWARD = 0.00125;
+
+    public static final double DRIVETRAIN_DRIVE_CURRENT_LIMIT = 50;
 
 
     public static final class ClimberConstants{
@@ -142,8 +144,8 @@ public final class Constants {
         public static final double kFarthestKey = 250.0;
         public static final double kClosestValue = 2100.0;
         public static final double kCloseValue = 2300.0;
-        public static final double kFarValue = 2650.0;
-        public static final double kFarthestValue = 3150.0;
+        public static final double kFarValue = 2625.0;
+        public static final double kFarthestValue = 3120.0;
         public static final double kAngleWindow = 10;
         public static final double kShotAngularVelocityLimit = 5;
 
@@ -180,12 +182,14 @@ public final class Constants {
         public static final int LED_STRIP_PORT = 0;
         public static final int LED_STRIP_LENGTH = 123;
         //Brightness and Saturation are a 0-255 scale
-        public static final int BRIGHTNESS = 100;
+        public static final int BRIGHTNESS = 80;
         public static final int SATURATION = 255;
         //rainbow hue speed is the speed for the slowest rainbow
         public static final double RAINBOW_HUE_SPEED = 0.5;
         //Hue is 0-360
-        
+        public static final double FLASHING_SPEED = 0.5;
+        //the rate in seconds that flashing hue flashes at
+
         public static final int HUE_RED = 0;
         public static final int HUE_ORANGE = 30;
         public static final int HUE_YELLOW = 60;
