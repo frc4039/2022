@@ -17,8 +17,12 @@ public class PowerDistributionSubsystem extends SubsystemBase {
         return m_PDP.getTotalCurrent();
     }
 
+    public double getChannelCurrent(int channel) {
+        return m_PDP.getCurrent(channel);
+    }
+
     public boolean getBrownout() {
         return m_PDP.getFaults().Brownout;
     }
-    
+
 }

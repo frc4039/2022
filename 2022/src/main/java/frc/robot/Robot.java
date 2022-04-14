@@ -34,11 +34,13 @@ public class Robot extends TimedRobot {
   private Compressor pcmCompressor = new Compressor(Constants.kPCMCANID, PneumaticsModuleType.CTREPCM);
 
   DoubleLogEntry logPDPVoltage;
+  double oldPDPVoltage;
   DoubleLogEntry logPDPTotalCurrent;
+  double oldPDPTotalCurrent;
   BooleanLogEntry logPDPBrownout;
-  double oldPDPVoltage = m_robotContainer.getPowerDistributionSubsystem().getVoltage();
-  double oldPDPTotalCurrent = m_robotContainer.getPowerDistributionSubsystem().getTotalCurrent();
-  boolean oldPDPBrownout = m_robotContainer.getPowerDistributionSubsystem().getBrownout();
+  boolean oldPDPBrownout;
+  DoubleLogEntry[] logPDPCurrent = new DoubleLogEntry[24];
+  double[] oldPDPCurrent = new double[24];
 
   private UpdateManager updateManager = new UpdateManager(
       m_robotContainer.getDrivetrainSubsystem()
@@ -70,8 +72,15 @@ public class Robot extends TimedRobot {
 
     DataLog log = DataLogManager.getLog();
     logPDPVoltage = new DoubleLogEntry(log, "/pdp/voltage");
+    oldPDPVoltage = m_robotContainer.getPowerDistributionSubsystem().getVoltage();
     logPDPTotalCurrent = new DoubleLogEntry(log, "/pdp/current/total");
+    oldPDPTotalCurrent = m_robotContainer.getPowerDistributionSubsystem().getTotalCurrent();
     logPDPBrownout = new BooleanLogEntry(log, "/pdp/fault/brownout");
+    oldPDPBrownout = m_robotContainer.getPowerDistributionSubsystem().getBrownout();
+    for (int i = 0; i < logPDPCurrent.length; i++) {
+      logPDPCurrent[i] = new DoubleLogEntry(log, "/pdp/current/" + i);
+      oldPDPCurrent[i] = m_robotContainer.getPowerDistributionSubsystem().getChannelCurrent(i);
+    }
     
     updateManager.startLoop(5.0e-3);
     pcmCompressor.enableDigital();
@@ -103,6 +112,12 @@ public class Robot extends TimedRobot {
     if (m_robotContainer.getPowerDistributionSubsystem().getBrownout() != oldPDPBrownout) {
       logPDPBrownout.append(m_robotContainer.getPowerDistributionSubsystem().getBrownout());
       oldPDPBrownout = m_robotContainer.getPowerDistributionSubsystem().getBrownout();
+    }
+    for (int i = 0; i < logPDPCurrent.length; i++) {
+      if (m_robotContainer.getPowerDistributionSubsystem().getChannelCurrent(i) != oldPDPCurrent[i]) {
+        logPDPCurrent[i].append(m_robotContainer.getPowerDistributionSubsystem().getChannelCurrent(i));
+        oldPDPCurrent[i] = m_robotContainer.getPowerDistributionSubsystem().getChannelCurrent(i);
+      }
     }
 
     CommandScheduler.getInstance().run();
