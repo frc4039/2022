@@ -5,6 +5,9 @@
 package frc.robot;
 
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.util.datalog.BooleanLogEntry;
+import edu.wpi.first.util.datalog.DataLog;
+import edu.wpi.first.util.datalog.DoubleLogEntry;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
@@ -29,6 +32,13 @@ public class Robot extends TimedRobot {
   private RobotContainer m_robotContainer = new RobotContainer();
 
   private Compressor pcmCompressor = new Compressor(Constants.kPCMCANID, PneumaticsModuleType.CTREPCM);
+
+  DoubleLogEntry logPDPVoltage;
+  DoubleLogEntry logPDPTotalCurrent;
+  BooleanLogEntry logPDPBrownout;
+  double oldPDPVoltage = m_robotContainer.getPowerDistributionSubsystem().getVoltage();
+  double oldPDPTotalCurrent = m_robotContainer.getPowerDistributionSubsystem().getTotalCurrent();
+  boolean oldPDPBrownout = m_robotContainer.getPowerDistributionSubsystem().getBrownout();
 
   private UpdateManager updateManager = new UpdateManager(
       m_robotContainer.getDrivetrainSubsystem()
@@ -57,6 +67,11 @@ public class Robot extends TimedRobot {
     //m_robotContainer = new RobotContainer();
 
     DataLogManager.start();
+
+    DataLog log = DataLogManager.getLog();
+    logPDPVoltage = new DoubleLogEntry(log, "/pdp/voltage");
+    logPDPTotalCurrent = new DoubleLogEntry(log, "/pdp/current/total");
+    logPDPBrownout = new BooleanLogEntry(log, "/pdp/fault/brownout");
     
     updateManager.startLoop(5.0e-3);
     pcmCompressor.enableDigital();
@@ -76,6 +91,20 @@ public class Robot extends TimedRobot {
     // commands, running already-scheduled commands, removing finished or interrupted commands,
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
+
+    if (m_robotContainer.getPowerDistributionSubsystem().getVoltage() != oldPDPVoltage) {
+      logPDPVoltage.append(m_robotContainer.getPowerDistributionSubsystem().getVoltage());
+      oldPDPVoltage = m_robotContainer.getPowerDistributionSubsystem().getVoltage();
+    }
+    if (m_robotContainer.getPowerDistributionSubsystem().getTotalCurrent() != oldPDPTotalCurrent) {
+      logPDPTotalCurrent.append(m_robotContainer.getPowerDistributionSubsystem().getTotalCurrent());
+      oldPDPTotalCurrent = m_robotContainer.getPowerDistributionSubsystem().getTotalCurrent();
+    }
+    if (m_robotContainer.getPowerDistributionSubsystem().getBrownout() != oldPDPBrownout) {
+      logPDPBrownout.append(m_robotContainer.getPowerDistributionSubsystem().getBrownout());
+      oldPDPBrownout = m_robotContainer.getPowerDistributionSubsystem().getBrownout();
+    }
+
     CommandScheduler.getInstance().run();
     m_robotContainer.PrintAllValues();
   }

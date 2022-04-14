@@ -45,6 +45,7 @@ public class RobotContainer {
   private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
   private final ClimberSubsystem climberSubsystem = new ClimberSubsystem();
   private final LimelightSubsystem limelightSubsystem = new LimelightSubsystem();
+  private final PowerDistributionSubsystem powerDistributionSubsystem = new PowerDistributionSubsystem();
   private final AddressableLEDSubsystem addressableLEDSubsystem = new AddressableLEDSubsystem();
 
 
@@ -252,6 +253,10 @@ public class RobotContainer {
 
   public ClimberSubsystem getClimberSubsystem() {
     return climberSubsystem;
+  }
+
+  public PowerDistributionSubsystem getPowerDistributionSubsystem() {
+    return powerDistributionSubsystem;
   }
 
   public XboxController2 getDriverController() {
