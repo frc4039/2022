@@ -125,6 +125,7 @@ public final class Constants {
         public static final double kfenderLowShotRPM = 1150;
         public static final double kfenderHighShotRPM = 2100;
         public static final double klimelightShotRPM = 2500;
+        public static final double khangarShotRPM = 1700;
         
         public static final double kpreShooterReverseRPM = 500;
         public static final double kpreShooterLimelightShotRPM = 2000;

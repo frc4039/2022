@@ -29,12 +29,14 @@ public class AutonomousChooser {
         autonomousModeChooser.addOption("(LEFT/HP) 4 Ball", AutonomousMode.FOUR_LEFT);
         autonomousModeChooser.addOption("(RIGHT) 3 Ball", AutonomousMode.THREE_RIGHT);
         //autonomousModeChooser.addOption("(RIGHT) 3 Ball Slow", AutonomousMode.THREE_RIGHT_SLOW);
-        autonomousModeChooser.addOption("(LEFT) 2+2 Ball", AutonomousMode.TWO_AND_TWO_LEFT);
+        autonomousModeChooser.addOption("(LEFT) 2+2 Ball (HANGAR)", AutonomousMode.TWO_AND_TWO_LEFT_HANGAR);
+        autonomousModeChooser.addOption("(LEFT) 2+2 Ball (HUB)", AutonomousMode.TWO_AND_TWO_LEFT_HUB);
         autonomousModeChooser.addOption("(LEFT) TAXI+1 Ball", AutonomousMode.ONE_LEFT);
         autonomousModeChooser.addOption("(LEFT/FRONT) TAXI+1 Ball", AutonomousMode.ONE_LEFT_FRONT);
         autonomousModeChooser.addOption("(RIGHT/FRONT) TAXI+1 Ball", AutonomousMode.ONE_RIGHT_FRONT);
         autonomousModeChooser.addOption("(RIGHT) TAXI+1 Ball", AutonomousMode.ONE_RIGHT);
-        autonomousModeChooser.addOption("(LEFT) ASSIST 3 BALL", AutonomousMode.ASSIST);
+        autonomousModeChooser.addOption("(LEFT) ASSIST 3 BALL (HANGAR)", AutonomousMode.ASSIST_HANGAR);
+        autonomousModeChooser.addOption("(LEFT) ASSIST 3 BALL (HUB)", AutonomousMode.ASSIST_HUB);
     }
 
     public SendableChooser<AutonomousMode> getAutonomousModeChooser() {
@@ -140,7 +142,26 @@ public class AutonomousChooser {
         return command;
     }
 
-    private SequentialCommandGroup getTwoAndTwoLeftAutoCommand(RobotContainer container) {
+    private SequentialCommandGroup getTwoAndTwoLeftAutoHangarCommand(RobotContainer container) {
+        SequentialCommandGroup command = new SequentialCommandGroup();
+
+        resetRobotPose(command, container, trajectories.getTwoAndTwoLeftAuto1());
+        setShotTypeLimelight(command, container);
+        followAndIntake(command, container, trajectories.getTwoAndTwoLeftAuto1());
+        followAndPreShoot(command, container, trajectories.getTwoAndTwoLeftAuto2());
+        aimAndShoot(command, container, 1.75);
+        followAndIntake(command, container, trajectories.getTwoAndTwoLeftAuto3());
+        followAndIntake(command, container, trajectories.getTwoAndTwoLeftAuto4());
+        setShotTypeHangar(command, container);
+        followAndPreShoot(command, container, trajectories.getTwoAndTwoLeftAuto5Hangar());
+        shoot(command, container, 1.5);
+        //followAndIntake(command, container, trajectories.getTwoAndTwoLeftAuto6Hangar());
+        setShotTypeLimelight(command, container);
+
+        return command;
+    }
+
+    private SequentialCommandGroup getTwoAndTwoLeftAutoHubCommand(RobotContainer container) {
         SequentialCommandGroup command = new SequentialCommandGroup();
 
         resetRobotPose(command, container, trajectories.getTwoAndTwoLeftAuto1());
@@ -151,9 +172,10 @@ public class AutonomousChooser {
         followAndIntake(command, container, trajectories.getTwoAndTwoLeftAuto3());
         followAndIntake(command, container, trajectories.getTwoAndTwoLeftAuto4());
         setShotTypeLow(command, container);
-        followAndPreShoot(command, container, trajectories.getTwoAndTwoLeftAuto5());
+        followAndPreShoot(command, container, trajectories.getTwoAndTwoLeftAuto5Hub());
         shoot(command, container, 1.5);
-        //followAndIntake(command, container, trajectories.getTwoAndTwoLeftAuto6());
+        //followAndIntake(command, container, trajectories.getTwoAndTwoLeftAuto6Hub());
+        setShotTypeLimelight(command, container);
 
         return command;
     }
@@ -206,7 +228,26 @@ public class AutonomousChooser {
         return command;
     }
 
-    private SequentialCommandGroup getAssistAutoCommand(RobotContainer container) {
+    private SequentialCommandGroup getAssistHangarAutoCommand(RobotContainer container) {
+        SequentialCommandGroup command = new SequentialCommandGroup();
+
+        resetRobotPose(command, container, trajectories.getAssistAuto1());
+        setShotTypeLimelight(command, container);
+        followAndIntake(command, container, trajectories.getAssistAuto1());
+        aimAndShoot(command, container, 1.75);
+        followAndIntake(command, container, trajectories.getAssistAuto2());
+        aim(command, container, 0.75);
+        aimAndShoot(command, container, 1.25);
+        followAndIntake(command, container, trajectories.getAssistAuto3());
+        setShotTypeHangar(command, container);
+        followAndPreShoot(command, container, trajectories.getAssistAuto4Hangar());
+        shoot(command, container, 1.5);
+        setShotTypeLimelight(command, container);
+
+        return command;
+    }
+    
+    private SequentialCommandGroup getAssistHubAutoCommand(RobotContainer container) {
         SequentialCommandGroup command = new SequentialCommandGroup();
 
         resetRobotPose(command, container, trajectories.getAssistAuto1());
@@ -218,8 +259,9 @@ public class AutonomousChooser {
         aimAndShoot(command, container, 1.25);
         followAndIntake(command, container, trajectories.getAssistAuto3());
         setShotTypeLow(command, container);
-        followAndPreShoot(command, container, trajectories.getAssistAuto4());
+        followAndPreShoot(command, container, trajectories.getAssistAuto4Hub());
         shoot(command, container, 1.5);
+        setShotTypeLimelight(command, container);
 
         return command;
     }
@@ -238,8 +280,10 @@ public class AutonomousChooser {
                 return getThreeRightAutoCommand(container);
             case THREE_RIGHT_SLOW:
                 return getThreeRightSlowAutoCommand(container);
-            case TWO_AND_TWO_LEFT:
-                return getTwoAndTwoLeftAutoCommand(container);
+            case TWO_AND_TWO_LEFT_HANGAR:
+                return getTwoAndTwoLeftAutoHangarCommand(container);
+            case TWO_AND_TWO_LEFT_HUB:
+                return getTwoAndTwoLeftAutoHubCommand(container);
             case ONE_LEFT:
                 return getTaxiAutoLeftCommand(container);
             case ONE_LEFT_FRONT:
@@ -248,8 +292,10 @@ public class AutonomousChooser {
                 return getTaxiAutoRightFrontCommand(container);
             case ONE_RIGHT:
                 return getTaxiAutoRightCommand(container);
-            case ASSIST:
-                return getAssistAutoCommand(container);
+            case ASSIST_HANGAR:
+                return getAssistHangarAutoCommand(container);
+            case ASSIST_HUB:
+                return getAssistHubAutoCommand(container);
             default:
                 return getNoAutoCommand(container);
         }
@@ -308,6 +354,12 @@ public class AutonomousChooser {
         command.addCommands(
             new ShooterHoodRetractCommand(container.getShooterSubsystem()),
             new ChangeShotTypeCommand(container.getShooterSubsystem(), container.getPreShooterSubsystem(), "low"));
+    }
+
+    private void setShotTypeHangar(SequentialCommandGroup command, RobotContainer container) {
+        command.addCommands(
+            new ShooterHoodRetractCommand(container.getShooterSubsystem()),
+            new ChangeShotTypeCommand(container.getShooterSubsystem(), container.getPreShooterSubsystem(), "hangar"));
     }
             
     private void setShotTypeLimelight(SequentialCommandGroup command, RobotContainer container) {
@@ -371,11 +423,13 @@ public class AutonomousChooser {
         FOUR_LEFT,
         THREE_RIGHT,
         THREE_RIGHT_SLOW,
-        TWO_AND_TWO_LEFT,
+        TWO_AND_TWO_LEFT_HANGAR,
+        TWO_AND_TWO_LEFT_HUB,
         ONE_LEFT,
         ONE_LEFT_FRONT,
         ONE_RIGHT_FRONT,
         ONE_RIGHT,
-        ASSIST
+        ASSIST_HANGAR,
+        ASSIST_HUB
     }
 }
