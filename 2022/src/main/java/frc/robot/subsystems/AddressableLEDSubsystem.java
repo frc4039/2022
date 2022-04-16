@@ -13,6 +13,7 @@ public class AddressableLEDSubsystem extends SubsystemBase {
     private AddressableLED m_led;
     private AddressableLEDBuffer m_ledBuffer;
     private double hue;
+    private double value;
     private double toggle = 0;
     
     public AddressableLEDSubsystem() {
@@ -73,6 +74,22 @@ public class AddressableLEDSubsystem extends SubsystemBase {
         }
     }
 
+    public void pulseRainbow()
+    {
+        for (var i = 0; i < LEDConstants.LED_STRIP_LENGTH; i++)
+        {
+            var varHue = (hue + (i * 180 / LEDConstants.LED_STRIP_LENGTH)) % 180;
+            value += (float)LEDConstants.BRIGHTNESS / LEDConstants.LED_STRIP_LENGTH;
+            value %= LEDConstants.BRIGHTNESS / 2;
+            value += LEDConstants.BRIGHTNESS / 2;
+            setHSV(i, (int)Math.round(varHue), 255, (int)Math.round(value));
+        }
+        value -= 0.5;
+        value %= LEDConstants.LED_STRIP_LENGTH;
+        hue += 0.5;
+        hue %= 180;
+    }
+
     public void slowRainbow() {
         for (var i = 0; i < LEDConstants.LED_STRIP_LENGTH; i++) {
             final var varHue = (hue + (i * 180 / LEDConstants.LED_STRIP_LENGTH)) % 180;
@@ -118,7 +135,7 @@ public class AddressableLEDSubsystem extends SubsystemBase {
     public void periodic(){
 
         if (DriverStation.isDisabled()) {
-            slowRainbow();
+            pulseRainbow();
         }
 
         m_led.setData(m_ledBuffer);
