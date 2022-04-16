@@ -54,6 +54,7 @@ public class AutonomousTrajectories {
     public AutonomousTrajectories(TrajectoryConstraint[] trajectoryConstraints) throws IOException {
         TrajectoryConstraint[] superSlowConstraints = Arrays.copyOf(trajectoryConstraints, trajectoryConstraints.length + 1);
         TrajectoryConstraint[] slowConstraints = Arrays.copyOf(trajectoryConstraints, trajectoryConstraints.length + 1);
+        TrajectoryConstraint[] slightlyFasterThanSlowConstraints = Arrays.copyOf(trajectoryConstraints, trajectoryConstraints.length + 1);
         TrajectoryConstraint[] normalConstraints = Arrays.copyOf(trajectoryConstraints, trajectoryConstraints.length + 1);
         TrajectoryConstraint[] slightlyFasterThanNormalConstraints = Arrays.copyOf(trajectoryConstraints, trajectoryConstraints.length + 1);
         TrajectoryConstraint[] fastConstraints = Arrays.copyOf(trajectoryConstraints, trajectoryConstraints.length + 1);
@@ -68,6 +69,12 @@ public class AutonomousTrajectories {
         // Acceleration speed
         slowConstraints[slowConstraints.length - 2] = new MaxAccelerationConstraint(4.0 * 12.0);
 
+        // Top speed
+        slightlyFasterThanSlowConstraints[slowConstraints.length - 1] = new MaxVelocityConstraint(5.0 * 12.0);
+        // Acceleration speed
+        slightlyFasterThanSlowConstraints[slowConstraints.length - 2] = new MaxAccelerationConstraint(4.0 * 12.0);
+
+                
         // Top speed
         normalConstraints[normalConstraints.length - 1] = new MaxVelocityConstraint(8.0 * 12.0);
         // Acceleration speed
@@ -252,7 +259,7 @@ public class AutonomousTrajectories {
             new SimplePathBuilder(new Vector2(-116.451, 70.019), Rotation2.fromDegrees(135))
                 .lineTo(new Vector2(-130, 31.792), Rotation2.fromDegrees(-13.74218))
                 .build(),
-                normalConstraints, SAMPLE_DISTANCE
+                slightlyFasterThanSlowConstraints, SAMPLE_DISTANCE
         );
 
         twoAndTwoLeftAuto3 = new Trajectory(
@@ -260,7 +267,7 @@ public class AutonomousTrajectories {
                 .lineTo(new Vector2(-144, 10), Rotation2.fromDegrees(-100))
                 .lineTo(new Vector2(-147, -32.423), Rotation2.fromDegrees(-90))
                 .build(),
-                normalConstraints, SAMPLE_DISTANCE
+                slightlyFasterThanSlowConstraints, SAMPLE_DISTANCE
         );
 
         twoAndTwoLeftAuto4 = new Trajectory(
@@ -268,21 +275,21 @@ public class AutonomousTrajectories {
                 .lineTo(new Vector2(-119.036, 46.2705), Rotation2.fromDegrees(68.66734))
                 .lineTo(new Vector2(-88.303, 124.964), Rotation2.fromDegrees(68.66734))
                 .build(),
-                normalConstraints, SAMPLE_DISTANCE
+                slightlyFasterThanSlowConstraints, SAMPLE_DISTANCE
         );
 
         twoAndTwoLeftAuto5Hangar = new Trajectory(
             new SimplePathBuilder(new Vector2(-88.303, 124.964), Rotation2.fromDegrees(68.66734))
                 .lineTo(new Vector2(-110, 125), Rotation2.fromDegrees(175))
                 .build(),
-                normalConstraints, SAMPLE_DISTANCE
+                slightlyFasterThanSlowConstraints, SAMPLE_DISTANCE
         );
 
         twoAndTwoLeftAuto6Hangar = new Trajectory(
             new SimplePathBuilder(new Vector2(-110, 125), Rotation2.fromDegrees(-180))
                 .lineTo(new Vector2(-60, 125), Rotation2.ZERO)
                 .build(),
-                normalConstraints, SAMPLE_DISTANCE
+                slightlyFasterThanSlowConstraints, SAMPLE_DISTANCE
         );
 
                 
@@ -290,7 +297,7 @@ public class AutonomousTrajectories {
             new SimplePathBuilder(new Vector2(-88.303, 124.964), Rotation2.fromDegrees(68.66734))
                 .lineTo(new Vector2(-110, 125), Rotation2.fromDegrees(-60))
                 .build(),
-                normalConstraints, SAMPLE_DISTANCE
+                slightlyFasterThanSlowConstraints, SAMPLE_DISTANCE
         );
 
 
@@ -298,7 +305,7 @@ public class AutonomousTrajectories {
             new SimplePathBuilder(new Vector2(-110, 125), Rotation2.fromDegrees(-90))
                 .lineTo(new Vector2(-60, 125), Rotation2.ZERO)
                 .build(),
-                normalConstraints, SAMPLE_DISTANCE
+                slightlyFasterThanSlowConstraints, SAMPLE_DISTANCE
         );
 
         taxiAuto1 = new Trajectory(
