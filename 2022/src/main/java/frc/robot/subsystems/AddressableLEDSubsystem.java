@@ -80,9 +80,8 @@ public class AddressableLEDSubsystem extends SubsystemBase {
         {
             var varHue = (hue + (i * 180 / LEDConstants.LED_STRIP_LENGTH)) % 180;
             value += (float)LEDConstants.BRIGHTNESS / LEDConstants.LED_STRIP_LENGTH;
-            value %= LEDConstants.BRIGHTNESS / 2;
-            value += LEDConstants.BRIGHTNESS / 2;
-            setHSV(i, (int)Math.round(varHue), 255, (int)Math.round(value));
+            value %= LEDConstants.BRIGHTNESS;
+            setHSV(i, (int)Math.round(varHue), LEDConstants.SATURATION, (int)Math.round(value));
         }
         value -= 0.5;
         value %= LEDConstants.LED_STRIP_LENGTH;
