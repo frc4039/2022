@@ -30,6 +30,8 @@ public class LEDCommand extends CommandBase{
 
     @Override
     public void execute() {
+        m_ledSubsystem.pulseRainbow();
+        /*
         if (DriverStation.isAutonomous()) {
             m_ledSubsystem.rainbow();
         } else if (m_climberSubsystem.getClimbeEnable()) {
@@ -57,6 +59,7 @@ public class LEDCommand extends CommandBase{
         } else {
             m_ledSubsystem.setWhiteAll();
         }
+        */
     }
 
     @Override

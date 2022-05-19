@@ -58,7 +58,7 @@ public class Robot extends TimedRobot {
 
     DataLogManager.start();
     
-    updateManager.startLoop(5.0e-3);
+    updateManager.startLoop(3.0e-2);
     pcmCompressor.enableDigital();
     CameraServer.startAutomaticCapture();
   }
