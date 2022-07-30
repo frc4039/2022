@@ -67,6 +67,8 @@ public class PreShooterSubsystem extends SubsystemBase {
       fenderLowPreShoot();
     else if (type == "limelight")
       limelightPreShoot();
+    else if (type == "hangar")
+      fenderHighPreShoot();
     else
       fenderHighPreShoot();
   }

@@ -125,6 +125,7 @@ public final class Constants {
         public static final double kfenderLowShotRPM = 1150;
         public static final double kfenderHighShotRPM = 2100;
         public static final double klimelightShotRPM = 2500;
+        public static final double khangarShotRPM = 1700;
         
         public static final double kpreShooterReverseRPM = 500;
         public static final double kpreShooterLimelightShotRPM = 2000;
@@ -142,10 +143,10 @@ public final class Constants {
         public static final double kCloseKey = 135.0;
         public static final double kFarKey = 185.0;
         public static final double kFarthestKey = 250.0;
-        public static final double kClosestValue = 2100.0;
-        public static final double kCloseValue = 2300.0;
-        public static final double kFarValue = 2625.0;
-        public static final double kFarthestValue = 3120.0;
+        public static final double kClosestValue = 2090.0;
+        public static final double kCloseValue = 2290.0;
+        public static final double kFarValue = 2600.0;
+        public static final double kFarthestValue = 3095.0;
         public static final double kAngleWindow = 10;
         public static final double kShotAngularVelocityLimit = 5;
 

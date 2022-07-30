@@ -83,6 +83,10 @@ public class ShooterSubsystem extends SubsystemBase {
     shoot(ShooterConstants.klimelightShotRPM);
   }
 
+  private void hangarShot() {
+    shoot(ShooterConstants.khangarShotRPM);
+  }
+
   public void shotType() {
     if(type == "high")
       fenderHighShot();
@@ -90,6 +94,8 @@ public class ShooterSubsystem extends SubsystemBase {
       fenderLowShot();
     else if (type == "limelight")
       limelightShot();
+    else if (type == "hangar")
+      hangarShot();
     else
       fenderHighShot();
   }

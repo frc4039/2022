@@ -37,8 +37,10 @@ public class AutonomousTrajectories {
     private Trajectory twoAndTwoLeftAuto2;
     private Trajectory twoAndTwoLeftAuto3;
     private Trajectory twoAndTwoLeftAuto4;
-    private Trajectory twoAndTwoLeftAuto5;
-    private Trajectory twoAndTwoLeftAuto6;
+    private Trajectory twoAndTwoLeftAuto5Hangar;
+    private Trajectory twoAndTwoLeftAuto5Hub;
+    private Trajectory twoAndTwoLeftAuto6Hangar;
+    private Trajectory twoAndTwoLeftAuto6Hub;
     private Trajectory taxiAuto1;
     private Trajectory taxiAuto2;
     private Trajectory taxiAuto3;
@@ -46,12 +48,15 @@ public class AutonomousTrajectories {
     private Trajectory assistAuto1;
     private Trajectory assistAuto2;
     private Trajectory assistAuto3;
-    private Trajectory assistAuto4;
+    private Trajectory assistAuto4Hangar;
+    private Trajectory assistAuto4Hub;
 
     public AutonomousTrajectories(TrajectoryConstraint[] trajectoryConstraints) throws IOException {
-        TrajectoryConstraint[] normalConstraints = Arrays.copyOf(trajectoryConstraints, trajectoryConstraints.length + 1);
-        TrajectoryConstraint[] slowConstraints = Arrays.copyOf(trajectoryConstraints, trajectoryConstraints.length + 1);
         TrajectoryConstraint[] superSlowConstraints = Arrays.copyOf(trajectoryConstraints, trajectoryConstraints.length + 1);
+        TrajectoryConstraint[] slowConstraints = Arrays.copyOf(trajectoryConstraints, trajectoryConstraints.length + 1);
+        TrajectoryConstraint[] slightlyFasterThanSlowConstraints = Arrays.copyOf(trajectoryConstraints, trajectoryConstraints.length + 1);
+        TrajectoryConstraint[] normalConstraints = Arrays.copyOf(trajectoryConstraints, trajectoryConstraints.length + 1);
+        TrajectoryConstraint[] slightlyFasterThanNormalConstraints = Arrays.copyOf(trajectoryConstraints, trajectoryConstraints.length + 1);
         TrajectoryConstraint[] fastConstraints = Arrays.copyOf(trajectoryConstraints, trajectoryConstraints.length + 1);
         
         // Top speed
@@ -65,10 +70,21 @@ public class AutonomousTrajectories {
         slowConstraints[slowConstraints.length - 2] = new MaxAccelerationConstraint(4.0 * 12.0);
 
         // Top speed
+        slightlyFasterThanSlowConstraints[slowConstraints.length - 1] = new MaxVelocityConstraint(5.0 * 12.0);
+        // Acceleration speed
+        slightlyFasterThanSlowConstraints[slowConstraints.length - 2] = new MaxAccelerationConstraint(4.0 * 12.0);
+
+                
+        // Top speed
         normalConstraints[normalConstraints.length - 1] = new MaxVelocityConstraint(8.0 * 12.0);
         // Acceleration speed
         normalConstraints[normalConstraints.length - 2] = new MaxAccelerationConstraint(4.0 * 12.0);
         
+        // Top speed
+        slightlyFasterThanNormalConstraints[normalConstraints.length - 1] = new MaxVelocityConstraint(9.0 * 12.0);
+        // Acceleration speed
+        slightlyFasterThanNormalConstraints[normalConstraints.length - 2] = new MaxAccelerationConstraint(5.0 * 12.0);
+
         // Top speed
         fastConstraints[normalConstraints.length - 1] = new MaxVelocityConstraint(12.0 * 12.0);
         // Acceleration speed
@@ -243,7 +259,7 @@ public class AutonomousTrajectories {
             new SimplePathBuilder(new Vector2(-116.451, 70.019), Rotation2.fromDegrees(135))
                 .lineTo(new Vector2(-130, 31.792), Rotation2.fromDegrees(-13.74218))
                 .build(),
-                slowConstraints, SAMPLE_DISTANCE
+                slightlyFasterThanSlowConstraints, SAMPLE_DISTANCE
         );
 
         twoAndTwoLeftAuto3 = new Trajectory(
@@ -251,7 +267,7 @@ public class AutonomousTrajectories {
                 .lineTo(new Vector2(-144, 10), Rotation2.fromDegrees(-100))
                 .lineTo(new Vector2(-147, -32.423), Rotation2.fromDegrees(-90))
                 .build(),
-                slowConstraints, SAMPLE_DISTANCE
+                slightlyFasterThanSlowConstraints, SAMPLE_DISTANCE
         );
 
         twoAndTwoLeftAuto4 = new Trajectory(
@@ -259,21 +275,37 @@ public class AutonomousTrajectories {
                 .lineTo(new Vector2(-119.036, 46.2705), Rotation2.fromDegrees(68.66734))
                 .lineTo(new Vector2(-88.303, 124.964), Rotation2.fromDegrees(68.66734))
                 .build(),
-                slowConstraints, SAMPLE_DISTANCE
+                slightlyFasterThanSlowConstraints, SAMPLE_DISTANCE
         );
 
-        twoAndTwoLeftAuto5 = new Trajectory(
+        twoAndTwoLeftAuto5Hangar = new Trajectory(
             new SimplePathBuilder(new Vector2(-88.303, 124.964), Rotation2.fromDegrees(68.66734))
-                .lineTo(new Vector2(-110, 125), Rotation2.fromDegrees(-180))
+                .lineTo(new Vector2(-110, 125), Rotation2.fromDegrees(175))
                 .build(),
-                slowConstraints, SAMPLE_DISTANCE
+                slightlyFasterThanSlowConstraints, SAMPLE_DISTANCE
         );
 
-        twoAndTwoLeftAuto6 = new Trajectory(
+        twoAndTwoLeftAuto6Hangar = new Trajectory(
             new SimplePathBuilder(new Vector2(-110, 125), Rotation2.fromDegrees(-180))
                 .lineTo(new Vector2(-60, 125), Rotation2.ZERO)
                 .build(),
-                slowConstraints, SAMPLE_DISTANCE
+                slightlyFasterThanSlowConstraints, SAMPLE_DISTANCE
+        );
+
+                
+        twoAndTwoLeftAuto5Hub = new Trajectory(
+            new SimplePathBuilder(new Vector2(-88.303, 124.964), Rotation2.fromDegrees(68.66734))
+                .lineTo(new Vector2(-110, 125), Rotation2.fromDegrees(-60))
+                .build(),
+                slightlyFasterThanSlowConstraints, SAMPLE_DISTANCE
+        );
+
+
+        twoAndTwoLeftAuto6Hub = new Trajectory(
+            new SimplePathBuilder(new Vector2(-110, 125), Rotation2.fromDegrees(-90))
+                .lineTo(new Vector2(-60, 125), Rotation2.ZERO)
+                .build(),
+                slightlyFasterThanSlowConstraints, SAMPLE_DISTANCE
         );
 
         taxiAuto1 = new Trajectory(
@@ -330,9 +362,16 @@ public class AutonomousTrajectories {
             normalConstraints, SAMPLE_DISTANCE
         );
 
-        assistAuto4 = new Trajectory(
+        assistAuto4Hangar = new Trajectory(
             new SimplePathBuilder(new Vector2(-88.303, 124.964), Rotation2.fromDegrees(62.87))
             .lineTo(new Vector2(-110, 125), Rotation2.fromDegrees(175))
+            .build(),
+            normalConstraints, SAMPLE_DISTANCE
+        );
+
+        assistAuto4Hub = new Trajectory(
+            new SimplePathBuilder(new Vector2(-88.303, 124.964), Rotation2.fromDegrees(62.87))
+            .lineTo(new Vector2(-110, 125), Rotation2.fromDegrees(-90))
             .build(),
             normalConstraints, SAMPLE_DISTANCE
         );
@@ -438,12 +477,20 @@ public class AutonomousTrajectories {
         return twoAndTwoLeftAuto4;
     }
 
-    public Trajectory getTwoAndTwoLeftAuto5() {
-        return twoAndTwoLeftAuto5;
+    public Trajectory getTwoAndTwoLeftAuto5Hangar() {
+        return twoAndTwoLeftAuto5Hangar;
     }
 
-    public Trajectory getTwoAndTwoLeftAuto6() {
-        return twoAndTwoLeftAuto6;
+    public Trajectory getTwoAndTwoLeftAuto6Hangar() {
+        return twoAndTwoLeftAuto6Hangar;
+    }
+
+    public Trajectory getTwoAndTwoLeftAuto5Hub() {
+        return twoAndTwoLeftAuto5Hub;
+    }
+
+    public Trajectory getTwoAndTwoLeftAuto6Hub() {
+        return twoAndTwoLeftAuto6Hub;
     }
 
     public Trajectory getTaxiAuto1(){
@@ -474,7 +521,11 @@ public class AutonomousTrajectories {
         return assistAuto3;
     }
 
-    public Trajectory getAssistAuto4(){
-        return assistAuto4;
+    public Trajectory getAssistAuto4Hangar(){
+        return assistAuto4Hangar;
+    }
+
+    public Trajectory getAssistAuto4Hub(){
+        return assistAuto4Hub;
     }
 }
