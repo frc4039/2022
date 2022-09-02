@@ -40,20 +40,6 @@ deploy {
     }
 }
 
-task createButtonFile (type: JavaExec) {
-    group = "Execution"
-    description = "Create button mapping text file"
-    classpath = sourceSets.main.runtimeClasspath
-    main = "frc.robot.MakeButtonList"
-}
-
-tasks.named('build').configure {
-    dependsOn createButtonFile
-}
-tasks.named('deploy').configure {
-    dependsOn createButtonFile
-}
-
 def deployArtifact = deploy.targets.roborio.artifacts.frcJava
 
 // Set to true to use debug for JNI.
