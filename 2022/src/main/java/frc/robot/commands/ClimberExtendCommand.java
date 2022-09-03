@@ -14,18 +14,8 @@ public class ClimberExtendCommand extends CommandBase {
     }
 
     @Override
-    public void initialize() {
-       
-    }
-
-    @Override
     public void execute() {
         m_climberSubsystem.climberExtend();
-    }
-
-    @Override
-    public void end(boolean interrupted) {
-        
     }
 
     @Override

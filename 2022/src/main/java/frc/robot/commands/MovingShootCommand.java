@@ -30,12 +30,12 @@ public class MovingShootCommand extends CommandBase {
 
   private InterpolatingTreeMap<InterpolatingDouble, InterpolatingDouble> shotProfile = new InterpolatingTreeMap<InterpolatingDouble, InterpolatingDouble>();
 
-  private double ShooterRPM = 0;
-  private double PreShooterRPM = 0;
-  private double RPMWindow = 0;
+  private double shooterRPM = 0;
+  private double preShooterRPM = 0;
+  private double rPMWindow = 0;
   private double preShooterRPMWindow = 0;
   private double feederPercent;
-  private double RPMChange;
+  private double rPMChange;
   private double targetDistance;
 
   /**
@@ -48,7 +48,7 @@ public class MovingShootCommand extends CommandBase {
     m_preShooter = preShooter;
     m_feeder = feeder;
     m_limelight = limelight;
-    this.RPMChange = RPMChange;
+    this.rPMChange = RPMChange;
     m_drivetrain = drivetrain;
 
     // Use addRequirements() here to declare subsystem dependencies.
@@ -67,22 +67,14 @@ public class MovingShootCommand extends CommandBase {
     shotProfile.put(new InterpolatingDouble(ShooterConstants.kFarKey), new InterpolatingDouble(ShooterConstants.kFarValue));
     shotProfile.put(new InterpolatingDouble(ShooterConstants.kFarthestKey), new InterpolatingDouble(ShooterConstants.kFarthestValue));
 
-
-    if (m_shooter.type == "high") {
-      ShooterRPM = ShooterConstants.kfenderHighShotRPM;
-      PreShooterRPM = ShooterConstants.kpreShooterFenderHighShotRPM;
-      RPMWindow = ShooterConstants.kfenderHighShotRPMWindow;
-      preShooterRPMWindow = ShooterConstants.kPreShooterFenderHighShotRPMWindow;
-      feederPercent = FeederConstants.kFeederHighShotPercent;
-    }
-    else if (m_shooter.type == "low") {
-      ShooterRPM = ShooterConstants.kfenderLowShotRPM;
-      PreShooterRPM = ShooterConstants.kpreShooterFenderLowShotRPM;
-      RPMWindow = ShooterConstants.kfenderLowShotRPMWindow;
+    if (m_shooter.type.equals("low")) {
+      shooterRPM = ShooterConstants.kfenderLowShotRPM;
+      preShooterRPM = ShooterConstants.kpreShooterFenderLowShotRPM;
+      rPMWindow = ShooterConstants.kfenderLowShotRPMWindow;
       preShooterRPMWindow = ShooterConstants.kPreShooterFenderLowShotRPMWindow;
       feederPercent = FeederConstants.kFeederLowShotPercent;
     }
-    else if (m_shooter.type == "limelight") {
+    else if (m_shooter.type.equals("limelight")) {
       if (m_limelight.getValidTarget()) {
         targetDistance = m_limelight.getDistanceToTarget();
       }
@@ -90,17 +82,17 @@ public class MovingShootCommand extends CommandBase {
         targetDistance = Math.sqrt(Math.pow(m_drivetrain.getPose().translation.x, 2) + Math.pow(m_drivetrain.getPose().translation.y, 2));
       }
 
-      ShooterRPM = (double)(shotProfile.getInterpolated(new InterpolatingDouble(targetDistance)).value) + RPMChange;
+      shooterRPM = shotProfile.getInterpolated(new InterpolatingDouble(targetDistance)).value + rPMChange;
 
-      PreShooterRPM = ShooterConstants.kpreShooterLimelightShotRPM;
-      RPMWindow = ShooterConstants.klimelightShotRPMWindow;
+      preShooterRPM = ShooterConstants.kpreShooterLimelightShotRPM;
+      rPMWindow = ShooterConstants.klimelightShotRPMWindow;
       preShooterRPMWindow = ShooterConstants.kPreShooterlimelightShotRPMWindow;
       feederPercent = FeederConstants.kFeederLimelightShotPercent;
     }
     else {
-      ShooterRPM = ShooterConstants.kfenderHighShotRPM;
-      PreShooterRPM = ShooterConstants.kpreShooterFenderHighShotRPM;
-      RPMWindow = ShooterConstants.kfenderHighShotRPMWindow;
+      shooterRPM = ShooterConstants.kfenderHighShotRPM;
+      preShooterRPM = ShooterConstants.kpreShooterFenderHighShotRPM;
+      rPMWindow = ShooterConstants.kfenderHighShotRPMWindow;
       preShooterRPMWindow = ShooterConstants.kPreShooterFenderHighShotRPMWindow;
       feederPercent = FeederConstants.kFeederHighShotPercent;
     }
@@ -110,7 +102,7 @@ public class MovingShootCommand extends CommandBase {
   @Override
   public void execute() {
 
-    if(m_shooter.type == "limelight") {
+    if(m_shooter.type.equals("limelight")) {
 
       if (m_limelight.getValidTarget()) {
         targetDistance = m_limelight.getDistanceToTarget();
@@ -119,14 +111,14 @@ public class MovingShootCommand extends CommandBase {
         targetDistance = Math.sqrt(Math.pow(m_drivetrain.getPose().translation.x, 2) + Math.pow(m_drivetrain.getPose().translation.y, 2));
       }
       
-      ShooterRPM = (double)(shotProfile.getInterpolated(new InterpolatingDouble(targetDistance)).value) + RPMChange;
-      m_shooter.shoot(ShooterRPM);
+      shooterRPM = shotProfile.getInterpolated(new InterpolatingDouble(targetDistance)).value + rPMChange;
+      m_shooter.shoot(shooterRPM);
     }
     
-    if ((m_shooter.returnCurrentRPM() > ShooterRPM * (1 - RPMWindow))
-      && (m_shooter.returnCurrentRPM() < ShooterRPM * (1 + RPMWindow))
-      && (m_preShooter.returnPreShooterCurrentRPM() > PreShooterRPM * (1 - preShooterRPMWindow))
-      && (m_preShooter.returnPreShooterCurrentRPM() < PreShooterRPM * (1 + preShooterRPMWindow))
+    if ((m_shooter.returnCurrentRPM() > shooterRPM * (1 - rPMWindow))
+      && (m_shooter.returnCurrentRPM() < shooterRPM * (1 + rPMWindow))
+      && (m_preShooter.returnPreShooterCurrentRPM() > preShooterRPM * (1 - preShooterRPMWindow))
+      && (m_preShooter.returnPreShooterCurrentRPM() < preShooterRPM * (1 + preShooterRPMWindow))
       )  {
             m_feeder.runFeeder(feederPercent);
     }

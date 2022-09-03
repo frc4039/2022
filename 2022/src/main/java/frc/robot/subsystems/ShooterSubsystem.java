@@ -88,13 +88,13 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public void shotType() {
-    if(type == "high")
+    if(type.equals("high"))
       fenderHighShot();
-    else if(type == "low")
+    else if(type.equals("low"))
       fenderLowShot();
-    else if (type == "limelight")
+    else if (type.equals("limelight"))
       limelightShot();
-    else if (type == "hangar")
+    else if (type.equals("hangar"))
       hangarShot();
     else
       fenderHighShot();

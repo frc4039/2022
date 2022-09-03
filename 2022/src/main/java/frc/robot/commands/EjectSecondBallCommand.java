@@ -12,7 +12,6 @@ import frc.robot.Constants.FeederConstants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.common.util.InterpolatingDouble;
 import frc.robot.common.util.InterpolatingTreeMap;
-import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.FeederSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.PreShooterSubsystem;
@@ -26,7 +25,6 @@ public class EjectSecondBallCommand extends CommandBase {
   private final ShooterSubsystem m_shooter;
   private final PreShooterSubsystem m_preShooter;
   private final LimelightSubsystem m_limelight;
-  private final DrivetrainSubsystem m_drivetrain;
 
   private String shotType;
   private String preShotType;
@@ -35,9 +33,9 @@ public class EjectSecondBallCommand extends CommandBase {
 
   private InterpolatingTreeMap<InterpolatingDouble, InterpolatingDouble> shotProfile = new InterpolatingTreeMap<InterpolatingDouble, InterpolatingDouble>();
 
-  private double ShooterRPM = 0;
-  private double PreShooterRPM = 0;
-  private double RPMWindow = 0;
+  private double shooterRPM = 0;
+  private double preShooterRPM = 0;
+  private double rPMWindow = 0;
   private double preShooterRPMWindow = 0;
   private double feederPercent;
 
@@ -46,12 +44,11 @@ public class EjectSecondBallCommand extends CommandBase {
    *
    * @param subsystem 
    */
-  public EjectSecondBallCommand(ShooterSubsystem shooter, PreShooterSubsystem preShooter, FeederSubsystem feeder, LimelightSubsystem limelight, DrivetrainSubsystem drivetrain) {
+  public EjectSecondBallCommand(ShooterSubsystem shooter, PreShooterSubsystem preShooter, FeederSubsystem feeder, LimelightSubsystem limelight) {
     m_shooter = shooter;
     m_preShooter = preShooter;
     m_feeder = feeder;
     m_limelight = limelight;
-    m_drivetrain = drivetrain;
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_shooter, m_preShooter, m_feeder);
@@ -65,10 +62,10 @@ public class EjectSecondBallCommand extends CommandBase {
     shotProfile.put(new InterpolatingDouble(ShooterConstants.kCloseKey), new InterpolatingDouble(ShooterConstants.kCloseValue));
     shotProfile.put(new InterpolatingDouble(ShooterConstants.kFarKey), new InterpolatingDouble(ShooterConstants.kFarValue));
     shotProfile.put(new InterpolatingDouble(ShooterConstants.kFarthestKey), new InterpolatingDouble(ShooterConstants.kFarthestValue));
-    ShooterRPM = (double)(shotProfile.getInterpolated(new InterpolatingDouble(m_limelight.getDistanceToTarget())).value);
+    shooterRPM = shotProfile.getInterpolated(new InterpolatingDouble(m_limelight.getDistanceToTarget())).value;
     
-    PreShooterRPM = ShooterConstants.kpreShooterLimelightShotRPM;
-    RPMWindow = ShooterConstants.klimelightShotRPMWindow;
+    preShooterRPM = ShooterConstants.kpreShooterLimelightShotRPM;
+    rPMWindow = ShooterConstants.klimelightShotRPMWindow;
     preShooterRPMWindow = ShooterConstants.kPreShooterlimelightShotRPMWindow;
     feederPercent = FeederConstants.kFeederLimelightShotPercent;
 
@@ -86,14 +83,14 @@ public class EjectSecondBallCommand extends CommandBase {
   @Override
   public void execute() {
 
-    ShooterRPM = (double)(shotProfile.getInterpolated(new InterpolatingDouble(m_limelight.getDistanceToTarget())).value);
-    m_shooter.shoot(ShooterRPM);
+    shooterRPM = shotProfile.getInterpolated(new InterpolatingDouble(m_limelight.getDistanceToTarget())).value;
+    m_shooter.shoot(shooterRPM);
 
     
-    if ((m_shooter.returnCurrentRPM() > ShooterRPM * (1 - RPMWindow))
-      && (m_shooter.returnCurrentRPM() < ShooterRPM * (1 + RPMWindow))
-      && (m_preShooter.returnPreShooterCurrentRPM() > PreShooterRPM * (1 - preShooterRPMWindow))
-      && (m_preShooter.returnPreShooterCurrentRPM() < PreShooterRPM * (1 + preShooterRPMWindow))
+    if ((m_shooter.returnCurrentRPM() > shooterRPM * (1 - rPMWindow))
+      && (m_shooter.returnCurrentRPM() < shooterRPM * (1 + rPMWindow))
+      && (m_preShooter.returnPreShooterCurrentRPM() > preShooterRPM * (1 - preShooterRPMWindow))
+      && (m_preShooter.returnPreShooterCurrentRPM() < preShooterRPM * (1 + preShooterRPMWindow))
       )  {
             m_feeder.runFeeder(feederPercent);
     } else if (m_feeder.getBreakBeamPreShooter()) {
@@ -130,22 +127,5 @@ public class EjectSecondBallCommand extends CommandBase {
   @Override
   public boolean isFinished() {
     return ejected;
-  }
-
-  private boolean aimedAtTarget() {
-    if (m_limelight.getValidTarget()) {
-      return true;
-    }
-    else {
-      double rotation = m_drivetrain.getPose().rotation.toDegrees();
-      double toTarget = Math.toDegrees(Math.atan2(m_drivetrain.getPose().translation.y, m_drivetrain.getPose().translation.x));
-
-      double angleDifference = Math.abs(rotation - toTarget);
-      if (angleDifference > 180) {
-        angleDifference -= 360;
-      }
-
-      return angleDifference < ShooterConstants.kAngleWindow;
-    }
   }
 }

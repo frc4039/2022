@@ -52,11 +52,4 @@ public class IntakeSubsystem extends SubsystemBase {
   public void stop() {
     m_intakeMotor.set(ControlMode.PercentOutput, 0);
   }
-
-  @Override
-  public void periodic() {
-
-  }
-
-
 }

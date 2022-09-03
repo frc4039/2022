@@ -12,10 +12,10 @@ import frc.robot.Constants.FeederConstants;
 public class FeederSubsystem extends SubsystemBase {
 
   private final CANSparkMax m_feederMotor;
-  private static DigitalInput m_BreakBeamIntake;
-  private static DigitalInput m_BreakBeamPreShooter;
-  private static DigitalInput m_BreakBeamLowerBall;
-  private static DigitalInput m_BreakBeamUpperBall;
+  private static DigitalInput m_BreakBeamIntake = new DigitalInput(FeederConstants.kBreakBeamIntakePort);
+  private static DigitalInput m_BreakBeamPreShooter = new DigitalInput(FeederConstants.kBreakBeamPreShooterPort);
+  private static DigitalInput m_BreakBeamLowerBall = new DigitalInput(FeederConstants.kBreakBeamLowerBall);
+  private static DigitalInput m_BreakBeamUpperBall = new DigitalInput(FeederConstants.kBreakBeamUpperBall);
 
   private final NetworkTableEntry intakeBB;
   private final NetworkTableEntry lowerBallBB;
@@ -29,11 +29,6 @@ public class FeederSubsystem extends SubsystemBase {
     //unique prime number frame period to avoid concurrent calls
     //this is based on anecdotal evidence that unique primes lower CAN utilization more than all devices at max interval
     m_feederMotor.setControlFramePeriodMs(97);
-
-    m_BreakBeamIntake = new DigitalInput(FeederConstants.kBreakBeamIntakePort);
-    m_BreakBeamPreShooter = new DigitalInput(FeederConstants.kBreakBeamPreShooterPort);
-    m_BreakBeamLowerBall = new DigitalInput(FeederConstants.kBreakBeamLowerBall);
-    m_BreakBeamUpperBall = new DigitalInput(FeederConstants.kBreakBeamUpperBall);
 
     ShuffleboardTab tab = Shuffleboard.getTab("Driver Readout");
         

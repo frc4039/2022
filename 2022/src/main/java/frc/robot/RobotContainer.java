@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 import frc.robot.common.autonomous.AutonomousChooser;
@@ -53,8 +52,6 @@ public class RobotContainer {
 
   private final DriverReadout driverReadout;
 
-  private final Trigger intakeBB = new Trigger(feederSubsystem::getBreakBeamIntake);
-
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the button bindings
@@ -78,7 +75,7 @@ public class RobotContainer {
     CommandScheduler.getInstance().registerSubsystem(limelightSubsystem);
     CommandScheduler.getInstance().registerSubsystem(addressableLEDSubsystem);
     CommandScheduler.getInstance().setDefaultCommand(drivetrainSubsystem, new DriveCommand(drivetrainSubsystem, getDriveForwardAxis(), getDriveStrafeAxis(), getDriveRotationXAxis(), getDriveRotationYAxis()));
-    CommandScheduler.getInstance().setDefaultCommand(feederSubsystem, new FeederManagementCommand(feederSubsystem, this));
+    CommandScheduler.getInstance().setDefaultCommand(feederSubsystem, new FeederManagementCommand(feederSubsystem));
     CommandScheduler.getInstance().setDefaultCommand(addressableLEDSubsystem, new LEDCommand(addressableLEDSubsystem, feederSubsystem, climberSubsystem));
 
     driverReadout = new DriverReadout(this);
@@ -103,7 +100,7 @@ public class RobotContainer {
       new ConditionalCommand(
         new AimAndShootCommand(drivetrainSubsystem, getDriveForwardAxis(), getDriveStrafeAxis(), limelightSubsystem, true, shooterSubsystem, preShooterSubsystem, feederSubsystem), 
         new ShootCommand(shooterSubsystem, preShooterSubsystem, feederSubsystem, limelightSubsystem, drivetrainSubsystem), 
-        () -> shooterSubsystem.type == "limelight"
+        () -> shooterSubsystem.type.equals("limelight")
         ));
 
     driverController.getYButton().whenHeld(
@@ -119,7 +116,7 @@ public class RobotContainer {
         new RotateToLimelightCommand(drivetrainSubsystem, getDriveForwardAxis(), getDriveStrafeAxis(), limelightSubsystem, true)
       ), 
       new InstantCommand(), 
-      () -> shooterSubsystem.type == "limelight"
+      () -> shooterSubsystem.type.equals("limelight")
       ));
     
     // intakeBB.whenActive(

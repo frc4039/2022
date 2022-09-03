@@ -8,7 +8,7 @@ public abstract class MotionProfile implements Serializable {
 	private final Goal start;
 	private final Goal end;
 
-	public MotionProfile(Goal start, Goal end) {
+	protected MotionProfile(Goal start, Goal end) {
 		this.start = start;
 		this.end = end;
 	}

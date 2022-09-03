@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.commands.StopEverythingCommand;
 import frc.robot.common.UpdateManager;
 import frc.robot.common.math.RigidTransform2;
 
@@ -88,19 +87,12 @@ public class Robot extends TimedRobot {
 
     }
 
-  @Override
-  public void disabledPeriodic() {}
-
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
     m_robotContainer.getDrivetrainSubsystem().resetPose(RigidTransform2.ZERO);
     m_robotContainer.getAutonomousCommand().schedule();
   }
-
-  /** This function is called periodically during autonomous. */
-  @Override
-  public void autonomousPeriodic() {}
 
   @Override
   public void teleopInit() {
@@ -113,19 +105,9 @@ public class Robot extends TimedRobot {
     }
   }
 
-  /** This function is called periodically during operator control. */
-  @Override
-  public void teleopPeriodic() {
-    
-  }
-
   @Override
   public void testInit() {
     // Cancels all running commands at the start of test mode.
     CommandScheduler.getInstance().cancelAll();
   }
-
-  /** This function is called periodically during test mode. */
-  @Override
-  public void testPeriodic() {}
 }

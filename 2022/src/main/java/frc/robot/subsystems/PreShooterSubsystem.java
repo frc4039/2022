@@ -61,13 +61,13 @@ public class PreShooterSubsystem extends SubsystemBase {
   }
 
   public void preShotType(){
-    if(type == "high")
+    if(type.equals("high"))
       fenderHighPreShoot();
-    else if(type == "low")
+    else if(type.equals("low"))
       fenderLowPreShoot();
-    else if (type == "limelight")
+    else if (type.equals("limelight"))
       limelightPreShoot();
-    else if (type == "hangar")
+    else if (type.equals("hangar"))
       fenderHighPreShoot();
     else
       fenderHighPreShoot();
@@ -75,10 +75,5 @@ public class PreShooterSubsystem extends SubsystemBase {
 
   public void reversePreShooter() {
     m_preShooterMotor.set(ControlMode.Velocity, ShooterConstants.kpreShooterReverseRPM * ShooterConstants.kPreShooterGearRatio * 2048 / 600.0);
-  }
-
-  @Override
-  public void periodic() {
-    
   }
 }

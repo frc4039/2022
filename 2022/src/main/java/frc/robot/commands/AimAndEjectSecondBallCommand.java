@@ -13,7 +13,7 @@ public class AimAndEjectSecondBallCommand extends ParallelCommandGroup{
     public AimAndEjectSecondBallCommand(DrivetrainSubsystem drivetrain, Axis forward, Axis strafe, LimelightSubsystem limelightSubsystem, boolean updateOdometry, ShooterSubsystem shooter, PreShooterSubsystem preShooter, FeederSubsystem feeder) {
         addCommands(
             new RotateToLimelightCommand(drivetrain, forward, strafe, limelightSubsystem, updateOdometry),
-            new EjectSecondBallCommand(shooter, preShooter, feeder, limelightSubsystem, drivetrain)
+            new EjectSecondBallCommand(shooter, preShooter, feeder, limelightSubsystem)
         );
     }
     

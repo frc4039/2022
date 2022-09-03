@@ -20,11 +20,6 @@ public class ClimberPreClimbCommand extends CommandBase {
     }
 
     @Override
-    public void execute() {
-
-    }
-
-    @Override
     public void end(boolean interrupted) {
         m_climberSubsystem.stop();
     }

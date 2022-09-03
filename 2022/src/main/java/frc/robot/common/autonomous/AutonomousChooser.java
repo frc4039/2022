@@ -304,7 +304,7 @@ public class AutonomousChooser {
     private void follow(SequentialCommandGroup command, RobotContainer container, Trajectory trajectory) {
         command.addCommands(new FollowTrajectoryCommand(container.getDrivetrainSubsystem(), trajectory)
             .deadlineWith(
-                new FeederManagementCommand(container.getFeederSubsystem(), container)
+                new FeederManagementCommand(container.getFeederSubsystem())
             )
         );
     }
@@ -313,7 +313,7 @@ public class AutonomousChooser {
         command.addCommands(new FollowTrajectoryCommand(container.getDrivetrainSubsystem(), trajectory)
                 .deadlineWith(new ParallelDeadlineGroup(
                         new IntakeCommand(container.getIntakeSubsystem()),
-                        new FeederManagementCommand(container.getFeederSubsystem(), container))));
+                        new FeederManagementCommand(container.getFeederSubsystem()))));
     }
 
     private void followIntakeAndPreShoot(SequentialCommandGroup command, RobotContainer container,Trajectory trajectory) {
@@ -331,7 +331,7 @@ public class AutonomousChooser {
         command.addCommands(new FollowTrajectoryCommand(container.getDrivetrainSubsystem(), trajectory)
             .deadlineWith(
                 new SequentialCommandGroup(
-                    new FeederManagementCommand(container.getFeederSubsystem(), container).withTimeout(1.0),
+                    new FeederManagementCommand(container.getFeederSubsystem()).withTimeout(1.0),
                     new PreShootCommand(container.getPreShooterSubsystem(), container.getShooterSubsystem(), container.getFeederSubsystem())
                 ) 
             )
@@ -344,11 +344,11 @@ public class AutonomousChooser {
                         .withTimeout(timeout));
     }
 
-    private void setShotTypeHigh(SequentialCommandGroup command, RobotContainer container) {
-        command.addCommands(
-            new ShooterHoodExtendCommand(container.getShooterSubsystem()),
-            new ChangeShotTypeCommand(container.getShooterSubsystem(), container.getPreShooterSubsystem(), "high"));
-    }
+    // private void setShotTypeHigh(SequentialCommandGroup command, RobotContainer container) {
+    //     command.addCommands(
+    //         new ShooterHoodExtendCommand(container.getShooterSubsystem()),
+    //         new ChangeShotTypeCommand(container.getShooterSubsystem(), container.getPreShooterSubsystem(), "high"));
+    // }
             
     private void setShotTypeLow(SequentialCommandGroup command, RobotContainer container) {
         command.addCommands(
@@ -399,13 +399,13 @@ public class AutonomousChooser {
             new IntakeCommand(container.getIntakeSubsystem())));
     }
 
-    private void followIntakeAndShoot(SequentialCommandGroup command, RobotContainer container, Trajectory trajectory, double RPMChange) {
-        command.addCommands(new FollowTrajectoryCommand(container.getDrivetrainSubsystem(), trajectory)
-                .deadlineWith(new ParallelCommandGroup(
-                        new IntakeCommand(container.getIntakeSubsystem()),
-                        new MovingShootCommand(container.getShooterSubsystem(), container.getPreShooterSubsystem(),
-                container.getFeederSubsystem(), container.getLimelightSubsystem(), container.getDrivetrainSubsystem(), RPMChange))));
-    }
+    // private void followIntakeAndShoot(SequentialCommandGroup command, RobotContainer container, Trajectory trajectory, double RPMChange) {
+    //     command.addCommands(new FollowTrajectoryCommand(container.getDrivetrainSubsystem(), trajectory)
+    //             .deadlineWith(new ParallelCommandGroup(
+    //                     new IntakeCommand(container.getIntakeSubsystem()),
+    //                     new MovingShootCommand(container.getShooterSubsystem(), container.getPreShooterSubsystem(),
+    //             container.getFeederSubsystem(), container.getLimelightSubsystem(), container.getDrivetrainSubsystem(), RPMChange))));
+    // }
 
     private void resetRobotPose(SequentialCommandGroup command, RobotContainer container, Trajectory trajectory) {
         command.addCommands(new InstantCommand(() ->

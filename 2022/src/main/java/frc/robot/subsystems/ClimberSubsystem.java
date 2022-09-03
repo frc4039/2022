@@ -121,7 +121,8 @@ public class ClimberSubsystem extends SubsystemBase {
                 m_climberMotorRight.set(ControlMode.PercentOutput, 0);
             } else {
                 m_climberMotorRight.set(ControlMode.Velocity, ClimberConstants.kClimberVelocityUp);
-            }if (getTopLeftBB()) {
+            }
+            if (getTopLeftBB()) {
                 m_climberMotorLeft.set(ControlMode.PercentOutput, 0);
             } else {
                 m_climberMotorLeft.set(ControlMode.Velocity, ClimberConstants.kClimberVelocityUp);

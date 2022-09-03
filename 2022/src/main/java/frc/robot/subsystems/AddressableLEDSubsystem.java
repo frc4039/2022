@@ -5,7 +5,6 @@ import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 import frc.robot.Constants.LEDConstants;
 
 public class AddressableLEDSubsystem extends SubsystemBase {
@@ -117,6 +116,16 @@ public class AddressableLEDSubsystem extends SubsystemBase {
 
         hue += LEDConstants.RAINBOW_HUE_SPEED*15;
         hue %= 180;
+    }
+
+    public void progressBar(double progress, Color color) {
+        int stripProgress = (int) (LEDConstants.LED_STRIP_LENGTH * progress);
+        for (int i = 0; i < stripProgress; i++) {
+            m_ledBuffer.setLED(i, color);
+        }
+        for (int i = LEDConstants.LED_STRIP_LENGTH - 1; i > stripProgress; i--) {
+            m_ledBuffer.setLED(i, Color.kWhite);
+        }
     }
 
         public void flashingHue(int hue) {

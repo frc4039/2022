@@ -1,8 +1,7 @@
 package frc.robot.commands;
 
-import java.sql.Driver;
-
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.LEDConstants;
 import frc.robot.subsystems.AddressableLEDSubsystem;
@@ -24,17 +23,21 @@ public class LEDCommand extends CommandBase{
     }
 
     @Override
-    public void initialize() {
-
-    }
-
-    @Override
     public void execute() {
-        if (DriverStation.isAutonomous()) {
-            m_ledSubsystem.rainbow();
+        if (DriverStation.isAutonomous() && DriverStation.getMatchTime() > 0) {
+            double progress = DriverStation.getMatchTime() / 15.0;
+            if (m_feederSubsystem.getBothBallBreakBeams()) {
+                m_ledSubsystem.progressBar(progress, Color.kGreen);
+            }
+            else if (m_feederSubsystem.getBreakBeamUpperBall() || m_feederSubsystem.getBreakBeamIntake() || m_feederSubsystem.getBreakBeamLowerBall()) {
+                m_ledSubsystem.progressBar(progress, Color.kBlue);
+            }
+            else {
+                m_ledSubsystem.progressBar(progress, Color.kRed);
+            }
         } else if (m_climberSubsystem.getClimbeEnable()) {
             m_ledSubsystem.fastRainbow();
-        } else if (DriverStation.getMatchTime() < 30) {
+        } else if (DriverStation.getMatchTime() < 30 && DriverStation.getMatchTime() > 0) {
             if (m_feederSubsystem.getBothBallBreakBeams()) {
                 m_ledSubsystem.flashingHue(LEDConstants.HUE_GREEN);
             }
