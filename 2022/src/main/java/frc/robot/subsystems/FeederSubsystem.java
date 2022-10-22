@@ -92,6 +92,10 @@ public class FeederSubsystem extends SubsystemBase {
     return (!m_BreakBeamLowerBall.get() || !m_BreakBeamIntake.get()) && !m_BreakBeamUpperBall.get();
   }
 
+  public boolean getNoObstructions(){
+    return (m_BreakBeamIntake.get() && m_BreakBeamPreShooter.get() && m_BreakBeamLowerBall.get() && m_BreakBeamUpperBall.get());
+  }
+
   @Override
   public void periodic() {
     intakeBB.setBoolean(getBreakBeamIntake());

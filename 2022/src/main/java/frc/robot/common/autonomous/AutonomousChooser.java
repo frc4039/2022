@@ -89,7 +89,7 @@ public class AutonomousChooser {
         //aimAndShoot(command,container, 1.75);
         followIntakeAndPreShoot(command, container, trajectories.getFiveRightAuto3());
         intakeAimAndShoot(command,container, 0.5);
-        aimAndShoot(command, container, 1.25);
+        aimAndShootTillDone(command, container, 3.0);
         followAndIntake(command, container, trajectories.getFiveRightAuto4());
         intake(command, container, 0.5);
         followIntakeAndPreShoot(command, container, trajectories.getFiveRightAuto5());
@@ -382,6 +382,14 @@ public class AutonomousChooser {
             new ShootCommand(container.getShooterSubsystem(), container.getPreShooterSubsystem(),
                 container.getFeederSubsystem(), container.getLimelightSubsystem(), container.getDrivetrainSubsystem())
                         .withTimeout(timeout)));
+    }
+
+    private void aimAndShootTillDone(SequentialCommandGroup command, RobotContainer container, double timeout) {
+        command.addCommands(new ParallelRaceGroup(
+            new RotateToLimelightCommand(container.getDrivetrainSubsystem(), container.getDriveForwardAxis(), container.getDriveStrafeAxis(), container.getLimelightSubsystem(), false),
+            new ShootCommand(container.getShooterSubsystem(), container.getPreShooterSubsystem(),
+                container.getFeederSubsystem(), container.getLimelightSubsystem(), container.getDrivetrainSubsystem()),
+            new AwaitNoObstructionsCommand(container.getFeederSubsystem()).withTimeout(timeout)));
     }
 
     private void aim(SequentialCommandGroup command, RobotContainer container, double timeout) {
